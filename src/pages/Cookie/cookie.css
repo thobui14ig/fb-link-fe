@@ -1,0 +1,59 @@
+                .table-responsive {
+                    height: 600px;
+                    overflow-x: auto;
+                }
+
+                /* Giới hạn độ dài cột và thêm ellipsis */
+                .col-stt {
+                    width: 50px;
+                    max-width: 50px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .col-cookie {
+                    max-width: 300px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .col-status {
+                    width: 100px;
+                    max-width: 100px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .col-action {
+                    width: 250px;
+                    max-width: 250px;
+                    white-space: normal;
+                    overflow: visible;
+                    text-overflow: clip;
+                }
+
+                .col-action .btn {
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                }
+
+                @media (max-width: 768px) {
+                    .col-cookie {
+                        max-width: 150px;
+                    }
+
+                    .col-action {
+                        width: 200px;
+                        max-width: 200px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 5px;
+                    }
+
+                    .col-action .btn {
+                        flex: 1 1 auto;
+                    }
+                }

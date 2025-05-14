@@ -1,0 +1,120 @@
+.login-container {
+  background: #2d2d2d;
+  /* Container xám đậm */
+  border-radius: 10px;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.login-header {
+  margin-bottom: 30px;
+}
+
+.brand h3 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff4d4d;
+  /* Màu đỏ */
+  margin: 0;
+  display: inline-block;
+  animation: textGlow 2s infinite alternate;
+  /* Hiệu ứng animation cho tiêu đề */
+}
+
+.brand small {
+  font-size: 14px;
+  color: #ccc;
+  display: block;
+  margin-top: 10px;
+}
+
+.form-control {
+  background: #fff;
+  /* Nền input trắng */
+  border: none;
+  border-radius: 5px;
+  color: #333;
+  padding: 12px 15px;
+  /* Tăng padding */
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+  /* Tăng font size */
+  height: 50px;
+  /* Tăng chiều cao input */
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+  /* Hiệu ứng focus màu đỏ */
+}
+
+.form-check {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.form-check-input {
+  margin-right: 10px;
+}
+
+.form-check-label {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.btn-signin {
+  background: linear-gradient(45deg, #f1c40f, #f39c12);
+  /* Gradient vàng */
+  color: #1a1a1a;
+  border: none;
+  border-radius: 5px;
+  padding: 12px;
+  /* Tăng padding */
+  width: 100%;
+  font-size: 18px;
+  /* Tăng font size */
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(241, 196, 15, 0.5);
+  /* Thêm bóng */
+}
+
+.btn-signin:hover {
+  background: linear-gradient(45deg, #d4ac0d, #e67e22);
+  /* Gradient đậm hơn khi hover */
+  transform: translateY(-2px);
+  /* Hiệu ứng nâng lên */
+  box-shadow: 0 4px 15px rgba(241, 196, 15, 0.7);
+  /* Tăng bóng khi hover */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 15px #ff4d4d;
+  }
+
+  100% {
+    text-shadow: 0 0 10px #ff4d4d, 0 0 20px #ff4d4d, 0 0 30px #ff4d4d;
+  }
+}

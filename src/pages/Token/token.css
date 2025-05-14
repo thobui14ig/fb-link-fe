@@ -1,0 +1,46 @@
+               .table-responsive {
+                   overflow-x: auto;
+               }
+
+               /* Giới hạn độ dài cột và thêm ellipsis */
+               .col-stt {
+                   width: 50px;
+                   max-width: 50px;
+                   white-space: nowrap;
+                   overflow: hidden;
+                   text-overflow: ellipsis;
+               }
+
+               .col-token {
+                   max-width: 500px;
+                   /* Giới hạn độ dài cột Token */
+                   white-space: nowrap;
+                   overflow: hidden;
+                   text-overflow: ellipsis;
+               }
+
+               .col-action {
+                   width: 100px;
+                   max-width: 100px;
+                   white-space: nowrap;
+                   overflow: hidden;
+                   text-overflow: ellipsis;
+               }
+
+               /* Đảm bảo các nút trong cột Hành Động không bị cắt */
+               .col-action .btn {
+                   margin-right: 5px;
+               }
+
+               /* Responsive: Giảm kích thước cột trên màn hình nhỏ */
+               @media (max-width: 768px) {
+                   .col-token {
+                       max-width: 200px;
+                       /* Giảm độ dài cột Token trên màn hình nhỏ */
+                   }
+
+                   .col-action {
+                       width: 80px;
+                       max-width: 80px;
+                   }
+               }
