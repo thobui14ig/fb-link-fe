@@ -19,6 +19,10 @@ export interface ILink {
     postId: string | null
     lastCommentTime: Date | null
     commentCount: number
+    countBefore: number
+    countAfter: number
+    likeBefore: number
+    likeAfter: number
     delayTime: number
     like: number
     status: LinkStatus

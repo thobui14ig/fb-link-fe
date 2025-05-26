@@ -9,6 +9,8 @@ import { toast } from 'react-toastify'
 import { customErrorToast } from '@/common/utils/toast'
 import { SettingOutlined } from '@ant-design/icons'
 import { Dropdown, MenuProps, Space, Typography } from 'antd'
+import copy from 'copy-to-clipboard';
+
 
 function Token() {
   const { active } = useTab()
@@ -87,14 +89,8 @@ function Token() {
                       key: '2',
                       label: 'Copy',
                       onClick: () => {
-                        navigator.clipboard
-                          .writeText(item.tokenValue)
-                          .then(() => {
-                            toast.success('Copy thành công')
-                          })
-                          .catch((err) => {
-                            console.error('Lỗi khi copy:', err)
-                          })
+                        copy(item.tokenValue)
+                        toast.success('Copy thành công')
                       },
                     },
                   ]

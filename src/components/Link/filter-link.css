@@ -1,0 +1,7 @@
+.white-label .ant-form-item-label > label {
+    color: white !important;
+    margin-bottom: 15px;
+  }
+  .white-form .ant-radio-wrapper {
+    color: white !important;
+  }

@@ -1,7 +1,6 @@
 import { getComments } from '@/api/comment.api'
 import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
-import { showDate } from '@/common/utils/time'
 import { IComment } from '@/common/model/comment'
 import { useEffect, useState } from 'react'
 
@@ -88,7 +87,7 @@ function Comment() {
                       </td>
                       <td>{item.name}</td>
                       <td>{item.message}</td>
-                      <td>{showDate(item.timeCreated)}</td>
+                      <td>{(item.timeCreated as any) ?? ''}</td>
                       <td>
                         <a
                           target='_blank'

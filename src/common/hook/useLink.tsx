@@ -1,8 +1,4 @@
-import {
-  createLink,
-  getLink as getLinkApi,
-  getLinks as getLinksApi,
-} from '@/api/link.api'
+import { createLink, getLink as getLinkApi } from '@/api/link.api'
 import { ELink, LinkStatus } from '@/common/model/link'
 
 function useLink() {
@@ -27,17 +23,12 @@ function useLink() {
     return createLink(argCreate)
   }
 
-  const getLinks = async (status: LinkStatus) => {
-    const { data } = await getLinksApi(status)
-    return data
-  }
-
   const getLink = async (id: number) => {
     const { data } = await getLinkApi(id)
     return data
   }
 
-  return { addLink, getLinks, getLink }
+  return { addLink, getLink }
 }
 
 export default useLink

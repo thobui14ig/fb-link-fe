@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { deleteLink, IGetAllLink, processLink } from '@/api/link.api'
-import useLink from '@/common/hook/useLink'
 import { ELink, ILink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
-import { showDate } from '@/common/utils/time'
 import { customErrorToast } from '@/common/utils/toast'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
+import FilterLink from './FilterLink'
 import ModalAddLink from './ModalAddLink'
 import ModalEditLink from './ModalEditLink'
 
@@ -16,19 +15,19 @@ export interface ITypeLink {
 
 function LinkComponent({ type }: ITypeLink) {
   const { isAdmin } = useApp()
-  const { getLinks } = useLink()
+  // const { getLinks } = useLink()
   const [isReload, setIsReload] = useState<boolean>(false)
   const [links, setLinks] = useState<IGetAllLink[]>([])
   const [linkEditId, setLinkEditId] = useState<number | null>(null)
 
-  useEffect(() => {
-    ;(async () => {
-      const data = await getLinks(
-        type === ELink.LINK_ON ? LinkStatus.Started : LinkStatus.Pending
-      )
-      setLinks(data)
-    })()
-  }, [isReload])
+  // useEffect(() => {
+  //   ;(async () => {
+  //     const data = await getLinks(
+  //       type === ELink.LINK_ON ? LinkStatus.Started : LinkStatus.Pending
+  //     )
+  //     setLinks(data)
+  //   })()
+  // }, [isReload])
 
   const handleDelete = async (id: number) => {
     try {
@@ -94,90 +93,10 @@ function LinkComponent({ type }: ITypeLink) {
       )}
 
       <div className='mb-4'>
-        <label
-          htmlFor='filterOption'
-          className='form-label'
-          style={{ color: '#fff' }}
-        >
-          Lọc theo:
-        </label>
-        <select
-          className='form-control'
-          id='filterOption'
-          style={{
-            backgroundColor: '#333',
-            color: '#fff',
-            border: '1px solid #444',
-            width: '200px',
-            display: 'inline-block',
-          }}
-        >
-          <option value=''>Chọn tiêu chí lọc</option>
-          <option value='lastCommentTime'>Last Comment Time</option>
-          <option value='count'>Count</option>
-          <option value='delay'>Delay (s)</option>
-          <option value='type'>Type Link</option>
-          <option value='likeCount'>Like Count</option>
-        </select>
-
-        <div
-          id='filterInputs'
-          className='d-inline-block ms-3'
-          style={{ display: 'none' }}
-        >
-          <div
-            id='rangeInputs'
-            style={{ display: 'none' }}
-          >
-            <label style={{ color: '#fff' }}>Từ:</label>
-            <input
-              type='number'
-              id='filterFrom'
-              className='form-control d-inline-block'
-              style={{
-                backgroundColor: '#333',
-                color: '#fff',
-                border: '1px solid #444',
-                width: '100px',
-                marginRight: '10px',
-              }}
-            />
-            <label style={{ color: '#fff' }}>Đến:</label>
-            <input
-              type='number'
-              id='filterTo'
-              className='form-control d-inline-block'
-              style={{
-                backgroundColor: '#333',
-                color: '#fff',
-                border: '1px solid #444',
-                width: '100px',
-                marginRight: '10px',
-              }}
-            />
-          </div>
-
-          <div
-            id='typeInput'
-            style={{ display: 'none' }}
-          >
-            <select
-              id='filterType'
-              className='form-control d-inline-block'
-              style={{
-                backgroundColor: '#333',
-                color: '#fff',
-                border: '1px solid #444',
-                width: '150px',
-              }}
-            >
-              <option value='public'>Public</option>
-              <option value='private'>Private</option>
-            </select>
-          </div>
-
-          <button className='btn btn-warning'>Lọc</button>
-        </div>
+        <FilterLink
+          setLinks={setLinks}
+          type={type}
+        />
 
         <div className='table-responsive'>
           <table
@@ -191,7 +110,7 @@ function LinkComponent({ type }: ITypeLink) {
                 <th scope='col'>Type Link</th>
                 <th scope='col'>ID Bài Viết</th>
                 <th scope='col'>Last Comment Time</th>
-                <th scope='col'>Count</th>
+                <th scope='col'>Comment Count</th>
                 <th scope='col'>Created At</th>
                 <th scope='col'>Delay (s)</th>
                 <th scope='col'>Like Count</th>
@@ -226,13 +145,13 @@ function LinkComponent({ type }: ITypeLink) {
                       </td>
                       <td data-time={item.lastCommentTime}>
                         <span className='time-ago'>
-                          {showDate(item.lastCommentTime)}
+                          {item.lastCommentTime as any}
                         </span>
                       </td>
-                      <td>{item.commentCount}</td>
-                      <td>{showDate(item.createdAt)}</td>
+                      <td>{`[${item.countBefore}-${item.countAfter}]`}</td>
+                      <td>{(item.createdAt as any) ?? ''}</td>
                       <td>{item.delayTime}</td>
-                      <td>like</td>
+                      <td>{`[${item.likeBefore}-${item.likeAfter}]`}</td>
                       <td>{item.email}</td>
                       <td className='nowrap'>
                         <div className='dropdown'>

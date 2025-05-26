@@ -10,7 +10,8 @@ export interface ICreateDelayParams
     | 'refreshCookie'
     | 'refreshToken'
     | 'refreshProxy'
-    | 'delayOn'
+    | 'delayOnPublic'
+    | 'delayOnPrivate'
     | 'delayOff'
     | 'delayCommentCount'
   > {}
@@ -22,7 +23,8 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
     refreshProxy: 0,
     delayCommentCount: 0,
     delayOff: 0,
-    delayOn: 0,
+    delayOnPublic: 0,
+    delayOnPrivate: 0,
   })
 
   useEffect(() => {
@@ -32,7 +34,8 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
       refreshProxy: _delay?.refreshProxy ?? 0,
       delayCommentCount: _delay?.delayCommentCount ?? 0,
       delayOff: _delay?.delayOff ?? 0,
-      delayOn: _delay?.delayOn ?? 0,
+      delayOnPublic: _delay?.delayOnPublic ?? 0,
+      delayOnPrivate: _delay?.delayOnPrivate ?? 0,
     })
   }, [_delay])
 
@@ -144,7 +147,7 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             htmlFor='delayLinkOn'
             className='form-label'
           >
-            Delay On(Phút)
+            Delay On Public(Giây)
           </label>
           <input
             type='number'
@@ -153,10 +156,36 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setDelay({
                 ...delay,
-                delayOn: Number(e.target.value),
+                delayOnPublic: Number(e.target.value),
               })
             }}
-            value={delay.delayOn}
+            value={delay.delayOnPublic}
+            style={{
+              backgroundColor: '#333',
+              color: '#fff',
+              border: '1px solid #444',
+            }}
+            min='0'
+          />
+        </div>
+        <div className='mb-3'>
+          <label
+            htmlFor='delayLinkOn'
+            className='form-label'
+          >
+            Delay On Private(Giây)
+          </label>
+          <input
+            type='number'
+            className='form-control'
+            id='delayLinkOn'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setDelay({
+                ...delay,
+                delayOnPrivate: Number(e.target.value),
+              })
+            }}
+            value={delay.delayOnPrivate}
             style={{
               backgroundColor: '#333',
               color: '#fff',

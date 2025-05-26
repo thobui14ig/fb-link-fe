@@ -4,7 +4,8 @@ export interface IDelay {
   updatedAt: Date
   refreshToken: number
   refreshProxy: number
-  delayOn: number
+  delayOnPublic: number
+  delayOnPrivate: number
   delayOff: number
   delayCommentCount: number
 }

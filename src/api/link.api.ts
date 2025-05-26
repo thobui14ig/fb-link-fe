@@ -1,5 +1,6 @@
 import { ILink, LinkStatus } from '@/common/model/link'
 import http from './http'
+import { FormValues } from '@/components/Link/FilterLink'
 
 export interface ICreateLinkParams {
   links: {
@@ -10,12 +11,19 @@ export interface ICreateLinkParams {
 }
 
 export interface IGetAllLink extends ILink {
-  email: string,
+  email: string
 }
 export const createLink = (links: ICreateLinkParams) =>
   http.post<ILink>(`/links`, links)
-export const getLinks = (status: LinkStatus) =>
-  http.get<IGetAllLink[]>(`/links?status=${status}`)
+export const getLinks = (
+  body: FormValues | null,
+  status: LinkStatus,
+  isFilter: boolean = false
+) =>
+  http.post<IGetAllLink[]>(
+    `/links/query?status=${status}&isFilter=${isFilter}`,
+    body ?? {}
+  )
 export const getLink = (id: number) =>
   http.get<Omit<ILink, 'user'>>(`/links/${id}`)
 export const updateLink = (link: Omit<Partial<ILink>, 'user'>) =>
