@@ -3,11 +3,13 @@ import { IUser } from './user'
 export enum ELink {
     LINK_OFF = 'linkOff',
     LINK_ON = 'linkOn',
+    LINK_HIDE = 'linkHide'
 }
 
 export enum LinkStatus {
     Pending = 'pending',
     Started = 'started',
+    Hide = 'hide'
 }
 
 export type Type = 'die' | 'undefined' | 'public' | 'private'
@@ -28,7 +30,8 @@ export interface ILink {
     status: LinkStatus
     type: Type
     errorMessage?: string
-    process?: boolean
+    process?: boolean,
+    hideCmt: boolean,
     createdAt?: Date
     user: IUser
 }

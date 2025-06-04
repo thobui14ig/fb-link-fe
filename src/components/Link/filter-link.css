@@ -5,3 +5,7 @@
   .white-form .ant-radio-wrapper {
     color: white !important;
   }
+
+  .hide-cmt {
+    display: flex;
+  }

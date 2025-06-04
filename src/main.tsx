@@ -13,6 +13,8 @@ import Cookie from './pages/Cookie/Cookie.tsx';
 import Token from './pages/Token/Token.tsx';
 import Proxy from './pages/Proxy/Proxy.tsx';
 import Admin from './pages/Admin/Admin.tsx';
+import LinkHide from './pages/LinkHide/LinkHide.tsx';
+import CommentHide from './pages/Comment/CommentHide.tsx';
 
 
 const router = createBrowserRouter([
@@ -36,8 +38,16 @@ const router = createBrowserRouter([
         element: <LinkOff />,
       },
       {
+        path: '/linkHide',
+        element: <LinkHide />,
+      },
+      {
         path: '/comments',
         element: <Comment />,
+      },
+      {
+        path: '/comments-hide',
+        element: <CommentHide />,
       },
       {
         path: '/cookie',

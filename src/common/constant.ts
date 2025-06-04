@@ -3,10 +3,12 @@ export enum Tab {
     LINK_ON = 'linkOn',
     LINK_OFF = 'linkOff',
     COMMENT = 'comments',
+    COMMENT_HIDE = 'comments-hide',
     COOKIE = 'cookie',
     TOKEN = 'token',
     PROXY = 'proxy',
-    ADMIN = 'admin'
+    ADMIN = 'admin',
+    LINK_HIDE = 'linkHide'
 }
 
 export enum EAuth {
@@ -19,10 +21,12 @@ export enum EUrl {
     LINK_ON = 'linkOn',
     LINK_OFF = 'linkOff',
     COMMENT = 'comments',
+    COMMENT_HIDE = 'comments-hide',
     COOKIE = 'cookie',
     TOKEN = 'token',
     PROXY = 'proxy',
     ADMIN = 'admin',
     LOGIN = 'login',
-    LOGOUT = 'logout'
+    LOGOUT = 'logout',
+    LINK_HIDE = 'linkHide'
 }

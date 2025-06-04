@@ -1,13 +1,15 @@
 import { ILink, LinkStatus } from '@/common/model/link'
 import http from './http'
 import { FormValues } from '@/components/Link/FilterLink'
+import { EKeyHideCmt } from '@/components/Link/LinkComponent'
 
 export interface ICreateLinkParams {
   links: {
     url: string
     delayTime: number
   }[]
-  status: LinkStatus
+  status: LinkStatus,
+  hideCmt: boolean
 }
 
 export interface IGetAllLink extends ILink {
@@ -18,10 +20,11 @@ export const createLink = (links: ICreateLinkParams) =>
 export const getLinks = (
   body: FormValues | null,
   status: LinkStatus,
-  isFilter: boolean = false
+  isFilter: number = 0,
+  hideCmt: number = 0
 ) =>
   http.post<IGetAllLink[]>(
-    `/links/query?status=${status}&isFilter=${isFilter}`,
+    `/links/query?status=${status}&isFilter=${isFilter}&hideCmt=${hideCmt}`,
     body ?? {}
   )
 export const getLink = (id: number) =>
@@ -31,3 +34,5 @@ export const updateLink = (link: Omit<Partial<ILink>, 'user'>) =>
 export const deleteLink = (id: number) => http.delete<null>(`/links/${id}`)
 export const processLink = (body: { id: number; status: LinkStatus }) =>
   http.post(`/monitoring/process`, body)
+export const hideCmt = (id: number, type: EKeyHideCmt) =>
+  http.post(`/links/hide-cmt/${id}?type=${type}`)

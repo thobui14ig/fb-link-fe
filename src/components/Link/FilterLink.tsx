@@ -65,7 +65,12 @@ function FilterLink({ setLinks, type }: { setLinks: any; type: ELink }) {
       return
     }
 
-    const data = await getLinks(values, linkType)
+    const data = await getLinks(
+      values,
+      linkType,
+      1,
+      type === ELink.LINK_HIDE ? 1 : 0
+    )
     setLinks(data.data)
   }
 
@@ -78,17 +83,6 @@ function FilterLink({ setLinks, type }: { setLinks: any; type: ELink }) {
 
     fetch()
   }, [])
-
-  useEffect(() => {
-    const fetch = async () => {
-      if (users.length > 0) {
-        const data = await getLinks(null, linkType)
-        setLinks(data.data)
-      }
-    }
-
-    fetch()
-  }, [users])
 
   if (!users.length) {
     return <></>
@@ -182,47 +176,49 @@ function FilterLink({ setLinks, type }: { setLinks: any; type: ELink }) {
         </Form.Item>
       </Form.Item>
 
-      <Form.Item
-        label='Delay'
-        style={{ marginBottom: 0 }}
-      >
-        <Form.Item
-          name='delayFrom'
-          style={{ display: 'inline-block', width: '50px' }}
-        >
-          <Input placeholder='Từ' />
-        </Form.Item>
-        <Form.Item
-          name='delayTo'
-          style={{
-            display: 'inline-block',
-            width: '50px',
-          }}
-        >
-          <Input placeholder='đến' />
-        </Form.Item>
-      </Form.Item>
       {isAdmin && (
-        <Form.Item
-          label='User'
-          style={{ width: '250px' }}
-          name='userId'
-        >
-          <Select>
-            <Select.Option value={null}>Chọn</Select.Option>
-            {users.length > 0 &&
-              users.map((item, i) => {
-                return (
-                  <Select.Option
-                    key={i}
-                    value={item.id}
-                  >
-                    {item.email}
-                  </Select.Option>
-                )
-              })}
-          </Select>
-        </Form.Item>
+        <>
+          <Form.Item
+            label='Delay'
+            style={{ marginBottom: 0 }}
+          >
+            <Form.Item
+              name='delayFrom'
+              style={{ display: 'inline-block', width: '50px' }}
+            >
+              <Input placeholder='Từ' />
+            </Form.Item>
+            <Form.Item
+              name='delayTo'
+              style={{
+                display: 'inline-block',
+                width: '50px',
+              }}
+            >
+              <Input placeholder='đến' />
+            </Form.Item>
+          </Form.Item>
+          <Form.Item
+            label='User'
+            style={{ width: '250px' }}
+            name='userId'
+          >
+            <Select>
+              <Select.Option value={null}>Chọn</Select.Option>
+              {users.length > 0 &&
+                users.map((item, i) => {
+                  return (
+                    <Select.Option
+                      key={i}
+                      value={item.id}
+                    >
+                      {item.email}
+                    </Select.Option>
+                  )
+                })}
+            </Select>
+          </Form.Item>
+        </>
       )}
 
       <Form.Item label={null}>

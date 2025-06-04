@@ -1,9 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { deleteLink, IGetAllLink, processLink } from '@/api/link.api'
+import {
+  deleteLink,
+  getLinks,
+  hideCmt,
+  IGetAllLink,
+  processLink,
+  updateLink,
+} from '@/api/link.api'
 import { ELink, ILink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
+import { getTypeLink } from '@/common/utils'
 import { customErrorToast } from '@/common/utils/toast'
-import { useState } from 'react'
+import { SettingOutlined } from '@ant-design/icons'
+import { Dropdown, MenuProps, Space, Typography } from 'antd'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import FilterLink from './FilterLink'
 import ModalAddLink from './ModalAddLink'
@@ -13,21 +23,32 @@ export interface ITypeLink {
   type: ELink
 }
 
+export enum EKeyHideCmt {
+  ALL = 'all',
+  PHONE = 'phone',
+  KEYWORD = 'keyword',
+}
+
 function LinkComponent({ type }: ITypeLink) {
   const { isAdmin } = useApp()
-  // const { getLinks } = useLink()
   const [isReload, setIsReload] = useState<boolean>(false)
   const [links, setLinks] = useState<IGetAllLink[]>([])
   const [linkEditId, setLinkEditId] = useState<number | null>(null)
+  const linkType = getTypeLink(type)
 
-  // useEffect(() => {
-  //   ;(async () => {
-  //     const data = await getLinks(
-  //       type === ELink.LINK_ON ? LinkStatus.Started : LinkStatus.Pending
-  //     )
-  //     setLinks(data)
-  //   })()
-  // }, [isReload])
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await getLinks(
+        null,
+        linkType,
+        0,
+        type === ELink.LINK_HIDE ? 1 : 0
+      )
+      setLinks(data.data)
+    }
+
+    fetch()
+  }, [isReload])
 
   const handleDelete = async (id: number) => {
     try {
@@ -62,6 +83,24 @@ function LinkComponent({ type }: ITypeLink) {
     }
   }
 
+  const handleHideCmt = async (link: ILink) => {
+    try {
+      await updateLink({ ...link, hideCmt: !link.hideCmt })
+      setIsReload(!isReload)
+    } catch (error) {
+      customErrorToast(error)
+    }
+  }
+
+  const actionHideCmt = async (linkId: number, key: EKeyHideCmt) => {
+    try {
+      await hideCmt(linkId, key)
+      toast.success('Ẩn cmt thành công!')
+    } catch (error) {
+      customErrorToast(error)
+    }
+  }
+
   return (
     <div
       className='card p-4'
@@ -71,7 +110,12 @@ function LinkComponent({ type }: ITypeLink) {
         className='text-center mb-4'
         style={{ color: '#ffc107' }}
       >
-        Content for {type === ELink.LINK_ON ? 'Links On' : 'Links Off'}
+        Content for{' '}
+        {type === ELink.LINK_ON
+          ? 'Links On'
+          : type === ELink.LINK_OFF
+            ? 'Links Off'
+            : 'Link Ẩn'}
       </h5>
       {!isAdmin && (
         <>
@@ -108,6 +152,7 @@ function LinkComponent({ type }: ITypeLink) {
                 <th scope='col'>STT</th>
                 <th scope='col'>Tên Link</th>
                 <th scope='col'>Type Link</th>
+                <th scope='col'>Ẩn</th>
                 <th scope='col'>ID Bài Viết</th>
                 <th scope='col'>Last Comment Time</th>
                 <th scope='col'>Comment Count</th>
@@ -121,6 +166,35 @@ function LinkComponent({ type }: ITypeLink) {
             <tbody id='linksTableBody'>
               {links.length > 0 &&
                 links.map((item, i) => {
+                  const dropdownItems: MenuProps['items'] = [
+                    {
+                      key: '1',
+                      label: 'All',
+                      onClick: () => {
+                        return actionHideCmt(item.id as number, EKeyHideCmt.ALL)
+                      },
+                    },
+                    {
+                      key: '2',
+                      label: 'Phone Number',
+                      onClick: () => {
+                        return actionHideCmt(
+                          item.id as number,
+                          EKeyHideCmt.PHONE
+                        )
+                      },
+                    },
+                    {
+                      key: '2',
+                      label: 'keyword',
+                      onClick: () => {
+                        return actionHideCmt(
+                          item.id as number,
+                          EKeyHideCmt.KEYWORD
+                        )
+                      },
+                    },
+                  ]
                   return (
                     <tr
                       key={i}
@@ -134,6 +208,39 @@ function LinkComponent({ type }: ITypeLink) {
                       <td className='stt'>{i + 1}</td>
                       <td>{item.linkName ?? item.linkUrl}</td>
                       <td>{item.type}</td>
+                      <td className='td-hide-cmt'>
+                        <div className='hide-cmt'>
+                          {/* {type !== ELink.LINK_HIDE && (
+                            <Switch
+                              checkedChildren='ON'
+                              unCheckedChildren='OFF'
+                              defaultChecked={item.hideCmt}
+                              onChange={(e) => handleHideCmt(e, item)}
+                            />
+                          )} */}
+
+                          {item.hideCmt ? (
+                            <Dropdown
+                              menu={{
+                                items: dropdownItems,
+                              }}
+                            >
+                              <Typography.Link>
+                                <Space>
+                                  <SettingOutlined
+                                    style={{
+                                      fontSize: '20px',
+                                    }}
+                                  />
+                                </Space>
+                              </Typography.Link>
+                            </Dropdown>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </td>
+
                       <td>
                         <a
                           target='_blank'
@@ -169,6 +276,14 @@ function LinkComponent({ type }: ITypeLink) {
                             className='dropdown-menu dropdown-menu-dark'
                             aria-labelledby='dropdownMenuButton-{{ link.id }}'
                           >
+                            <li>
+                              <button
+                                className='dropdown-item btn btn-sm btn-primary'
+                                onClick={() => handleHideCmt(item)}
+                              >
+                                Ẩn
+                              </button>
+                            </li>
                             <li>
                               <button
                                 className='dropdown-item btn btn-sm btn-primary'

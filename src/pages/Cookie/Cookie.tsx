@@ -8,7 +8,7 @@ import ModalAddCookies from './ModalAddCookies'
 import ModalEditCookie from './ModalEditCookie'
 import { toast } from 'react-toastify'
 import { customErrorToast } from '@/common/utils/toast'
-import copy from 'copy-to-clipboard';
+import copy from 'copy-to-clipboard'
 
 function Cookie() {
   const { active } = useTab()
@@ -141,7 +141,6 @@ function Cookie() {
                               <button
                                 className='dropdown-item btn btn-sm btn-warning'
                                 onClick={() => {
-
                                   copy(item.cookie)
                                   toast.success('Copy thành công')
                                 }}
