@@ -1,7 +1,8 @@
-import { getComments, hideCmt } from '@/api/comment.api'
+import { getComments } from '@/api/comment.api'
 import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
 import { IComment } from '@/common/model/comment'
+import { useApp } from '@/common/store/AppContext'
 import { customErrorToast } from '@/common/utils/toast'
 import { Button, DatePicker, Form, Switch } from 'antd'
 import dayjs from 'dayjs'
@@ -10,7 +11,7 @@ import { toast } from 'react-toastify'
 
 function CommentHide() {
   const [form] = Form.useForm<any>()
-
+  const { isAdmin } = useApp()
   const { active } = useTab()
   const [comments, setComments] = useState<IComment[]>([])
   const initialValues = {
@@ -32,9 +33,10 @@ function CommentHide() {
       const curenttCmt = comments.find((item) => item.id === comment.id)
       if (curenttCmt) {
         curenttCmt.hideCmt = checked
-        setComments([...comments])
-        await hideCmt(comment.cmtId)
-        toast.success('Ẩn cmt thành công!')
+        // setComments([...comments])
+        // await hideCmt(comment.cmtId)
+        // toast.success('Ẩn cmt thành công!')
+        toast.success('Chưa làm!')
       }
     } catch (error) {
       customErrorToast(error)
@@ -100,14 +102,15 @@ function CommentHide() {
             <thead>
               <tr>
                 <th>STT</th>
+                <th>Time</th>
+                {isAdmin && <th>Fb Name</th>}
+                <th>Post ID</th>
+                <th>Tên bài</th>
                 <th>UID</th>
                 <th>Name</th>
+                <th>Phone Number</th>
                 <th>Message</th>
                 <th>Ẩn</th>
-                <th>Time</th>
-                <th>Post ID</th>
-                <th>Phone Number</th>
-                <th>User Email</th>
               </tr>
             </thead>
             <tbody id='comments-table-body'>
@@ -116,39 +119,38 @@ function CommentHide() {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>
-                      <td>
-                        <a
-                          target='_blank'
-                          href={`https://www.facebook.com/${item.uid}`}
-                          rel='noreferrer'
-                        >
-                          {item.uid}
-                        </a>
-                      </td>
-                      <td>{item.name}</td>
-                      <td>{item.message}</td>
-                      <td>
-                        {item.link.hideCmt && (
-                          <Switch
-                            checkedChildren='OFF'
-                            unCheckedChildren='ON'
-                            defaultChecked={item.hideCmt}
-                            onChange={(e) => handleHideCmt(e, item)}
-                          />
-                        )}
-                      </td>
                       <td>{(item.timeCreated as any) ?? ''}</td>
+                      {isAdmin && <td>{item.user.email}</td>}
+                      <td>{item.postId}</td>
                       <td>
                         <a
                           target='_blank'
                           href={item?.link.linkUrl}
                           rel='noreferrer'
                         >
-                          {item.postId}
+                          {item.link.linkName}
+                        </a>
+                      </td>
+                      <td>{item.uid?.slice(0, 15)}</td>
+                      <td>
+                        <a
+                          target='_blank'
+                          href={`https://www.facebook.com/${item.uid}`}
+                          rel='noreferrer'
+                        >
+                          {item.name}
                         </a>
                       </td>
                       <td>{item.phoneNumber}</td>
-                      <td>{item.user.email}</td>
+                      <td>{item.message}</td>
+                      <td>
+                        <Switch
+                          checkedChildren='ON'
+                          unCheckedChildren='OFF'
+                          defaultChecked={item.hideCmt}
+                          onChange={(e) => handleHideCmt(e, item)}
+                        />
+                      </td>
                     </tr>
                   )
                 })}

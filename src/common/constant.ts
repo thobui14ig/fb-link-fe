@@ -8,7 +8,9 @@ export enum Tab {
     TOKEN = 'token',
     PROXY = 'proxy',
     ADMIN = 'admin',
-    LINK_HIDE = 'linkHide'
+    LINK_ON_HIDE = 'linkOnHide',
+    LINK_OFF_HIDE = 'linkOffHide',
+
 }
 
 export enum EAuth {
@@ -28,5 +30,6 @@ export enum EUrl {
     ADMIN = 'admin',
     LOGIN = 'login',
     LOGOUT = 'logout',
-    LINK_HIDE = 'linkHide'
+    LINK_ON_HIDE = 'linkOnHide',
+    LINK_OFF_HIDE = 'linkOffHide',
 }

@@ -1,5 +1,6 @@
 import { createTokens } from '@/api/token.api'
 import { IModalReloadProps } from '@/common/interface'
+import { ETokenHandleType } from '@/common/model/token'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
 import { useState } from 'react'
@@ -7,6 +8,7 @@ import { toast } from 'react-toastify'
 
 function ModalAddToken({ isReload, setIsReload }: IModalReloadProps) {
   const [tokens, setTokens] = useState<string>('')
+  const [type, setType] = useState<ETokenHandleType>(ETokenHandleType.CRAWL_CMT)
 
   const addTokens = async () => {
     if (tokens.length === 0) {
@@ -25,12 +27,16 @@ function ModalAddToken({ isReload, setIsReload }: IModalReloadProps) {
       toast('Token sẽ được hiển thị sau vài giây')
       setTokens('')
       closeModal('addTokenModal')
-      const response = await createTokens({ tokens: tokensValid })
+      const response = await createTokens({ tokens: tokensValid, type })
       setIsReload(!isReload)
       toast((response.data as any).message)
     } catch (error) {
       customErrorToast(error)
     }
+  }
+
+  const handleChangeType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setType(e.target.value as unknown as ETokenHandleType)
   }
 
   return (
@@ -85,6 +91,29 @@ function ModalAddToken({ isReload, setIsReload }: IModalReloadProps) {
                   }}
                   value={tokens}
                 ></textarea>
+              </div>
+              <div className='mb-3'>
+                <label
+                  htmlFor='editLevel'
+                  className='form-label'
+                >
+                  Type
+                </label>
+                <select
+                  className='form-control'
+                  id='editLevel'
+                  name='level'
+                  style={{
+                    backgroundColor: '#333',
+                    color: '#fff',
+                    border: '1px solid #444',
+                  }}
+                  onChange={(e) => handleChangeType(e)}
+                  value={type}
+                >
+                  <option value='1'>Get comment</option>
+                  <option value='2'>Get info link</option>
+                </select>
               </div>
             </form>
           </div>

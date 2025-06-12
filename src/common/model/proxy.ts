@@ -6,4 +6,5 @@ export interface IProxy {
     id: number;
     proxyAddress: string;
     status: ProxyStatus;
+    isFbBlock: boolean
 }

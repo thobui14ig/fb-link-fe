@@ -2,11 +2,13 @@ import { getComments, IGetCommentParams } from '@/api/comment.api'
 import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
 import { IComment } from '@/common/model/comment'
+import { useApp } from '@/common/store/AppContext'
 import { Button, DatePicker, Form } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
 function Comment() {
+  const { isAdmin } = useApp()
   const [form] = Form.useForm<IGetCommentParams>()
   const { active } = useTab()
   const [comments, setComments] = useState<IComment[]>([])
@@ -84,13 +86,14 @@ function Comment() {
             <thead>
               <tr>
                 <th>STT</th>
+                <th>Time</th>
+                {isAdmin && <th>Fb Name</th>}
+                <th>Post ID</th>
+                <th>Tên bài</th>
                 <th>UID</th>
                 <th>Name</th>
-                <th>Message</th>
-                <th>Time</th>
-                <th>Post ID</th>
                 <th>Phone Number</th>
-                <th>User Email</th>
+                <th>Message</th>
               </tr>
             </thead>
             <tbody id='comments-table-body'>
@@ -99,29 +102,31 @@ function Comment() {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>
+                      <td>{(item.timeCreated as any) ?? ''}</td>
+                      {isAdmin && <td>{item.user.email}</td>}
+
+                      <td>{item.postId}</td>
+                      <td>
+                        <a
+                          target='_blank'
+                          href={`${item.link.linkUrl}`}
+                          rel='noreferrer'
+                        >
+                          {item.link.linkName}
+                        </a>
+                      </td>
+                      <td>{item.uid?.slice(0, 15)}</td>
                       <td>
                         <a
                           target='_blank'
                           href={`https://www.facebook.com/${item.uid}`}
                           rel='noreferrer'
                         >
-                          {item.uid}
-                        </a>
-                      </td>
-                      <td>{item.name}</td>
-                      <td>{item.message}</td>
-                      <td>{(item.timeCreated as any) ?? ''}</td>
-                      <td>
-                        <a
-                          target='_blank'
-                          href={item?.link.linkUrl}
-                          rel='noreferrer'
-                        >
-                          {item.postId}
+                          {item.name}
                         </a>
                       </td>
                       <td>{item.phoneNumber}</td>
-                      <td>{item.user.email}</td>
+                      <td>{item.message}</td>
                     </tr>
                   )
                 })}

@@ -2,15 +2,14 @@ import useTab from '@/common/hook/useTab'
 import './token.css'
 import { Tab } from '@/common/constant'
 import { useEffect, useState } from 'react'
-import { IToken } from '@/common/model/token'
+import { ETokenHandleType, IToken } from '@/common/model/token'
 import { deleteToken, getTokens } from '@/api/token.api'
 import ModalAddToken from './ModalAddToken'
 import { toast } from 'react-toastify'
 import { customErrorToast } from '@/common/utils/toast'
 import { SettingOutlined } from '@ant-design/icons'
 import { Dropdown, MenuProps, Space, Typography } from 'antd'
-import copy from 'copy-to-clipboard';
-
+import copy from 'copy-to-clipboard'
 
 function Token() {
   const { active } = useTab()
@@ -35,6 +34,14 @@ function Token() {
 
     fetch()
   }, [isReload])
+
+  const showType = (type: ETokenHandleType) => {
+    if (type === ETokenHandleType.CRAWL_CMT) {
+      return 'Get comment'
+    }
+
+    return 'Crawl info link'
+  }
 
   return (
     <div
@@ -71,6 +78,7 @@ function Token() {
                 <th className='col-stt'>STT</th>
                 <th className='col-token'>Token</th>
                 <th className='col-token'>Status</th>
+                <th className='col-token'>Type</th>
                 <th className='col-action'>Hành Động</th>
               </tr>
             </thead>
@@ -100,6 +108,7 @@ function Token() {
                       <td className='col-stt'>{i + 1}</td>
                       <td className='col-token'>{item.tokenValue}</td>
                       <td>{item.status}</td>
+                      <td>{showType(item.type)}</td>
                       <td>
                         <Dropdown
                           menu={{

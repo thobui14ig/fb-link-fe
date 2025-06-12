@@ -66,6 +66,7 @@ function Proxy() {
               <tr>
                 <th className='col-stt'>STT</th>
                 <th className='col-proxy'>Proxy</th>
+                <th className='col-proxy'>FB Block</th>
                 <th>Tình Trạng</th>
                 <th className='col-action'>Hành Động</th>
               </tr>
@@ -77,6 +78,9 @@ function Proxy() {
                     <tr>
                       <td className='col-stt'>{i + 1}</td>
                       <td className='col-proxy'>{item.proxyAddress}</td>
+                      <td className='col-proxy'>
+                        {item.isFbBlock ? 'Đã Block' : 'Chưa'}
+                      </td>
                       <td>{item.status}</td>
                       <td className='col-action'>
                         <button

@@ -1,15 +1,17 @@
+import { EKeyHideCmt } from '@/components/Link/LinkComponent'
 import { IUser } from './user'
+import { IKeyword } from './keyword'
 
 export enum ELink {
     LINK_OFF = 'linkOff',
     LINK_ON = 'linkOn',
-    LINK_HIDE = 'linkHide'
+    LINK_ON_HIDE = 'linkOnHide',
+    LINK_OFF_HIDE = 'linkOffHide',
 }
 
 export enum LinkStatus {
     Pending = 'pending',
     Started = 'started',
-    Hide = 'hide'
 }
 
 export type Type = 'die' | 'undefined' | 'public' | 'private'
@@ -32,6 +34,8 @@ export interface ILink {
     errorMessage?: string
     process?: boolean,
     hideCmt: boolean,
+    hideBy: EKeyHideCmt,
     createdAt?: Date
-    user: IUser
+    user: IUser,
+    keywords: IKeyword[]
 }

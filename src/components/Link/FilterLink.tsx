@@ -1,12 +1,13 @@
-import { Button, Form, Input, Select } from 'antd'
-import './filter-link.css'
-import { useEffect, useState } from 'react'
-import { getUsers } from '@/api/user.api'
-import { IUser } from '@/common/model/user'
-import { toast } from 'react-toastify'
 import { getLinks } from '@/api/link.api'
+import { getUsers } from '@/api/user.api'
+import { IModalReloadProps } from '@/common/interface'
 import { ELink, LinkStatus } from '@/common/model/link'
+import { IUser } from '@/common/model/user'
 import { useApp } from '@/common/store/AppContext'
+import { Button, Form, Input, Select } from 'antd'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import './filter-link.css'
 
 export interface FormValues {
   type: 'private' | 'public' | 'die'
@@ -21,7 +22,14 @@ export interface FormValues {
   userId: number
 }
 
-function FilterLink({ setLinks, type }: { setLinks: any; type: ELink }) {
+export interface IPropFilter extends IModalReloadProps {
+  isModalOpen: boolean
+  setShowModal: (isModalOpen: boolean) => void
+  setLinks: any
+  type: ELink
+}
+
+function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
   const { isAdmin } = useApp()
   const [form] = Form.useForm<FormValues>()
   const [users, setUsers] = useState<IUser[]>([])
@@ -69,7 +77,7 @@ function FilterLink({ setLinks, type }: { setLinks: any; type: ELink }) {
       values,
       linkType,
       1,
-      type === ELink.LINK_HIDE ? 1 : 0
+      type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE ? 1 : 0
     )
     setLinks(data.data)
   }
@@ -83,6 +91,10 @@ function FilterLink({ setLinks, type }: { setLinks: any; type: ELink }) {
 
     fetch()
   }, [])
+
+  const handleShowSetting = () => {
+    setShowModal(true)
+  }
 
   if (!users.length) {
     return <></>
@@ -229,6 +241,12 @@ function FilterLink({ setLinks, type }: { setLinks: any; type: ELink }) {
           Submit
         </Button>
       </Form.Item>
+      <Button
+        onClick={() => handleShowSetting()}
+        type='primary'
+      >
+        Setting
+      </Button>
     </Form>
   )
 }

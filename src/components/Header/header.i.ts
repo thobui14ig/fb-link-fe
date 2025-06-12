@@ -18,8 +18,13 @@ export const menus: IHeaderItems[] = [
         className: 'fas fa-link-slash',
     },
     {
-        urlName: EUrl.LINK_HIDE,
-        name: 'LinkHide',
+        urlName: EUrl.LINK_ON_HIDE,
+        name: 'LinkOn Hide',
+        className: 'fas fa-link-slash',
+    },
+    {
+        urlName: EUrl.LINK_OFF_HIDE,
+        name: 'LinkOff Hide',
         className: 'fas fa-link-slash',
     },
     {

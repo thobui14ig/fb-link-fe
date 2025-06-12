@@ -19,10 +19,13 @@ function useLink() {
     const argCreate = {
       links,
       status:
-        type === ELink.LINK_ON || type === ELink.LINK_HIDE
+        type === ELink.LINK_ON || type === ELink.LINK_ON_HIDE
           ? LinkStatus.Started
           : LinkStatus.Pending,
-      hideCmt: type === ELink.LINK_HIDE ? true : false
+      hideCmt:
+        type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE
+          ? true
+          : false,
     }
     return createLink(argCreate)
   }

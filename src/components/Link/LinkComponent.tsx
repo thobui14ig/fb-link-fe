@@ -11,13 +11,15 @@ import { ELink, ILink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
 import { getTypeLink } from '@/common/utils'
 import { customErrorToast } from '@/common/utils/toast'
-import { SettingOutlined } from '@ant-design/icons'
-import { Dropdown, MenuProps, Space, Typography } from 'antd'
+import { Select, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import FilterLink from './FilterLink'
 import ModalAddLink from './ModalAddLink'
 import ModalEditLink from './ModalEditLink'
+import { SettingOutlined } from '@ant-design/icons'
+import ModalAddKeyword from './ModalAddKeyword'
+import ModalSetting from './ModalSetting'
 
 export interface ITypeLink {
   type: ELink
@@ -26,14 +28,19 @@ export interface ITypeLink {
 export enum EKeyHideCmt {
   ALL = 'all',
   PHONE = 'phone',
-  KEYWORD = 'keyword',
+  KEYWORD = 'keywords',
 }
 
 function LinkComponent({ type }: ITypeLink) {
   const { isAdmin } = useApp()
   const [isReload, setIsReload] = useState<boolean>(false)
+  const [isShowModalAddKeywords, setIsShowModalAddKeywords] =
+    useState<boolean>(false)
+  const [isShowModalSetting, setIsShowModalSetting] = useState<boolean>(false)
+
   const [links, setLinks] = useState<IGetAllLink[]>([])
   const [linkEditId, setLinkEditId] = useState<number | null>(null)
+  const [linkSetKeyword, setLinkSetKeyword] = useState<number | null>(null)
   const linkType = getTypeLink(type)
 
   useEffect(() => {
@@ -42,7 +49,7 @@ function LinkComponent({ type }: ITypeLink) {
         null,
         linkType,
         0,
-        type === ELink.LINK_HIDE ? 1 : 0
+        type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE ? 1 : 0
       )
       setLinks(data.data)
     }
@@ -92,13 +99,23 @@ function LinkComponent({ type }: ITypeLink) {
     }
   }
 
-  const actionHideCmt = async (linkId: number, key: EKeyHideCmt) => {
+  const actionHideCmt = async (key: EKeyHideCmt, linkId: number) => {
+    if (key === EKeyHideCmt.KEYWORD) {
+      setLinkSetKeyword(linkId)
+      setIsShowModalAddKeywords(true)
+    }
     try {
       await hideCmt(linkId, key)
-      toast.success('Ẩn cmt thành công!')
+      setIsReload(!isReload)
+      toast.success('Ok!')
     } catch (error) {
       customErrorToast(error)
     }
+  }
+
+  const handleAddkeyword = (linkId: number) => {
+    setLinkSetKeyword(linkId)
+    setIsShowModalAddKeywords(true)
   }
 
   return (
@@ -140,6 +157,10 @@ function LinkComponent({ type }: ITypeLink) {
         <FilterLink
           setLinks={setLinks}
           type={type}
+          isModalOpen={isShowModalSetting}
+          setShowModal={setIsShowModalSetting}
+          isReload={isReload}
+          setIsReload={setIsReload}
         />
 
         <div className='table-responsive'>
@@ -166,35 +187,6 @@ function LinkComponent({ type }: ITypeLink) {
             <tbody id='linksTableBody'>
               {links.length > 0 &&
                 links.map((item, i) => {
-                  const dropdownItems: MenuProps['items'] = [
-                    {
-                      key: '1',
-                      label: 'All',
-                      onClick: () => {
-                        return actionHideCmt(item.id as number, EKeyHideCmt.ALL)
-                      },
-                    },
-                    {
-                      key: '2',
-                      label: 'Phone Number',
-                      onClick: () => {
-                        return actionHideCmt(
-                          item.id as number,
-                          EKeyHideCmt.PHONE
-                        )
-                      },
-                    },
-                    {
-                      key: '2',
-                      label: 'keyword',
-                      onClick: () => {
-                        return actionHideCmt(
-                          item.id as number,
-                          EKeyHideCmt.KEYWORD
-                        )
-                      },
-                    },
-                  ]
                   return (
                     <tr
                       key={i}
@@ -210,31 +202,47 @@ function LinkComponent({ type }: ITypeLink) {
                       <td>{item.type}</td>
                       <td className='td-hide-cmt'>
                         <div className='hide-cmt'>
-                          {/* {type !== ELink.LINK_HIDE && (
-                            <Switch
-                              checkedChildren='ON'
-                              unCheckedChildren='OFF'
-                              defaultChecked={item.hideCmt}
-                              onChange={(e) => handleHideCmt(e, item)}
-                            />
-                          )} */}
-
                           {item.hideCmt ? (
-                            <Dropdown
-                              menu={{
-                                items: dropdownItems,
-                              }}
-                            >
-                              <Typography.Link>
-                                <Space>
+                            <>
+                              <Select
+                                defaultValue={item.hideBy}
+                                style={{ width: 120 }}
+                                onChange={(e) =>
+                                  actionHideCmt(
+                                    e as unknown as EKeyHideCmt,
+                                    item.id as number
+                                  )
+                                }
+                                options={[
+                                  {
+                                    value: EKeyHideCmt.ALL,
+                                    label: 'All',
+                                  },
+                                  {
+                                    value: EKeyHideCmt.PHONE,
+                                    label: 'Phone number',
+                                  },
+                                  {
+                                    value: EKeyHideCmt.KEYWORD,
+                                    label: 'Keywords',
+                                  },
+                                ]}
+                              />
+                              {item.hideBy === EKeyHideCmt.KEYWORD && (
+                                <Typography.Link
+                                  onClick={() =>
+                                    handleAddkeyword(item.id as number)
+                                  }
+                                >
                                   <SettingOutlined
                                     style={{
                                       fontSize: '20px',
+                                      marginLeft: '5px',
                                     }}
                                   />
-                                </Space>
-                              </Typography.Link>
-                            </Dropdown>
+                                </Typography.Link>
+                              )}
+                            </>
                           ) : (
                             <></>
                           )}
@@ -327,6 +335,25 @@ function LinkComponent({ type }: ITypeLink) {
           isReload={isReload}
           linkEditId={linkEditId}
         />
+        {linkSetKeyword && (
+          <ModalAddKeyword
+            isReload={isReload}
+            setIsReload={setIsReload}
+            isModalOpen={isShowModalAddKeywords}
+            setShowModal={setIsShowModalAddKeywords}
+            linkId={linkSetKeyword}
+          />
+        )}
+        {isShowModalSetting && (
+          <ModalSetting
+            isModalOpen={isShowModalSetting}
+            setShowModal={setIsShowModalSetting}
+            isReload={isReload}
+            setIsReload={setIsReload}
+            links={links}
+            linkType={linkType}
+          />
+        )}
       </div>
     </div>
   )
