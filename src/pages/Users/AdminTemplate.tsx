@@ -5,8 +5,13 @@ import ModalEditUser from '@/components/ModalUser/ModalEditUser'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
+export interface IListUser extends IUser {
+  totalRunning: number
+  totalPending: number
+}
+
 function AdminTemplate() {
-  const [users, setUsers] = useState<IUser[]>([])
+  const [users, setUsers] = useState<IListUser[]>([])
   const [isReload, setIsReload] = useState<boolean>(false)
   const [userEdit, setUserEdit] = useState<number | null>(null)
 
@@ -41,7 +46,7 @@ function AdminTemplate() {
           </th>
         </tr>
         <tr>
-          <th>Email</th>
+          <th>Username</th>
           <th>Running Links</th>
           <th>Not Running Links</th>
           <th>Expiration Date</th>
@@ -53,15 +58,15 @@ function AdminTemplate() {
           users.map((item, index) => {
             return (
               <tr key={index}>
-                <td>{item.email}</td>
-                <td>1</td>
-                <td>1</td>
+                <td>{item.username ?? 'Noname'}</td>
+                <td>{item.totalRunning}</td>
+                <td>{item.totalPending}</td>
                 <td>
                   <span
                     className='expiration-days'
                     data-expired-at="{{ user['expired_at'] }}"
                   >
-                    Đang tính...
+                    {item.expiredAt}
                   </span>
                 </td>
                 <td className='nowrap'>

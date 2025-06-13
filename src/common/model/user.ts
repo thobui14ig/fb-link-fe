@@ -1,15 +1,25 @@
 export interface IUser {
-    id: number;
-    email: string;
-    expiredAt: string;
-    linkAddLimit?: number;
-    linkStartLimit?: number;
-    password?: string;
-    level: number;
-    createdAt: string;
+    id: number
+    username: string
+    expiredAt: string
+    linkAddLimit?: number
+    linkStartLimit?: number
+    password?: string
+    level: number
+    createdAt: string
 }
 
 export enum Level {
     ADMIN = 1,
-    USER = 0
+    USER = 0,
 }
+
+export interface IUserLogin {
+    totalPublic: number
+    totalPrivate: number
+    totalPublicRunning: number
+    totalPrivateRunning: number
+}
+
+
+export interface ICurrentUserLogin extends IUserLogin, IUser { }

@@ -120,7 +120,7 @@ function CommentHide() {
                     <tr key={i}>
                       <td>{i + 1}</td>
                       <td>{(item.timeCreated as any) ?? ''}</td>
-                      {isAdmin && <td>{item.user.email}</td>}
+                      {isAdmin && <td>{item.user.username}</td>}
                       <td>{item.postId}</td>
                       <td>
                         <a

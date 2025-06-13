@@ -14,15 +14,19 @@ function UserTemplate() {
       <tbody>
         <tr>
           <td>Name</td>
-          <td>{userLogin?.email}</td>
+          <td>{userLogin?.username}</td>
         </tr>
         <tr>
           <td>Total Public Links / Running Links</td>
-          <td>Đang xử lý</td>
+          <td>
+            {userLogin?.totalPublic}/{userLogin?.totalPublicRunning}
+          </td>
         </tr>
         <tr>
           <td>Total Private Links / Running Links</td>
-          <td>Đang xử lý</td>
+          <td>
+            {userLogin?.totalPrivate}/{userLogin?.totalPrivateRunning}
+          </td>
         </tr>
         <tr>
           <td>Registration Date</td>
@@ -35,7 +39,7 @@ function UserTemplate() {
               className='expiration-days'
               data-expired-at="{{ user_info['expired_at'] }}"
             >
-              Đang tính...
+              {userLogin?.expiredAt}
             </span>
           </td>
         </tr>

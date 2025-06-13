@@ -224,7 +224,7 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
                       key={i}
                       value={item.id}
                     >
-                      {item.email}
+                      {item.username}
                     </Select.Option>
                   )
                 })}

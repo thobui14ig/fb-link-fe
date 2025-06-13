@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 export interface IUserRegister {
-  email: string | null
+  username: string | null
   password: string | null
   linkStartLimit: number | null
   linkAddLimit: number | null
@@ -15,7 +15,7 @@ export interface IUserRegister {
 }
 
 const defaultValue = {
-  email: null,
+  username: null,
   password: null,
   linkStartLimit: null,
   linkAddLimit: null,
@@ -77,24 +77,24 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
               <div className='row mb-3'>
                 <div className='col-md-6'>
                   <label
-                    htmlFor='email'
+                    htmlFor='username'
                     className='form-label'
                   >
-                    Email
+                    Username
                   </label>
                   <input
                     type='email'
                     className='form-control'
-                    id='email'
-                    name='email'
+                    id='username'
+                    name='username'
                     required
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setUserInfo({
                         ...userInfo,
-                        email: e.target.value,
+                        username: e.target.value,
                       })
                     }}
-                    value={userInfo.email ?? ''}
+                    value={userInfo.username ?? ''}
                     style={{
                       backgroundColor: '#333',
                       color: '#fff',

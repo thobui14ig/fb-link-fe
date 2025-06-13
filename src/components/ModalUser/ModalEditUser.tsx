@@ -76,26 +76,25 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                     id='editUserId'
                   />
 
-                  {/* Email & Password */}
                   <div className='row mb-3'>
                     <div className='col-md-6'>
                       <label
-                        htmlFor='editEmail'
+                        htmlFor='editUsername'
                         className='form-label'
                       >
-                        Email
+                        Username
                       </label>
                       <input
-                        type='email'
+                        type='username'
                         className='form-control'
-                        id='editEmail'
-                        name='email'
+                        id='editUsername'
+                        name='username'
                         required
-                        value={user.email}
+                        value={user.username}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           setUser({
                             ...user,
-                            email: e.target.value,
+                            username: e.target.value,
                           })
                         }}
                         style={{

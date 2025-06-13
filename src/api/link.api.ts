@@ -19,7 +19,7 @@ export interface ISettingLink {
 }
 
 export interface IGetAllLink extends ILink {
-  email: string
+  username: string
 }
 export const createLink = (links: ICreateLinkParams) =>
   http.post<ILink>(`/links`, links)
