@@ -1,6 +1,7 @@
 import { IGetAllLink, settingLink } from '@/api/link.api'
 import { IModalReloadProps } from '@/common/interface'
 import { LinkStatus } from '@/common/model/link'
+import { useApp } from '@/common/store/AppContext'
 import { customErrorToast } from '@/common/utils/toast'
 import { Form, InputNumber, Modal, Switch } from 'antd'
 import { toast } from 'react-toastify'
@@ -25,6 +26,7 @@ function ModalSetting({
   links,
   linkType,
 }: IPropModalSetting) {
+  const { isAdmin } = useApp()
   const [form] = Form.useForm<IForm>()
   const initialValues = {
     isDelete: false,
@@ -84,12 +86,14 @@ function ModalSetting({
           <Switch />
         </Form.Item>
 
-        <Form.Item
-          label='Delay'
-          name='delay'
-        >
-          <InputNumber />
-        </Form.Item>
+        {isAdmin && (
+          <Form.Item
+            label='Delay'
+            name='delay'
+          >
+            <InputNumber />
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   )
