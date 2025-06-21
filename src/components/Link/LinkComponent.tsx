@@ -171,16 +171,21 @@ function LinkComponent({ type }: ITypeLink) {
             <thead>
               <tr>
                 <th scope='col'>STT</th>
-                <th scope='col'>Tên Link</th>
-                <th scope='col'>Type Link</th>
-                {isAdmin && <th scope='col'>Ẩn</th>}
+                <th scope='col'>Created At</th>
                 <th scope='col'>ID Bài Viết</th>
+                <th scope='col'>Tên Link</th>
+                <th scope='col'>Content</th>
                 <th scope='col'>Last Comment Time</th>
                 <th scope='col'>Comment Count</th>
-                <th scope='col'>Created At</th>
-                <th scope='col'>Delay (s)</th>
                 <th scope='col'>Like Count</th>
-                {isAdmin && <th scope='col'>User Name</th>}
+
+                {isAdmin && (
+                  <>
+                    <th scope='col'>Type Link</th>
+                    <th scope='col'>Delay (s)</th>
+                    <th scope='col'>User Name</th>
+                  </>
+                )}
                 <th scope='col'>Hành Động</th>
               </tr>
             </thead>
@@ -198,8 +203,35 @@ function LinkComponent({ type }: ITypeLink) {
                       data-like-count='{{ link.like }}'
                     >
                       <td className='stt'>{i + 1}</td>
+                      <td>{(item.createdAt as any) ?? ''}</td>
+                      <td>
+                        <a
+                          target='_blank'
+                          href={`${item.linkUrl}`}
+                          rel='noreferrer'
+                        >
+                          {item.postId}
+                        </a>
+                      </td>
                       <td>{item.linkName ?? item.linkUrl}</td>
-                      <td>{item.type}</td>
+                      <td>{item.content}</td>
+
+
+                      <td data-time={item.lastCommentTime}>
+                        <span className='time-ago'>
+                          {item.lastCommentTime as any}
+                        </span>
+                      </td>
+                      <td>{`[${item.countBefore}-${item.countAfter}]`}</td>
+                      <td>{`[${item.likeBefore}-${item.likeAfter}]`}</td>
+
+                      {isAdmin && (
+                        <>
+                          <td>{item.type}</td>
+                          <td>{item.delayTime}</td>
+                          <td>{item.username}</td>
+                        </>
+                      )}
                       {isAdmin && (
                         <td className='td-hide-cmt'>
                           <div className='hide-cmt'>
@@ -251,25 +283,6 @@ function LinkComponent({ type }: ITypeLink) {
                         </td>
                       )}
 
-                      <td>
-                        <a
-                          target='_blank'
-                          href={`${item.linkUrl}`}
-                          rel='noreferrer'
-                        >
-                          {item.postId}
-                        </a>
-                      </td>
-                      <td data-time={item.lastCommentTime}>
-                        <span className='time-ago'>
-                          {item.lastCommentTime as any}
-                        </span>
-                      </td>
-                      <td>{`[${item.countBefore}-${item.countAfter}]`}</td>
-                      <td>{(item.createdAt as any) ?? ''}</td>
-                      <td>{item.delayTime}</td>
-                      <td>{`[${item.likeBefore}-${item.likeAfter}]`}</td>
-                      {isAdmin && <td>{item.username}</td>}
                       <td className='nowrap'>
                         <div className='dropdown'>
                           <button

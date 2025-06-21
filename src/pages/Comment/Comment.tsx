@@ -6,6 +6,8 @@ import { useApp } from '@/common/store/AppContext'
 import { Button, DatePicker, Form } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 
 function Comment() {
   const { isAdmin } = useApp()
@@ -29,6 +31,32 @@ function Comment() {
   const onFinish = async (values: IGetCommentParams) => {
     const { data } = await getComments(values)
     setComments(data)
+  }
+
+  const downloadExcel = () => {
+    const formattedData = comments.map((item, index) => ({
+      STT: index + 1,
+      Time: item.timeCreated,
+      PostId: item.postId,
+      'Tên bài': item.link.linkName,
+      UID: item.uid,
+      Name: item.name,
+      'Phone Number': item.phoneNumber || '',
+      Message: item.message,
+    }))
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Comments')
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    })
+    const dataBlob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
+    saveAs(dataBlob, 'comments.xlsx')
   }
 
   return (
@@ -75,6 +103,7 @@ function Comment() {
             <Button
               type='primary'
               htmlType='submit'
+              onClick={() => downloadExcel()}
             >
               Download Excel
             </Button>

@@ -2,23 +2,22 @@ import { createUser } from '@/api/user.api'
 import { IModalReloadProps } from '@/common/interface'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
-import dayjs from 'dayjs'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 export interface IUserRegister {
   username: string | null
   password: string | null
-  linkStartLimit: number | null
-  linkAddLimit: number | null
+  linkOffLimit: number | null
+  linkOnLimit: number | null
   expiredAt: Date | null
 }
 
 const defaultValue = {
   username: null,
   password: null,
-  linkStartLimit: null,
-  linkAddLimit: null,
+  linkOffLimit: null,
+  linkOnLimit: null,
   expiredAt: null,
 }
 
@@ -134,22 +133,22 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
               <div className='row mb-3'>
                 <div className='col-md-6'>
                   <label
-                    htmlFor='link_start_limit'
+                    htmlFor='link_add_limit'
                     className='form-label'
                   >
-                    Link Start Limit
+                    Link On Limit
                   </label>
                   <input
                     type='number'
                     className='form-control'
-                    id='link_start_limit'
-                    name='link_start_limit'
+                    id='link_add_limit'
+                    name='link_add_limit'
                     required
-                    value={userInfo.linkStartLimit ?? ''}
+                    value={userInfo.linkOnLimit ?? ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setUserInfo({
                         ...userInfo,
-                        linkStartLimit: Number(e.target.value),
+                        linkOnLimit: Number(e.target.value),
                       })
                     }}
                     style={{
@@ -161,22 +160,22 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
                 </div>
                 <div className='col-md-6'>
                   <label
-                    htmlFor='link_add_limit'
+                    htmlFor='link_start_limit'
                     className='form-label'
                   >
-                    Link Add Limit
+                    Link Off Limit
                   </label>
                   <input
                     type='number'
                     className='form-control'
-                    id='link_add_limit'
-                    name='link_add_limit'
+                    id='link_start_limit'
+                    name='link_start_limit'
                     required
-                    value={userInfo.linkAddLimit ?? ''}
+                    value={userInfo.linkOffLimit ?? ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setUserInfo({
                         ...userInfo,
-                        linkAddLimit: Number(e.target.value),
+                        linkOffLimit: Number(e.target.value),
                       })
                     }}
                     style={{
@@ -204,7 +203,7 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setUserInfo({
                       ...userInfo,
-                      expiredAt: dayjs(e.target.value) as any,
+                      expiredAt: new Date(e.target.value).toDateString() as any,
                     })
                   }}
                   style={{

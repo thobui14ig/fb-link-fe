@@ -136,7 +136,7 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                   <div className='row mb-3'>
                     <div className='col-md-6'>
                       <label
-                        htmlFor='editLinkStartLimit'
+                        htmlFor='editLinkOffLimit'
                         className='form-label'
                       >
                         Link Start Limit
@@ -144,14 +144,14 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                       <input
                         type='number'
                         className='form-control'
-                        id='editLinkStartLimit'
+                        id='editLinkOffLimit'
                         name='link_start_limit'
                         required
-                        value={user.linkStartLimit}
+                        value={user.linkOffLimit}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           setUser({
                             ...user,
-                            linkStartLimit: Number(e.target.value),
+                            linkOffLimit: Number(e.target.value),
                           })
                         }}
                         style={{
@@ -163,7 +163,7 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                     </div>
                     <div className='col-md-6'>
                       <label
-                        htmlFor='editLinkAddLimit'
+                        htmlFor='editLinkOnLimit'
                         className='form-label'
                       >
                         Link Add Limit
@@ -171,14 +171,14 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                       <input
                         type='number'
                         className='form-control'
-                        id='editLinkAddLimit'
+                        id='editLinkOnLimit'
                         name='link_add_limit'
                         required
-                        value={user.linkAddLimit}
+                        value={user.linkOnLimit}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           setUser({
                             ...user,
-                            linkAddLimit: Number(e.target.value),
+                            linkOnLimit: Number(e.target.value),
                           })
                         }}
                         style={{

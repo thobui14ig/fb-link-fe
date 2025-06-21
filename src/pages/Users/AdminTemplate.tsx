@@ -8,6 +8,8 @@ import { toast } from 'react-toastify'
 export interface IListUser extends IUser {
   totalRunning: number
   totalPending: number
+  totalLinkHideRunning: number
+  totalLinkHidePending: number
 }
 
 function AdminTemplate() {
@@ -39,7 +41,7 @@ function AdminTemplate() {
       <thead>
         <tr>
           <th
-            colSpan={5}
+            colSpan={7}
             className='text-center'
           >
             All Users
@@ -49,6 +51,8 @@ function AdminTemplate() {
           <th>Username</th>
           <th>Running Links</th>
           <th>Not Running Links</th>
+          <th>Running Links Hide</th>
+          <th>Not Running Links Hide</th>
           <th>Expiration Date</th>
           <th>Action</th>
         </tr>
@@ -61,6 +65,8 @@ function AdminTemplate() {
                 <td>{item.username ?? 'Noname'}</td>
                 <td>{item.totalRunning}</td>
                 <td>{item.totalPending}</td>
+                <td>{item.totalLinkHideRunning}</td>
+                <td>{item.totalLinkHidePending}</td>
                 <td>
                   <span
                     className='expiration-days'
@@ -112,7 +118,7 @@ function AdminTemplate() {
 
         <tr>
           <td
-            colSpan={5}
+            colSpan={7}
             className='text-center'
           >
             <button

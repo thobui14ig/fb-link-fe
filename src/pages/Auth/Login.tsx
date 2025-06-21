@@ -34,8 +34,13 @@ function Login() {
         handleSetCurrentUserLogin(data.info)
         navigation(`/${EUrl.USERS}`)
       })
-      .catch(() => {
-        toast.error('Lỗi đăng nhập.')
+      .catch((e) => {
+        const message = e?.response?.data?.message
+        if (message === 'Unauthorized') {
+          toast.error('Lỗi đăng nhập!')
+          return
+        }
+        toast.error(e?.response?.data?.message)
       })
   }
 

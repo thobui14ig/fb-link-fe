@@ -2,8 +2,8 @@ export interface IUser {
     id: number
     username: string
     expiredAt: string
-    linkAddLimit?: number
-    linkStartLimit?: number
+    linkOnLimit?: number
+    linkOffLimit?: number
     password?: string
     level: number
     createdAt: string

@@ -37,5 +37,6 @@ export interface ILink {
     hideBy: EKeyHideCmt,
     createdAt?: Date
     user: IUser,
-    keywords: IKeyword[]
+    keywords: IKeyword[],
+    content: string
 }
