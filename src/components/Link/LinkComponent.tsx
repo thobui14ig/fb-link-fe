@@ -216,7 +216,6 @@ function LinkComponent({ type }: ITypeLink) {
                       <td>{item.linkName ?? item.linkUrl}</td>
                       <td>{item.content}</td>
 
-
                       <td data-time={item.lastCommentTime}>
                         <span className='time-ago'>
                           {item.lastCommentTime as any}

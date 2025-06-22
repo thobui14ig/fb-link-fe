@@ -136,37 +136,10 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                   <div className='row mb-3'>
                     <div className='col-md-6'>
                       <label
-                        htmlFor='editLinkOffLimit'
-                        className='form-label'
-                      >
-                        Link Start Limit
-                      </label>
-                      <input
-                        type='number'
-                        className='form-control'
-                        id='editLinkOffLimit'
-                        name='link_start_limit'
-                        required
-                        value={user.linkOffLimit}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          setUser({
-                            ...user,
-                            linkOffLimit: Number(e.target.value),
-                          })
-                        }}
-                        style={{
-                          backgroundColor: '#333',
-                          color: '#fff',
-                          border: '1px solid #444',
-                        }}
-                      />
-                    </div>
-                    <div className='col-md-6'>
-                      <label
                         htmlFor='editLinkOnLimit'
                         className='form-label'
                       >
-                        Link Add Limit
+                        Link On Limit
                       </label>
                       <input
                         type='number'
@@ -179,6 +152,33 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                           setUser({
                             ...user,
                             linkOnLimit: Number(e.target.value),
+                          })
+                        }}
+                        style={{
+                          backgroundColor: '#333',
+                          color: '#fff',
+                          border: '1px solid #444',
+                        }}
+                      />
+                    </div>
+                    <div className='col-md-6'>
+                      <label
+                        htmlFor='editLinkOffLimit'
+                        className='form-label'
+                      >
+                        Link Off Limit
+                      </label>
+                      <input
+                        type='number'
+                        className='form-control'
+                        id='editLinkOffLimit'
+                        name='link_start_limit'
+                        required
+                        value={user.linkOffLimit}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setUser({
+                            ...user,
+                            linkOffLimit: Number(e.target.value),
                           })
                         }}
                         style={{

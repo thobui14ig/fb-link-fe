@@ -8,12 +8,17 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
+import './comment.css'
+import { getLink } from '@/api/link.api'
+import { customErrorToast } from '@/common/utils/toast'
 
 function Comment() {
   const { isAdmin } = useApp()
   const [form] = Form.useForm<IGetCommentParams>()
   const { active } = useTab()
   const [comments, setComments] = useState<IComment[]>([])
+  const [showPopover, setShowPopover] = useState<null | string>(null)
+  const [contentPopover, setShowContentPopover] = useState<null | string>(null)
   const initialValues: IGetCommentParams = {
     startDate: dayjs(),
     endDate: dayjs(),
@@ -57,6 +62,16 @@ function Comment() {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     })
     saveAs(dataBlob, 'comments.xlsx')
+  }
+
+  const handlePopover = async (cmtId: string, linkId: number) => {
+    try {
+      const response = await getLink(linkId)
+      setShowContentPopover(response.data.content)
+      setShowPopover(cmtId)
+    } catch (error) {
+      customErrorToast(error)
+    }
   }
 
   return (
@@ -134,7 +149,18 @@ function Comment() {
                       <td>{(item.timeCreated as any) ?? ''}</td>
                       {isAdmin && <td>{item.user.username}</td>}
 
-                      <td>{item.postId}</td>
+                      <td
+                        onMouseEnter={() => {
+                          handlePopover(item.cmtId, Number(item.link.id))
+                        }}
+                        onMouseLeave={() => setShowPopover(null)}
+                        className='post-id-popover'
+                      >
+                        {item.postId}
+                        {showPopover && showPopover === item.cmtId && (
+                          <div className='popover'>{contentPopover}</div>
+                        )}
+                      </td>
                       <td>
                         <a
                           target='_blank'
