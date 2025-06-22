@@ -190,6 +190,63 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                     </div>
                   </div>
 
+                  <div className='row mb-3'>
+                    <div className='col-md-6'>
+                      <label
+                        htmlFor='editLinkOnLimit'
+                        className='form-label'
+                      >
+                        Link On Hide Limit
+                      </label>
+                      <input
+                        type='number'
+                        className='form-control'
+                        id='editLinkOnLimit'
+                        name='link_add_limit'
+                        required
+                        value={user.linkOnHideLimit}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setUser({
+                            ...user,
+                            linkOnHideLimit: Number(e.target.value),
+                          })
+                        }}
+                        style={{
+                          backgroundColor: '#333',
+                          color: '#fff',
+                          border: '1px solid #444',
+                        }}
+                      />
+                    </div>
+                    <div className='col-md-6'>
+                      <label
+                        htmlFor='editLinkOffLimit'
+                        className='form-label'
+                      >
+                        Link Off Hide Limit
+                      </label>
+                      <input
+                        type='number'
+                        className='form-control'
+                        id='editLinkOffLimit'
+                        name='link_start_limit'
+                        required
+                        value={user.linkOffHideLimit}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setUser({
+                            ...user,
+                            linkOffHideLimit: Number(e.target.value),
+                          })
+                        }}
+                        style={{
+                          backgroundColor: '#333',
+                          color: '#fff',
+                          border: '1px solid #444',
+                        }}
+                      />
+                    </div>
+                  </div>
+
                   {/* Expiration & Level */}
                   <div className='row mb-3'>
                     <div className='col-md-6'>

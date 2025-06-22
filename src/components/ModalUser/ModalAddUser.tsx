@@ -10,6 +10,8 @@ export interface IUserRegister {
   password: string | null
   linkOffLimit: number | null
   linkOnLimit: number | null
+  linkOnHideLimit: number | null
+  linkOffHideLimit: number | null
   expiredAt: Date | null
 }
 
@@ -18,6 +20,8 @@ const defaultValue = {
   password: null,
   linkOffLimit: null,
   linkOnLimit: null,
+  linkOnHideLimit: null,
+  linkOffHideLimit: null,
   expiredAt: null,
 }
 
@@ -176,6 +180,62 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
                       setUserInfo({
                         ...userInfo,
                         linkOffLimit: Number(e.target.value),
+                      })
+                    }}
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                  />
+                </div>
+              </div>
+              <div className='row mb-3'>
+                <div className='col-md-6'>
+                  <label
+                    htmlFor='link_add_limit'
+                    className='form-label'
+                  >
+                    Link On Hide Limit
+                  </label>
+                  <input
+                    type='number'
+                    className='form-control'
+                    id='link_add_limit'
+                    name='link_add_limit'
+                    required
+                    value={userInfo.linkOnHideLimit ?? ''}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setUserInfo({
+                        ...userInfo,
+                        linkOnHideLimit: Number(e.target.value),
+                      })
+                    }}
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <label
+                    htmlFor='link_start_limit'
+                    className='form-label'
+                  >
+                    Link Off Hide Limit
+                  </label>
+                  <input
+                    type='number'
+                    className='form-control'
+                    id='link_start_limit'
+                    name='link_start_limit'
+                    required
+                    value={userInfo.linkOffHideLimit ?? ''}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setUserInfo({
+                        ...userInfo,
+                        linkOffHideLimit: Number(e.target.value),
                       })
                     }}
                     style={{

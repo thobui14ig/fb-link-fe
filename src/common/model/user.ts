@@ -4,6 +4,8 @@ export interface IUser {
     expiredAt: string
     linkOnLimit?: number
     linkOffLimit?: number
+    linkOnHideLimit?: number
+    linkOffHideLimit?: number
     password?: string
     level: number
     createdAt: string

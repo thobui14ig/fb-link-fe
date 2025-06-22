@@ -8,7 +8,7 @@ export interface ICreateLinkParams {
     url: string
     delayTime: number
   }[]
-  status: LinkStatus,
+  status: LinkStatus
   hideCmt: boolean
 }
 export interface ISettingLink {
@@ -38,8 +38,11 @@ export const getLink = (id: number) =>
 export const updateLink = (link: Omit<Partial<ILink>, 'user'>) =>
   http.put(`/links`, link)
 export const deleteLink = (id: number) => http.delete<null>(`/links/${id}`)
-export const processLink = (body: { id: number; status: LinkStatus }) =>
-  http.post(`/monitoring/process`, body)
+export const processLink = (body: {
+  id: number
+  status: LinkStatus
+  hideCmt: boolean
+}) => http.post(`/monitoring/process`, body)
 export const hideCmt = (id: number, type: EKeyHideCmt) =>
   http.post(`/links/hide-cmt/${id}?type=${type}`)
 export const getKeywordByLinkId = (id: number) =>

@@ -5,20 +5,19 @@ import {
   hideCmt,
   IGetAllLink,
   processLink,
-  updateLink,
 } from '@/api/link.api'
 import { ELink, ILink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
 import { getTypeLink } from '@/common/utils'
 import { customErrorToast } from '@/common/utils/toast'
+import { SettingOutlined } from '@ant-design/icons'
 import { Select, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import FilterLink from './FilterLink'
+import ModalAddKeyword from './ModalAddKeyword'
 import ModalAddLink from './ModalAddLink'
 import ModalEditLink from './ModalEditLink'
-import { SettingOutlined } from '@ant-design/icons'
-import ModalAddKeyword from './ModalAddKeyword'
 import ModalSetting from './ModalSetting'
 
 export interface ITypeLink {
@@ -81,6 +80,10 @@ function LinkComponent({ type }: ITypeLink) {
       const response = await processLink({
         id: Number(link.id),
         status,
+        hideCmt:
+          type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE
+            ? true
+            : false,
       })
 
       setIsReload(!isReload)
@@ -90,14 +93,14 @@ function LinkComponent({ type }: ITypeLink) {
     }
   }
 
-  const handleHideCmt = async (link: ILink) => {
-    try {
-      await updateLink({ ...link, hideCmt: !link.hideCmt })
-      setIsReload(!isReload)
-    } catch (error) {
-      customErrorToast(error)
-    }
-  }
+  // const handleHideCmt = async (link: ILink) => {
+  //   try {
+  //     await updateLink({ ...link, hideCmt: !link.hideCmt })
+  //     setIsReload(!isReload)
+  //   } catch (error) {
+  //     customErrorToast(error)
+  //   }
+  // }
 
   const actionHideCmt = async (key: EKeyHideCmt, linkId: number) => {
     if (key === EKeyHideCmt.KEYWORD) {
@@ -117,6 +120,15 @@ function LinkComponent({ type }: ITypeLink) {
     setLinkSetKeyword(linkId)
     setIsShowModalAddKeywords(true)
   }
+
+  // const getTypeAction = () => {
+  //   if (type === ELink.LINK_ON_HIDE) {
+  //     return 'Ẩn'
+  //   }
+  //   if (type === ELink.LINK_OFF_HIDE) {
+  //     return 'Tắt ẩn'
+  //   }
+  // }
 
   return (
     <div
@@ -186,6 +198,11 @@ function LinkComponent({ type }: ITypeLink) {
                     <th scope='col'>User Name</th>
                   </>
                 )}
+                {isAdmin &&
+                  (type === ELink.LINK_ON_HIDE ||
+                    type === ELink.LINK_OFF_HIDE) && (
+                    <th scope='col'>Ẩn theo</th>
+                  )}
                 <th scope='col'>Hành Động</th>
               </tr>
             </thead>
@@ -231,56 +248,58 @@ function LinkComponent({ type }: ITypeLink) {
                           <td>{item.username}</td>
                         </>
                       )}
-                      {isAdmin && (
-                        <td className='td-hide-cmt'>
-                          <div className='hide-cmt'>
-                            {item.hideCmt ? (
-                              <>
-                                <Select
-                                  defaultValue={item.hideBy}
-                                  style={{ width: 120 }}
-                                  onChange={(e) =>
-                                    actionHideCmt(
-                                      e as unknown as EKeyHideCmt,
-                                      item.id as number
-                                    )
-                                  }
-                                  options={[
-                                    {
-                                      value: EKeyHideCmt.ALL,
-                                      label: 'All',
-                                    },
-                                    {
-                                      value: EKeyHideCmt.PHONE,
-                                      label: 'Phone number',
-                                    },
-                                    {
-                                      value: EKeyHideCmt.KEYWORD,
-                                      label: 'Keywords',
-                                    },
-                                  ]}
-                                />
-                                {item.hideBy === EKeyHideCmt.KEYWORD && (
-                                  <Typography.Link
-                                    onClick={() =>
-                                      handleAddkeyword(item.id as number)
+                      {isAdmin &&
+                        (type === ELink.LINK_ON_HIDE ||
+                          type === ELink.LINK_OFF_HIDE) && (
+                          <td className='td-hide-cmt'>
+                            <div className='hide-cmt'>
+                              {item.hideCmt ? (
+                                <>
+                                  <Select
+                                    defaultValue={item.hideBy}
+                                    style={{ width: 120 }}
+                                    onChange={(e) =>
+                                      actionHideCmt(
+                                        e as unknown as EKeyHideCmt,
+                                        item.id as number
+                                      )
                                     }
-                                  >
-                                    <SettingOutlined
-                                      style={{
-                                        fontSize: '20px',
-                                        marginLeft: '5px',
-                                      }}
-                                    />
-                                  </Typography.Link>
-                                )}
-                              </>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
-                        </td>
-                      )}
+                                    options={[
+                                      {
+                                        value: EKeyHideCmt.ALL,
+                                        label: 'All',
+                                      },
+                                      {
+                                        value: EKeyHideCmt.PHONE,
+                                        label: 'Phone number',
+                                      },
+                                      {
+                                        value: EKeyHideCmt.KEYWORD,
+                                        label: 'Keywords',
+                                      },
+                                    ]}
+                                  />
+                                  {item.hideBy === EKeyHideCmt.KEYWORD && (
+                                    <Typography.Link
+                                      onClick={() =>
+                                        handleAddkeyword(item.id as number)
+                                      }
+                                    >
+                                      <SettingOutlined
+                                        style={{
+                                          fontSize: '20px',
+                                          marginLeft: '5px',
+                                        }}
+                                      />
+                                    </Typography.Link>
+                                  )}
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          </td>
+                        )}
 
                       <td className='nowrap'>
                         <div className='dropdown'>
@@ -298,14 +317,18 @@ function LinkComponent({ type }: ITypeLink) {
                             className='dropdown-menu dropdown-menu-dark'
                             aria-labelledby='dropdownMenuButton-{{ link.id }}'
                           >
-                            <li>
-                              <button
-                                className='dropdown-item btn btn-sm btn-primary'
-                                onClick={() => handleHideCmt(item)}
-                              >
-                                Ẩn
-                              </button>
-                            </li>
+                            {/* {(type === ELink.LINK_ON_HIDE ||
+                              type === ELink.LINK_OFF_HIDE) && (
+                              <li>
+                                <button
+                                  className='dropdown-item btn btn-sm btn-primary'
+                                  onClick={() => handleHideCmt(item)}
+                                >
+                                  {getTypeAction()}
+                                </button>
+                              </li>
+                            )} */}
+
                             <li>
                               <button
                                 className='dropdown-item btn btn-sm btn-primary'
