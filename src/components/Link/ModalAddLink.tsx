@@ -1,6 +1,8 @@
 import useLink from '@/common/hook/useLink'
 import { IModalReloadProps } from '@/common/interface'
 import { ELink } from '@/common/model/link'
+import { useApp } from '@/common/store/AppContext'
+import { isLinkHide } from '@/common/utils'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
 import { useState } from 'react'
@@ -10,7 +12,9 @@ interface IPropsmodalAddLink extends IModalReloadProps {
   type: ELink
 }
 function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
+  const {isAdmin} = useApp()
   const [link, setLink] = useState<string>('')
+  const [thread, setThread] = useState<number>(1)
   const { addLink } = useLink()
 
   const handleAddLink = async () => {
@@ -20,7 +24,7 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
     }
 
     try {
-      const response = await addLink(link, type)
+      const response = await addLink(link, type, thread)
       setIsReload(!isReload)
       setLink('')
       toast((response.data as any).message)
@@ -81,6 +85,33 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
                   }}
                 ></textarea>
               </div>
+              {isAdmin && isLinkHide(type) && 
+                <div className='mb-3'>
+                  <label
+                    htmlFor='link_add_limit'
+                    className='form-label'
+                  >
+                    Thread
+                  </label>
+                  <input
+                    type='number'
+                    className='form-control'
+                    id='link_add_limit'
+                    name='link_add_limit'
+                    required
+                    value={thread}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setThread(Number(e.target.value))
+                    }}
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                  />
+                </div>                
+              }
+
             </form>
           </div>
           <div className='modal-footer'>

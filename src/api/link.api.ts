@@ -10,12 +10,14 @@ export interface ICreateLinkParams {
   }[]
   status: LinkStatus
   hideCmt: boolean
+  thread: number
 }
 export interface ISettingLink {
   isDelete: boolean
   onOff: boolean
   delay: number
   linkIds: number[]
+  hideCmt?: boolean
 }
 
 export interface IGetAllLink extends ILink {

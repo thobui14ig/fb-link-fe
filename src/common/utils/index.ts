@@ -10,4 +10,8 @@ const getTypeLink = (type: ELink) => {
     return LinkStatus.Started
 }
 
-export { getTypeLink }
+const isLinkHide = (type: ELink) => {
+    return type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE ? true : false
+}
+
+export { getTypeLink, isLinkHide }

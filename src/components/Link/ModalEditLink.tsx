@@ -3,19 +3,21 @@ import useLink from '@/common/hook/useLink'
 import { useApp } from '@/common/store/AppContext'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
-import { ILink, Type } from '@/common/model/link'
+import { ELink, ILink, Type } from '@/common/model/link'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { IModalReloadProps } from '@/common/interface'
+import { isLinkHide } from '@/common/utils'
 
 interface IModalEditLink extends IModalReloadProps {
   linkEditId: number | null
+ type: ELink
 }
-function ModalEditLink({ linkEditId, isReload, setIsReload }: IModalEditLink) {
+function ModalEditLink({ linkEditId, isReload, setIsReload, type }: IModalEditLink) {
   const { getLink } = useLink()
   const { isAdmin } = useApp()
   const [link, setLink] = useState<Omit<Partial<ILink>, 'user'> | null>(null)
-
+  
   useEffect(() => {
     ;(async () => {
       if (linkEditId) {
@@ -118,6 +120,34 @@ function ModalEditLink({ linkEditId, isReload, setIsReload }: IModalEditLink) {
                   }}
                 />
               </div>
+              {isAdmin && isLinkHide(type) && 
+                <div className='mb-3'>
+                  <label
+                    htmlFor='editPostId'
+                    className='form-label'
+                  >
+                    Thread
+                  </label>
+                  <input
+                    type='text'
+                    className='form-control'
+                    id='editPostId'
+                    value={link?.thread??1}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setLink({
+                        ...link,
+                        thread: Number(e.target.value)
+                      })
+                    }}               
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                  />
+                </div>                
+              }
+
               {isAdmin && (
                 <>
                   <div className='mb-3'>

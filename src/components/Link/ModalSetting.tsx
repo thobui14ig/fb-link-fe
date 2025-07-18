@@ -1,6 +1,6 @@
 import { IGetAllLink, settingLink } from '@/api/link.api'
 import { IModalReloadProps } from '@/common/interface'
-import { LinkStatus } from '@/common/model/link'
+import { ELink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
 import { customErrorToast } from '@/common/utils/toast'
 import { Form, InputNumber, Modal, Switch } from 'antd'
@@ -9,7 +9,8 @@ export interface IPropModalSetting extends IModalReloadProps {
   isModalOpen: boolean
   setShowModal: (isModalOpen: boolean) => void
   links: IGetAllLink[]
-  linkType: LinkStatus
+  linkStatus: LinkStatus,
+  type: ELink
 }
 
 export interface IForm {
@@ -24,13 +25,14 @@ function ModalSetting({
   isReload,
   setIsReload,
   links,
-  linkType,
+  linkStatus,
+  type
 }: IPropModalSetting) {
   const { isAdmin } = useApp()
   const [form] = Form.useForm<IForm>()
   const initialValues = {
     isDelete: false,
-    onOff: linkType === LinkStatus.Started ? true : false,
+    onOff: linkStatus === LinkStatus.Started ? true : false,
     delay: 0,
   }
   const handleOk = () => {
@@ -47,6 +49,10 @@ function ModalSetting({
       await settingLink({
         ...values,
         linkIds: links.map((item) => item.id) as number[],
+        hideCmt:
+          type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE
+            ? true
+                  : false,
       })
       setIsReload(!isReload)
       toast.success('Update thành công!')

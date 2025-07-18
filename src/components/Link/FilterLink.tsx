@@ -8,6 +8,9 @@ import { Button, Form, Input, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import './filter-link.css'
+import { isLinkHide } from '@/common/utils'
+import { getCookies } from '@/api/cookie.api'
+import { CookieStatus } from '@/common/model/cookie'
 
 export interface FormValues {
   type: 'private' | 'public' | 'die'
@@ -33,6 +36,10 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
   const { isAdmin } = useApp()
   const [form] = Form.useForm<FormValues>()
   const [users, setUsers] = useState<IUser[]>([])
+  const [cookieLive, setCookieLive] = useState({
+    live: 0,
+    total: 0
+  })
   const linkType =
     type === ELink.LINK_ON ? LinkStatus.Started : LinkStatus.Pending
 
@@ -77,7 +84,7 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
       values,
       linkType,
       1,
-      type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE ? 1 : 0
+      isLinkHide(type) ? 1 : 0
     )
     setLinks(data.data)
   }
@@ -92,6 +99,19 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
     fetch()
   }, [])
 
+  useEffect(() => {
+    const fetch = async () => {
+      const { data: cookies } = await getCookies()
+      setCookieLive({
+        ...cookieLive,
+        live: cookies.map(item => item.status === CookieStatus.ACTIVE).length,
+        total: cookies.length
+      })
+    }
+
+    fetch()
+  }, [])
+
   const handleShowSetting = () => {
     setShowModal(true)
   }
@@ -99,155 +119,163 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
   if (!users.length) {
     return <></>
   }
-
+  
   return (
-    <Form
-      form={form}
-      name='horizontal_login'
-      layout='inline'
-      className='white-label white-form'
-      onFinish={onFinish}
-      initialValues={{
-        type: null,
-        userId: null,
-      }}
-    >
-      {isAdmin && (
-        <Form.Item
-          label='Loại'
-          style={{ width: '150px' }}
-          name='type'
-        >
-          <Select>
-            <Select.Option value={null}>Chọn</Select.Option>
-            <Select.Option value='private'>Private</Select.Option>
-            <Select.Option value='public'>Public</Select.Option>
-            <Select.Option value='die'>Die</Select.Option>
-          </Select>
-        </Form.Item>
-      )}
-
-      <Form.Item
-        label='Thời gian commnent '
-        style={{ marginBottom: 0 }}
+    <div className='filter-item-link-hide'>
+      <Form
+        form={form}
+        name='horizontal_login'
+        layout='inline'
+        className='white-label white-form'
+        onFinish={onFinish}
+        initialValues={{
+          type: null,
+          userId: null,
+        }}
       >
-        <Form.Item
-          name='lastCommentFrom'
-          style={{ display: 'inline-block', width: '50px' }}
-        >
-          <Input placeholder='Từ' />
-        </Form.Item>
-        <Form.Item
-          name='lastCommentTo'
-          style={{
-            display: 'inline-block',
-            width: '50px',
-          }}
-        >
-          <Input placeholder='đến' />
-        </Form.Item>
-      </Form.Item>
-      <Form.Item
-        label='Chênh Cmt'
-        style={{ marginBottom: 0 }}
-      >
-        <Form.Item
-          name='differenceCountCmtFrom'
-          style={{ display: 'inline-block', width: '50px' }}
-        >
-          <Input placeholder='Từ' />
-        </Form.Item>
-        <Form.Item
-          name='differenceCountCmtTo'
-          style={{
-            display: 'inline-block',
-            width: '50px',
-          }}
-        >
-          <Input placeholder='đến' />
-        </Form.Item>
-      </Form.Item>
-      <Form.Item
-        label='Like'
-        style={{ marginBottom: 0 }}
-      >
-        <Form.Item
-          name='likeFrom'
-          style={{ display: 'inline-block', width: '50px' }}
-        >
-          <Input placeholder='Từ' />
-        </Form.Item>
-        <Form.Item
-          name='likeTo'
-          style={{
-            display: 'inline-block',
-            width: '50px',
-          }}
-        >
-          <Input placeholder='đến' />
-        </Form.Item>
-      </Form.Item>
-
-      {isAdmin && (
-        <>
+        {isAdmin && (
           <Form.Item
-            label='Delay'
-            style={{ marginBottom: 0 }}
-          >
-            <Form.Item
-              name='delayFrom'
-              style={{ display: 'inline-block', width: '50px' }}
-            >
-              <Input placeholder='Từ' />
-            </Form.Item>
-            <Form.Item
-              name='delayTo'
-              style={{
-                display: 'inline-block',
-                width: '50px',
-              }}
-            >
-              <Input placeholder='đến' />
-            </Form.Item>
-          </Form.Item>
-          <Form.Item
-            label='User'
-            style={{ width: '250px' }}
-            name='userId'
+            label='Loại'
+            style={{ width: '150px' }}
+            name='type'
           >
             <Select>
               <Select.Option value={null}>Chọn</Select.Option>
-              {users.length > 0 &&
-                users.map((item, i) => {
-                  return (
-                    <Select.Option
-                      key={i}
-                      value={item.id}
-                    >
-                      {item.username}
-                    </Select.Option>
-                  )
-                })}
+              <Select.Option value='private'>Private</Select.Option>
+              <Select.Option value='public'>Public</Select.Option>
+              <Select.Option value='die'>Die</Select.Option>
             </Select>
           </Form.Item>
-        </>
-      )}
+        )}
 
-      <Form.Item label={null}>
-        <Button
-          type='primary'
-          htmlType='submit'
+        <Form.Item
+          label='Thời gian commnent '
+          style={{ marginBottom: 0 }}
         >
-          Submit
+          <Form.Item
+            name='lastCommentFrom'
+            style={{ display: 'inline-block', width: '50px' }}
+          >
+            <Input placeholder='Từ' />
+          </Form.Item>
+          <Form.Item
+            name='lastCommentTo'
+            style={{
+              display: 'inline-block',
+              width: '50px',
+            }}
+          >
+            <Input placeholder='đến' />
+          </Form.Item>
+        </Form.Item>
+        <Form.Item
+          label='Chênh Cmt'
+          style={{ marginBottom: 0 }}
+        >
+          <Form.Item
+            name='differenceCountCmtFrom'
+            style={{ display: 'inline-block', width: '50px' }}
+          >
+            <Input placeholder='Từ' />
+          </Form.Item>
+          <Form.Item
+            name='differenceCountCmtTo'
+            style={{
+              display: 'inline-block',
+              width: '50px',
+            }}
+          >
+            <Input placeholder='đến' />
+          </Form.Item>
+        </Form.Item>
+        <Form.Item
+          label='Like'
+          style={{ marginBottom: 0 }}
+        >
+          <Form.Item
+            name='likeFrom'
+            style={{ display: 'inline-block', width: '50px' }}
+          >
+            <Input placeholder='Từ' />
+          </Form.Item>
+          <Form.Item
+            name='likeTo'
+            style={{
+              display: 'inline-block',
+              width: '50px',
+            }}
+          >
+            <Input placeholder='đến' />
+          </Form.Item>
+        </Form.Item>
+
+        {isAdmin && (
+          <>
+            <Form.Item
+              label='Delay'
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='delayFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='delayTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              label='User'
+              style={{ width: '250px' }}
+              name='userId'
+            >
+              <Select>
+                <Select.Option value={null}>Chọn</Select.Option>
+                {users.length > 0 &&
+                  users.map((item, i) => {
+                    return (
+                      <Select.Option
+                        key={i}
+                        value={item.id}
+                      >
+                        {item.username}
+                      </Select.Option>
+                    )
+                  })}
+              </Select>
+            </Form.Item>
+          </>
+        )}
+
+        <Form.Item label={null}>
+          <Button
+            type='primary'
+            htmlType='submit'
+          >
+            Submit
+          </Button>
+        </Form.Item>
+        <Button
+          onClick={() => handleShowSetting()}
+          type='primary'
+        >
+          Setting
         </Button>
-      </Form.Item>
-      <Button
-        onClick={() => handleShowSetting()}
-        type='primary'
-      >
-        Setting
-      </Button>
-    </Form>
+      </Form>   
+      {!isAdmin && isLinkHide(type) && 
+        <div >
+          <span className='cookie-live'>Cookie live: {cookieLive.live}/{cookieLive.total}</span>
+        </div>
+      }
+    </div>
+
   )
 }
 

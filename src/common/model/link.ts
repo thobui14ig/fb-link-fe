@@ -39,4 +39,5 @@ export interface ILink {
     user: IUser,
     keywords: IKeyword[],
     content: string
+    thread: number
 }

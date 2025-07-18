@@ -1,12 +1,20 @@
 .white-label .ant-form-item-label > label {
-    color: white !important;
-    margin-bottom: 15px;
-  }
-  .white-form .ant-radio-wrapper {
-    color: white !important;
-  }
+  color: white !important;
+  margin-bottom: 15px;
+}
+.white-form .ant-radio-wrapper {
+  color: white !important;
+}
 
-  .hide-cmt {
-    display: flex;
-    align-items: center;
-  }
+.hide-cmt {
+  display: flex;
+  align-items: center;
+}
+.filter-item-link-hide{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cookie-live{
+  font-size: 20px;
+}

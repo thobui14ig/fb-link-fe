@@ -2,7 +2,7 @@ import { createLink, getLink as getLinkApi } from '@/api/link.api'
 import { ELink, LinkStatus } from '@/common/model/link'
 
 function useLink() {
-  const addLink = async (link: string, type: ELink) => {
+  const addLink = async (link: string, type: ELink, thread: number) => {
     const links = link
       .split('\n')
       .map((url) => url.trim())
@@ -26,6 +26,7 @@ function useLink() {
         type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE
           ? true
           : false,
+      thread
     }
     return createLink(argCreate)
   }

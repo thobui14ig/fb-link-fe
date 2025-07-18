@@ -40,13 +40,13 @@ function LinkComponent({ type }: ITypeLink) {
   const [links, setLinks] = useState<IGetAllLink[]>([])
   const [linkEditId, setLinkEditId] = useState<number | null>(null)
   const [linkSetKeyword, setLinkSetKeyword] = useState<number | null>(null)
-  const linkType = getTypeLink(type)
+  const linkStatus = getTypeLink(type)
 
   useEffect(() => {
     const fetch = async () => {
       const data = await getLinks(
         null,
-        linkType,
+        linkStatus,
         0,
         type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE ? 1 : 0
       )
@@ -198,11 +198,8 @@ function LinkComponent({ type }: ITypeLink) {
                     <th scope='col'>User Name</th>
                   </>
                 )}
-                {isAdmin &&
-                  (type === ELink.LINK_ON_HIDE ||
-                    type === ELink.LINK_OFF_HIDE) && (
-                    <th scope='col'>Ẩn theo</th>
-                  )}
+                {(type === ELink.LINK_ON_HIDE ||
+                  type === ELink.LINK_OFF_HIDE) && <th scope='col'>Ẩn theo</th>}
                 <th scope='col'>Hành Động</th>
               </tr>
             </thead>
@@ -235,7 +232,7 @@ function LinkComponent({ type }: ITypeLink) {
 
                       <td data-time={item.lastCommentTime}>
                         <span className='time-ago'>
-                          {item.lastCommentTime as any}
+                          {(item.lastCommentTime as any)}
                         </span>
                       </td>
                       <td>{`[${item.countBefore}-${item.countAfter}]`}</td>
@@ -248,58 +245,57 @@ function LinkComponent({ type }: ITypeLink) {
                           <td>{item.username}</td>
                         </>
                       )}
-                      {isAdmin &&
-                        (type === ELink.LINK_ON_HIDE ||
-                          type === ELink.LINK_OFF_HIDE) && (
-                          <td className='td-hide-cmt'>
-                            <div className='hide-cmt'>
-                              {item.hideCmt ? (
-                                <>
-                                  <Select
-                                    defaultValue={item.hideBy}
-                                    style={{ width: 120 }}
-                                    onChange={(e) =>
-                                      actionHideCmt(
-                                        e as unknown as EKeyHideCmt,
-                                        item.id as number
-                                      )
+                      {(type === ELink.LINK_ON_HIDE ||
+                        type === ELink.LINK_OFF_HIDE) && (
+                        <td className='td-hide-cmt'>
+                          <div className='hide-cmt'>
+                            {item.hideCmt ? (
+                              <>
+                                <Select
+                                  defaultValue={item.hideBy}
+                                  style={{ width: 120 }}
+                                  onChange={(e) =>
+                                    actionHideCmt(
+                                      e as unknown as EKeyHideCmt,
+                                      item.id as number
+                                    )
+                                  }
+                                  options={[
+                                    {
+                                      value: EKeyHideCmt.ALL,
+                                      label: 'All',
+                                    },
+                                    {
+                                      value: EKeyHideCmt.PHONE,
+                                      label: 'Phone number',
+                                    },
+                                    {
+                                      value: EKeyHideCmt.KEYWORD,
+                                      label: 'Keywords',
+                                    },
+                                  ]}
+                                />
+                                {item.hideBy === EKeyHideCmt.KEYWORD && (
+                                  <Typography.Link
+                                    onClick={() =>
+                                      handleAddkeyword(item.id as number)
                                     }
-                                    options={[
-                                      {
-                                        value: EKeyHideCmt.ALL,
-                                        label: 'All',
-                                      },
-                                      {
-                                        value: EKeyHideCmt.PHONE,
-                                        label: 'Phone number',
-                                      },
-                                      {
-                                        value: EKeyHideCmt.KEYWORD,
-                                        label: 'Keywords',
-                                      },
-                                    ]}
-                                  />
-                                  {item.hideBy === EKeyHideCmt.KEYWORD && (
-                                    <Typography.Link
-                                      onClick={() =>
-                                        handleAddkeyword(item.id as number)
-                                      }
-                                    >
-                                      <SettingOutlined
-                                        style={{
-                                          fontSize: '20px',
-                                          marginLeft: '5px',
-                                        }}
-                                      />
-                                    </Typography.Link>
-                                  )}
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                            </div>
-                          </td>
-                        )}
+                                  >
+                                    <SettingOutlined
+                                      style={{
+                                        fontSize: '20px',
+                                        marginLeft: '5px',
+                                      }}
+                                    />
+                                  </Typography.Link>
+                                )}
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                        </td>
+                      )}
 
                       <td className='nowrap'>
                         <div className='dropdown'>
@@ -371,6 +367,7 @@ function LinkComponent({ type }: ITypeLink) {
           setIsReload={setIsReload}
           isReload={isReload}
           linkEditId={linkEditId}
+          type={type}
         />
         {linkSetKeyword && (
           <ModalAddKeyword
@@ -388,7 +385,8 @@ function LinkComponent({ type }: ITypeLink) {
             isReload={isReload}
             setIsReload={setIsReload}
             links={links}
-            linkType={linkType}
+            linkStatus={linkStatus}
+            type={type}
           />
         )}
       </div>
