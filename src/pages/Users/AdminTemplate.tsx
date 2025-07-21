@@ -41,7 +41,7 @@ function AdminTemplate() {
       <thead>
         <tr>
           <th
-            colSpan={7}
+            colSpan={8}
             className='text-center'
           >
             All Users
@@ -53,6 +53,7 @@ function AdminTemplate() {
           <th>Not Running Links</th>
           <th>Running Links Hide</th>
           <th>Not Running Links Hide</th>
+          <th>Delay On Private</th>
           <th>Expiration Date</th>
           <th>Action</th>
         </tr>
@@ -67,6 +68,7 @@ function AdminTemplate() {
                 <td>{item.totalPending}</td>
                 <td>{item.totalLinkHideRunning}</td>
                 <td>{item.totalLinkHidePending}</td>
+                <td>{item.delayOnPrivate}</td>
                 <td>
                   <span
                     className='expiration-days'
@@ -118,7 +120,7 @@ function AdminTemplate() {
 
         <tr>
           <td
-            colSpan={7}
+            colSpan={8}
             className='text-center'
           >
             <button

@@ -13,6 +13,7 @@ export interface IUserRegister {
   linkOnHideLimit: number | null
   linkOffHideLimit: number | null
   expiredAt: Date | null
+  delayOnPrivate: number | null
 }
 
 const defaultValue = {
@@ -23,6 +24,7 @@ const defaultValue = {
   linkOnHideLimit: null,
   linkOffHideLimit: null,
   expiredAt: null,
+  delayOnPrivate: 5
 }
 
 function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
@@ -273,6 +275,36 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
                   }}
                 />
               </div>
+              <div className='row mb-3'>
+                <div className='col-md-6'>
+                    <label
+                      htmlFor='link_start_limit'
+                      className='form-label'
+                    >
+                      Delay on Private
+                    </label>
+                    <input
+                      type='number'
+                      className='form-control'
+                      id='link_start_limit'
+                      name='link_start_limit'
+                      required
+                      value={userInfo.delayOnPrivate ?? 5}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setUserInfo({
+                          ...userInfo,
+                          delayOnPrivate: Number(e.target.value),
+                        })
+                      }}
+                      style={{
+                        backgroundColor: '#333',
+                        color: '#fff',
+                        border: '1px solid #444',
+                      }}
+                    />
+                  </div>                
+              </div>
+
             </form>
           </div>
           <div className='modal-footer'>

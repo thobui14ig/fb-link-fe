@@ -1,6 +1,6 @@
+import { IComment } from '@/common/model/comment'
 import { ILink, LinkStatus } from '@/common/model/link'
 import { FormValues } from '@/components/Link/FilterLink'
-import { EKeyHideCmt } from '@/components/Link/LinkComponent'
 import http from './http'
 
 export interface ICreateLinkParams {
@@ -45,8 +45,8 @@ export const processLink = (body: {
   status: LinkStatus
   hideCmt: boolean
 }) => http.post(`/monitoring/process`, body)
-export const hideCmt = (id: number, type: EKeyHideCmt) =>
-  http.post(`/links/hide-cmt/${id}?type=${type}`)
+export const hideCmt = (comment: IComment) =>
+  http.post(`/comments/hide-cmt`, comment)
 export const getKeywordByLinkId = (id: number) =>
   http.get<Omit<ILink, 'user'>>(`/links/get-keywords/${id}`)
 export const settingLink = (body: ISettingLink) =>

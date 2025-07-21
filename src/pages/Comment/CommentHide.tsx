@@ -1,4 +1,5 @@
 import { getComments } from '@/api/comment.api'
+import { hideCmt } from '@/api/link.api'
 import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
 import { IComment } from '@/common/model/comment'
@@ -28,24 +29,24 @@ function CommentHide() {
     fetch()
   }, [])
 
-  const handleHideCmt = async (checked: boolean, comment: IComment) => {
-    try {
-      const curenttCmt = comments.find((item) => item.id === comment.id)
-      if (curenttCmt) {
-        curenttCmt.hideCmt = checked
-        // setComments([...comments])
-        // await hideCmt(comment.cmtId)
-        // toast.success('Ẩn cmt thành công!')
-        toast.success('Chưa làm!')
-      }
-    } catch (error) {
-      customErrorToast(error)
+const handleHideCmt = async (checked: boolean, comment: IComment) => {
+  try {
+    const curenttCmt = comments.find((item) => item.id === comment.id)
+    if (curenttCmt?.hideCmt) {
+      toast.error('Không thể tắt ẩn!')
+      return
     }
-  }
 
-  const onFinish = async (values: any) => {
-    console.log('🚀 ~ Comment ~ values:', values)
+    if (curenttCmt) {
+      curenttCmt.hideCmt = checked
+      setComments([...comments]) // Trigger render
+      await hideCmt(comment)
+      toast.success('Ok!')
+    }
+  } catch (error) {
+    customErrorToast(error)
   }
+}
 
   return (
     <div
@@ -61,7 +62,6 @@ function CommentHide() {
             name='horizontal_login'
             layout='inline'
             className='white-label white-form'
-            onFinish={onFinish}
             initialValues={{
               startDate: initialValues.startDate,
               endDate: initialValues.endDate,
@@ -145,10 +145,10 @@ function CommentHide() {
                       <td>{item.message}</td>
                       <td>
                         <Switch
-                          checkedChildren='ON'
-                          unCheckedChildren='OFF'
-                          defaultChecked={item.hideCmt}
-                          onChange={(e) => handleHideCmt(e, item)}
+                          checked={item.hideCmt}
+                          checkedChildren="ON"
+                          unCheckedChildren="OFF"
+                          onChange={(checked) => handleHideCmt(checked, item)}
                         />
                       </td>
                     </tr>

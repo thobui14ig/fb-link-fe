@@ -9,6 +9,7 @@ export interface IUser {
     password?: string
     level: number
     createdAt: string
+    delayOnPrivate?: number
 }
 
 export enum Level {

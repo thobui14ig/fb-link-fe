@@ -2,9 +2,8 @@
 import {
   deleteLink,
   getLinks,
-  hideCmt,
   IGetAllLink,
-  processLink,
+  processLink
 } from '@/api/link.api'
 import { ELink, ILink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
@@ -102,19 +101,19 @@ function LinkComponent({ type }: ITypeLink) {
   //   }
   // }
 
-  const actionHideCmt = async (key: EKeyHideCmt, linkId: number) => {
-    if (key === EKeyHideCmt.KEYWORD) {
-      setLinkSetKeyword(linkId)
-      setIsShowModalAddKeywords(true)
-    }
-    try {
-      await hideCmt(linkId, key)
-      setIsReload(!isReload)
-      toast.success('Ok!')
-    } catch (error) {
-      customErrorToast(error)
-    }
-  }
+  // const actionHideCmt = async (key: EKeyHideCmt, linkId: number) => {
+  //   if (key === EKeyHideCmt.KEYWORD) {
+  //     setLinkSetKeyword(linkId)
+  //     setIsShowModalAddKeywords(true)
+  //   }
+  //   try {
+  //     await hideCmt(linkId, key)
+  //     setIsReload(!isReload)
+  //     toast.success('Ok!')
+  //   } catch (error) {
+  //     customErrorToast(error)
+  //   }
+  // }
 
   const handleAddkeyword = (linkId: number) => {
     setLinkSetKeyword(linkId)
@@ -254,12 +253,12 @@ function LinkComponent({ type }: ITypeLink) {
                                 <Select
                                   defaultValue={item.hideBy}
                                   style={{ width: 120 }}
-                                  onChange={(e) =>
-                                    actionHideCmt(
-                                      e as unknown as EKeyHideCmt,
-                                      item.id as number
-                                    )
-                                  }
+                                  // onChange={(e) =>
+                                  //   actionHideCmt(
+                                  //     e as unknown as EKeyHideCmt,
+                                  //     item.id as number
+                                  //   )
+                                  // }
                                   options={[
                                     {
                                       value: EKeyHideCmt.ALL,

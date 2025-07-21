@@ -300,6 +300,36 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                       </select>
                     </div>
                   </div>
+
+                <div className='row mb-3'>
+                  <div className='col-md-6'>
+                      <label
+                        htmlFor='link_start_limit'
+                        className='form-label'
+                      >
+                        Delay on Private
+                      </label>
+                      <input
+                        type='number'
+                        className='form-control'
+                        id='link_start_limit'
+                        name='link_start_limit'
+                        required
+                        value={user.delayOnPrivate ?? 5}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setUser({
+                            ...user,
+                            delayOnPrivate: Number(e.target.value),
+                          })
+                        }}
+                        style={{
+                          backgroundColor: '#333',
+                          color: '#fff',
+                          border: '1px solid #444',
+                        }}
+                      />
+                    </div>                
+                </div>
                 </form>
               </div>
 
