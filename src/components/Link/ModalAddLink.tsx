@@ -1,11 +1,13 @@
+import { getPages } from '@/api/page.api'
 import useLink from '@/common/hook/useLink'
 import { IModalReloadProps } from '@/common/interface'
 import { ELink } from '@/common/model/link'
+import { IPage } from '@/common/model/page'
 import { useApp } from '@/common/store/AppContext'
 import { isLinkHide } from '@/common/utils'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 interface IPropsmodalAddLink extends IModalReloadProps {
@@ -14,8 +16,17 @@ interface IPropsmodalAddLink extends IModalReloadProps {
 function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
   const {isAdmin} = useApp()
   const [link, setLink] = useState<string>('')
+  const [pageId, setPageId] = useState<number | null>(null)
   const [thread, setThread] = useState<number>(1)
   const { addLink } = useLink()
+  const [pages, setPages] = useState<IPage[]>([])
+
+  useEffect(() => {
+    ;(async () => {
+        const { data: resPages } = await getPages()
+        setPages(resPages)
+    })()
+  }, [])
 
   const handleAddLink = async () => {
     if (link.length === 0) {
@@ -23,8 +34,13 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
       return
     }
 
+    if (isLinkHide(type) && !pageId) {
+      toast.error('Ẩn phải chọn page!')
+      return
+    }
+
     try {
-      const response = await addLink(link, type, thread)
+      const response = await addLink(link, type, thread, pageId)
       setIsReload(!isReload)
       setLink('')
       toast((response.data as any).message)
@@ -110,6 +126,38 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
                     }}
                   />
                 </div>                
+              }
+
+              {isLinkHide(type) &&
+                <div className='mb-3'>
+                  <label
+                    htmlFor='editLevel'
+                    className='form-label'
+                  >
+                    Page
+                  </label>
+                  <select
+                    className='form-control'
+                    id='editLevel'
+                    name='level'
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                    onChange={(e) => {
+                      setPageId(Number(e.target.value))
+                    }}
+                    value={pageId??0}
+                  >
+                    {pages.length > 0 && 
+                      pages.map((item, i) => {
+                        return (<option key={i} value={item.id}>{item.name}</option>)
+                      })
+                    }
+    
+                  </select>
+                </div>              
               }
 
             </form>

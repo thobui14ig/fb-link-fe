@@ -103,8 +103,7 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
     const fetch = async () => {
       const { data: cookies } = await getCookies()
       setCookieLive({
-        ...cookieLive,
-        live: cookies.map(item => item.status === CookieStatus.ACTIVE).length,
+        live: cookies.filter(item => item.status === CookieStatus.ACTIVE).length,
         total: cookies.length
       })
     }

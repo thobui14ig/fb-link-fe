@@ -39,6 +39,9 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
     }
 
     try {
+      if (userInfo && userInfo.delayOnPrivate) {
+        userInfo.delayOnPrivate = Number(userInfo.delayOnPrivate)
+      } 
       await createUser(userInfo)
       setUserInfo({ ...defaultValue })
       setIsReload(!isReload)
@@ -284,16 +287,13 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
                       Delay on Private
                     </label>
                     <input
-                      type='number'
                       className='form-control'
-                      id='link_start_limit'
-                      name='link_start_limit'
                       required
                       value={userInfo.delayOnPrivate ?? 5}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setUserInfo({
                           ...userInfo,
-                          delayOnPrivate: Number(e.target.value),
+                          delayOnPrivate: e.target.value as any,
                         })
                       }}
                       style={{

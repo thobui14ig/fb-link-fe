@@ -92,42 +92,10 @@ function LinkComponent({ type }: ITypeLink) {
     }
   }
 
-  // const handleHideCmt = async (link: ILink) => {
-  //   try {
-  //     await updateLink({ ...link, hideCmt: !link.hideCmt })
-  //     setIsReload(!isReload)
-  //   } catch (error) {
-  //     customErrorToast(error)
-  //   }
-  // }
-
-  // const actionHideCmt = async (key: EKeyHideCmt, linkId: number) => {
-  //   if (key === EKeyHideCmt.KEYWORD) {
-  //     setLinkSetKeyword(linkId)
-  //     setIsShowModalAddKeywords(true)
-  //   }
-  //   try {
-  //     await hideCmt(linkId, key)
-  //     setIsReload(!isReload)
-  //     toast.success('Ok!')
-  //   } catch (error) {
-  //     customErrorToast(error)
-  //   }
-  // }
-
   const handleAddkeyword = (linkId: number) => {
     setLinkSetKeyword(linkId)
     setIsShowModalAddKeywords(true)
   }
-
-  // const getTypeAction = () => {
-  //   if (type === ELink.LINK_ON_HIDE) {
-  //     return 'Ẩn'
-  //   }
-  //   if (type === ELink.LINK_OFF_HIDE) {
-  //     return 'Tắt ẩn'
-  //   }
-  // }
 
   return (
     <div

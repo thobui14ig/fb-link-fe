@@ -78,6 +78,7 @@ function Cookie() {
               <tr>
                 <th className='col-stt'>STT</th>
                 <th className='col-cookie'>Cookie</th>
+                <th className='col-status'>Page</th>
                 <th className='col-status'>Status</th>
                 <th className='col-action'>Hành Động</th>
               </tr>
@@ -89,6 +90,7 @@ function Cookie() {
                     <tr key={i}>
                       <td className='col-stt'>{i + 1}</td>
                       <td className='col-cookie'>{item.cookie}</td>
+                      <td className='col-status'>{item?.page?.name}</td>
                       <td className='col-status'>{item.status}</td>
                       <td className='nowrap'>
                         <div className='dropdown'>

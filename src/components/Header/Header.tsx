@@ -41,6 +41,11 @@ function Header() {
           name: 'Đăng xuất',
           className: 'fas fa-user',
         },
+                {
+          urlName: EUrl.PAGE,
+          name: 'Quản lý page',
+          className: 'fas fa-user',
+        },
       ])
     }
   }, [isAdmin])

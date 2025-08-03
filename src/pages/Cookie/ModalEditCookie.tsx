@@ -5,6 +5,8 @@ import { ICookie } from "@/common/model/cookie"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { IModalReloadProps } from "@/common/interface"
+import { IPage } from "@/common/model/page"
+import { getPages } from "@/api/page.api"
 
 interface IModalEditCookie extends IModalReloadProps {
     linkEditId: number | null
@@ -12,6 +14,7 @@ interface IModalEditCookie extends IModalReloadProps {
 
 function ModalEditCookie({ isReload, linkEditId, setIsReload }: IModalEditCookie) {
     const [cookie, setCookie] = useState<ICookie | null>(null)
+    const [pages, setPages] = useState<IPage[]>([])
 
     const saveEdit = async () => {
         try {
@@ -25,6 +28,13 @@ function ModalEditCookie({ isReload, linkEditId, setIsReload }: IModalEditCookie
             customErrorToast(error)
         }
     }
+
+    useEffect(() => {
+        ;(async () => {
+            const { data: resPages } = await getPages()
+            setPages(resPages)
+        })()
+    }, [linkEditId])
 
     useEffect(() => {
         (async () => {
@@ -84,6 +94,40 @@ function ModalEditCookie({ isReload, linkEditId, setIsReload }: IModalEditCookie
                                         <option value="limit">Limit</option>
                                     </select>
                                 </div>
+                                {cookie.pageId&&
+                                    <div className='mb-3'>
+                                        <label
+                                            htmlFor='editLevel'
+                                            className='form-label'
+                                        >
+                                            Page
+                                        </label>
+                                        <select
+                                            className='form-control'
+                                            id='editLevel'
+                                            name='level'
+                                            style={{
+                                            backgroundColor: '#333',
+                                            color: '#fff',
+                                            border: '1px solid #444',
+                                            }}
+                                            onChange={(e) => {
+                                            setCookie({
+                                                ...cookie,
+                                                pageId: Number(e.target.value)
+                                            })
+                                            }}
+                                            value={cookie.pageId}
+                                        >
+                                            {pages.length > 0 && 
+                                            pages.map((item, i) => {
+                                                return (<option key={i} value={item.id}>{item.name}</option>)
+                                            })
+                                            }
+                            
+                                        </select>
+                                    </div>
+                                }
                             </form>
                         }
 

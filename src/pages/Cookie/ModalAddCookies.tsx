@@ -1,16 +1,33 @@
 import { createCookies } from '@/api/cookie.api'
+import { getPages } from '@/api/page.api'
 import { IModalReloadProps } from '@/common/interface'
+import { IPage } from '@/common/model/page'
+import { useApp } from '@/common/store/AppContext'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
+  const {isAdmin} = useApp()
   const [cookies, setCookies] = useState<string>('')
+  const [pages, setPages] = useState<IPage[]>([])
+  const [pageId, setPageId] = useState<number | null>(null)
+
+  useEffect(() => {
+    ;(async () => {
+        const { data: resPages } = await getPages()
+        setPages(resPages)
+    })()
+  }, [])
 
   const addCookies = async () => {
     if (cookies.length === 0) {
       toast.error('Nội dung không được trống!')
+      return
+    }
+    if (!isAdmin && !pageId) {
+      toast.error('Chưa chọn page!')
       return
     }
     const cookiesValid = cookies
@@ -22,7 +39,7 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
       })
 
     try {
-      await createCookies({ cookies: cookiesValid })
+      await createCookies({ cookies: cookiesValid, pageId })
       setIsReload(!isReload)
       setCookies('')
       closeModal('addCookieModal')
@@ -84,6 +101,38 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
                   }}
                 ></textarea>
               </div>
+              {!isAdmin &&
+                <div className='mb-3'>
+                  <label
+                    htmlFor='editLevel'
+                    className='form-label'
+                  >
+                    Page
+                  </label>
+                  <select
+                    className='form-control'
+                    id='editLevel'
+                    name='level'
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                    onChange={(e) => {
+                      setPageId(Number(e.target.value))
+                    }}
+                    value={pageId??0}
+                  >
+                    {pages.length > 0 && 
+                      pages.map((item, i) => {
+                        return (<option key={i} value={item.id}>{item.name}</option>)
+                      })
+                    }
+    
+                  </select>
+                </div>                 
+              }
+
             </form>
           </div>
           <div className='modal-footer'>

@@ -11,6 +11,7 @@ export interface ICreateLinkParams {
   status: LinkStatus
   hideCmt: boolean
   thread: number
+  tablePageId: number | null
 }
 export interface ISettingLink {
   isDelete: boolean

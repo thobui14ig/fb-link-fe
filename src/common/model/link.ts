@@ -40,4 +40,5 @@ export interface ILink {
     keywords: IKeyword[],
     content: string
     thread: number
+    tablePageId: number
 }

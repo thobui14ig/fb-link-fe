@@ -16,6 +16,7 @@ import Proxy from './pages/Proxy/Proxy.tsx';
 import Token from './pages/Token/Token.tsx';
 import Users from './pages/Users/Users.tsx';
 import LinkOffHide from './pages/LinkOffHide/LinkOnHide.tsx';
+import Page from './pages/Page/Page.tsx';
 
 
 const router = createBrowserRouter([
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: '/admin',
         element: <Admin />,
+      },
+      {
+        path: '/page',
+        element: <Page />,
       },
     ],
   },

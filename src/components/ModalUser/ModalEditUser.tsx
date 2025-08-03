@@ -16,6 +16,9 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
 
   const handleEdit = async () => {
     try {
+      if (user && user.delayOnPrivate) {
+        user.delayOnPrivate = Number(user.delayOnPrivate)
+      } 
       user && (await updateUser(user))
       setIsReload(!isReload)
       toast('Update thành công!')
@@ -310,7 +313,6 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                         Delay on Private
                       </label>
                       <input
-                        type='number'
                         className='form-control'
                         id='link_start_limit'
                         name='link_start_limit'
@@ -319,7 +321,7 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           setUser({
                             ...user,
-                            delayOnPrivate: Number(e.target.value),
+                            delayOnPrivate: e.target.value as any,
                           })
                         }}
                         style={{

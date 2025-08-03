@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { IModalReloadProps } from '@/common/interface'
 import { isLinkHide } from '@/common/utils'
+import { IPage } from '@/common/model/page'
+import { getPages } from '@/api/page.api'
 
 interface IModalEditLink extends IModalReloadProps {
   linkEditId: number | null
@@ -16,13 +18,16 @@ interface IModalEditLink extends IModalReloadProps {
 function ModalEditLink({ linkEditId, isReload, setIsReload, type }: IModalEditLink) {
   const { getLink } = useLink()
   const { isAdmin } = useApp()
+  const [pages, setPages] = useState<IPage[]>([])
   const [link, setLink] = useState<Omit<Partial<ILink>, 'user'> | null>(null)
   
   useEffect(() => {
     ;(async () => {
       if (linkEditId) {
         const data = await getLink(linkEditId)
+        const { data: resPages } = await getPages()
         setLink(data)
+        setPages(resPages)
       }
     })()
   }, [linkEditId])
@@ -30,6 +35,7 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type }: IModalEditLi
   const saveEdit = async () => {
     try {
       if (link) {
+        link.delayTime = Number(link.delayTime)
         await updateLink(link)
         setIsReload(!isReload)
         toast('Update thành công!')
@@ -120,6 +126,43 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type }: IModalEditLi
                   }}
                 />
               </div>
+                
+          
+              {link?.hideCmt && link.tablePageId &&
+                <div className='mb-3'>
+                  <label
+                    htmlFor='editLevel'
+                    className='form-label'
+                  >
+                    Page
+                  </label>
+                  <select
+                    className='form-control'
+                    id='editLevel'
+                    name='level'
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                    onChange={(e) => {
+                      setLink({
+                        ...link,
+                        tablePageId: Number(e.target.value)
+                      })
+                    }}
+                    value={link.tablePageId}
+                  >
+                    {pages.length > 0 && 
+                      pages.map((item, i) => {
+                        return (<option key={i} value={item.id}>{item.name}</option>)
+                      })
+                    }
+    
+                  </select>
+                </div>
+              }
+
               {isAdmin && isLinkHide(type) && 
                 <div className='mb-3'>
                   <label
@@ -145,7 +188,8 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type }: IModalEditLi
                       border: '1px solid #444',
                     }}
                   />
-                </div>                
+                </div>    
+                
               }
 
               {isAdmin && (
@@ -186,14 +230,13 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type }: IModalEditLi
                       Delay Time (giây)
                     </label>
                     <input
-                      type='number'
                       className='form-control'
                       id='editDelayTime'
                       value={link?.delayTime}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setLink({
                           ...link,
-                          delayTime: Number(e.target.value),
+                          delayTime: e.target.value as any,
                         })
                       }}
                       style={{

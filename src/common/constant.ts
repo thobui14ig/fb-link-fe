@@ -10,7 +10,7 @@ export enum Tab {
     ADMIN = 'admin',
     LINK_ON_HIDE = 'linkOnHide',
     LINK_OFF_HIDE = 'linkOffHide',
-
+    PAGE = 'page',
 }
 
 export enum EAuth {
@@ -32,4 +32,5 @@ export enum EUrl {
     LOGOUT = 'logout',
     LINK_ON_HIDE = 'linkOnHide',
     LINK_OFF_HIDE = 'linkOffHide',
+    PAGE = 'page'
 }

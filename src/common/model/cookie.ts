@@ -1,3 +1,5 @@
+import { IPage } from "./page";
+
 export enum CookieStatus {
     ACTIVE = 'active',
     INACTIVE = 'inactive',
@@ -9,4 +11,6 @@ export interface ICookie {
     id: number;
     cookie: string;
     status: CookieStatus;
+    pageId: number,
+    page: IPage
 }
