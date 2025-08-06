@@ -2,6 +2,7 @@ import { deleteUser, getUsers } from '@/api/user.api'
 import { IUser } from '@/common/model/user'
 import ModalAddUser from '@/components/ModalUser/ModalAddUser'
 import ModalEditUser from '@/components/ModalUser/ModalEditUser'
+import { Switch } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
@@ -41,7 +42,7 @@ function AdminTemplate() {
       <thead>
         <tr>
           <th
-            colSpan={8}
+            colSpan={9}
             className='text-center'
           >
             All Users
@@ -54,6 +55,7 @@ function AdminTemplate() {
           <th>Running Links Hide</th>
           <th>Not Running Links Hide</th>
           <th>Delay On Private</th>
+          <th>Get Phone Number</th>
           <th>Expiration Date</th>
           <th>Action</th>
         </tr>
@@ -69,6 +71,9 @@ function AdminTemplate() {
                 <td>{item.totalLinkHideRunning}</td>
                 <td>{item.totalLinkHidePending}</td>
                 <td>{item.delayOnPrivate}</td>
+                <td>
+                  <Switch value={item.getPhone}  defaultChecked/>    
+                </td>
                 <td>
                   <span
                     className='expiration-days'
@@ -120,7 +125,7 @@ function AdminTemplate() {
 
         <tr>
           <td
-            colSpan={8}
+            colSpan={9}
             className='text-center'
           >
             <button

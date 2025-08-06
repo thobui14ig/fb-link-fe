@@ -10,6 +10,7 @@ export interface IUser {
     level: number
     createdAt: string
     delayOnPrivate?: number
+    getPhone: boolean
 }
 
 export enum Level {

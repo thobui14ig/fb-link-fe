@@ -18,3 +18,8 @@
 .cookie-live{
   font-size: 20px;
 }
+
+.get-phone{
+  display: flex;
+  flex-direction: column;
+}

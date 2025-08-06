@@ -3,6 +3,7 @@ import { IModalReloadProps } from '@/common/interface'
 import { IUser } from '@/common/model/user'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
+import { Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -330,7 +331,24 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                           border: '1px solid #444',
                         }}
                       />
-                    </div>                
+                    </div>   
+                <div className='col-md-6 get-phone'>
+                    <label
+                      htmlFor='link_start_limit'
+                      className='form-label'
+                    >
+                      Get phone number
+                  </label>
+                  <div>
+                    <Switch value={user.getPhone}  defaultChecked onChange={(e) => {
+                        setUser({
+                          ...user,
+                          getPhone: e,
+                        })
+                    }} />                    
+                  </div>
+
+                </div> 
                 </div>
                 </form>
               </div>

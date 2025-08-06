@@ -37,13 +37,13 @@ function Header() {
       setMn([
         ...menus,
         {
-          urlName: EUrl.LOGOUT,
-          name: 'Đăng xuất',
-          className: 'fas fa-user',
-        },
-                {
           urlName: EUrl.PAGE,
           name: 'Quản lý page',
+          className: 'fas fa-user',
+        },
+        {
+          urlName: EUrl.LOGOUT,
+          name: 'Đăng xuất',
           className: 'fas fa-user',
         },
       ])

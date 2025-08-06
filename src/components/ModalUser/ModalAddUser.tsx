@@ -2,6 +2,7 @@ import { createUser } from '@/api/user.api'
 import { IModalReloadProps } from '@/common/interface'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
+import { Switch } from 'antd'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 
@@ -13,7 +14,8 @@ export interface IUserRegister {
   linkOnHideLimit: number | null
   linkOffHideLimit: number | null
   expiredAt: Date | null
-  delayOnPrivate: number | null
+  delayOnPrivate: number | null,
+  getPhone: boolean
 }
 
 const defaultValue = {
@@ -24,7 +26,8 @@ const defaultValue = {
   linkOnHideLimit: null,
   linkOffHideLimit: null,
   expiredAt: null,
-  delayOnPrivate: 5
+  delayOnPrivate: 5,
+  getPhone: true
 }
 
 function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
@@ -302,7 +305,24 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
                         border: '1px solid #444',
                       }}
                     />
-                  </div>                
+                </div>   
+                <div className='col-md-6 get-phone'>
+                    <label
+                      htmlFor='link_start_limit'
+                      className='form-label'
+                    >
+                      Get phone number
+                  </label>
+                  <div>
+                    <Switch value={userInfo.getPhone}  defaultChecked onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          getPhone: e,
+                        })
+                    }} />                    
+                  </div>
+
+                </div> 
               </div>
 
             </form>
