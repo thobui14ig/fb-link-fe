@@ -17,20 +17,36 @@ function UserTemplate() {
           <td>{userLogin?.username}</td>
         </tr>
         <tr>
-          <td>Total Public Links / Running Links</td>
+          <td>Total Link On / Limit Link On</td>
           <td>
-            {userLogin?.totalPublic}/{userLogin?.totalPublicRunning}
+            {userLogin?.totalLinkOn}/{userLogin?.linkOnLimit}
           </td>
         </tr>
         <tr>
-          <td>Total Private Links / Running Links</td>
+          <td>Total Link Off / Limit Link Off</td>
           <td>
-            {userLogin?.totalPrivate}/{userLogin?.totalPrivateRunning}
+            {userLogin?.totalLinkOff}/{userLogin?.linkOffLimit}
           </td>
         </tr>
         <tr>
+          <td>Total Link On Hide / Limit Link On Hide</td>
+          <td>
+            {userLogin?.totalLinkOnHide}/{userLogin?.linkOnHideLimit}
+          </td>
+        </tr>
+        <tr>
+          <td>Total Link Off Hide / Limit Link Off Hide</td>
+          <td>
+            {userLogin?.totalLinkOff}/{userLogin?.linkOffHideLimit}
+          </td>
+        </tr>
+        {/* <tr>
           <td>Registration Date</td>
           <td>{userLogin?.createdAt}</td>
+        </tr> */}
+        <tr>
+          <td>Total Comments To Day</td>
+          <td>{userLogin?.totalComments}</td>
         </tr>
         <tr>
           <td>Expiration Date</td>

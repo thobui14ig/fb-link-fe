@@ -9,9 +9,11 @@ import ModalEditCookie from './ModalEditCookie'
 import { toast } from 'react-toastify'
 import { customErrorToast } from '@/common/utils/toast'
 import copy from 'copy-to-clipboard'
+import { useApp } from '@/common/store/AppContext'
 
 function Cookie() {
   const { active } = useTab()
+  const { isAdmin } = useApp()
   const [cookies, setCookies] = useState<ICookie[]>([])
   const [isReload, setIsReload] = useState<boolean>(false)
   const [linkEditId, setLinkEditId] = useState<number | null>(null)
@@ -80,6 +82,7 @@ function Cookie() {
                 <th className='col-cookie'>Cookie</th>
                 <th className='col-status'>Page</th>
                 <th className='col-status'>Status</th>
+                { isAdmin && <th className='col-status'>Created By</th>}
                 <th className='col-action'>Hành Động</th>
               </tr>
             </thead>
@@ -92,6 +95,7 @@ function Cookie() {
                       <td className='col-cookie'>{item.cookie}</td>
                       <td className='col-status'>{item?.page?.name}</td>
                       <td className='col-status'>{item.status}</td>
+                      { isAdmin && <td className='col-status'>{item.user?.username}</td>}
                       <td className='nowrap'>
                         <div className='dropdown'>
                           <button

@@ -11,6 +11,8 @@ export interface IUser {
     createdAt: string
     delayOnPrivate?: number
     getPhone: boolean
+    accountFbUuid: string
+    totalComments: number
 }
 
 export enum Level {
@@ -23,6 +25,11 @@ export interface IUserLogin {
     totalPrivate: number
     totalPublicRunning: number
     totalPrivateRunning: number
+    totalLinkOn: number
+    totalLinkOff: number
+    totalLinkOnHide: number
+    totalLinkOffHide: number
+
 }
 
 

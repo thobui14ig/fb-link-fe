@@ -13,7 +13,7 @@ import { getLink } from '@/api/link.api'
 import { customErrorToast } from '@/common/utils/toast'
 
 function Comment() {
-  const { isAdmin } = useApp()
+  const { isAdmin, userLogin } = useApp()
   const [form] = Form.useForm<IGetCommentParams>()
   const { active } = useTab()
   const [comments, setComments] = useState<IComment[]>([])
@@ -136,7 +136,7 @@ function Comment() {
                 <th>Tên bài</th>
                 <th>UID</th>
                 <th>Name</th>
-                <th>Phone Number</th>
+                {!isAdmin && !!userLogin?.getPhone && <th>Phone Number</th>}
                 <th>Message</th>
               </tr>
             </thead>
@@ -180,7 +180,7 @@ function Comment() {
                           {item.name}
                         </a>
                       </td>
-                      <td>{item.phoneNumber}</td>
+                      {!isAdmin && !!userLogin?.getPhone && <td>{item.phoneNumber}</td>}
                       <td>{item.message}</td>
                     </tr>
                   )

@@ -17,7 +17,8 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
   useEffect(() => {
     ;(async () => {
         const { data: resPages } = await getPages()
-        setPages(resPages)
+      setPages(resPages)
+      setPageId(resPages.length > 0 ? resPages[0].id : null)
     })()
   }, [])
 
@@ -121,7 +122,7 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
                     onChange={(e) => {
                       setPageId(Number(e.target.value))
                     }}
-                    value={pageId??0}
+                    value={pageId ?? 0}
                   >
                     {pages.length > 0 && 
                       pages.map((item, i) => {

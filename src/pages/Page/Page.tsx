@@ -7,11 +7,14 @@ import { customErrorToast } from '@/common/utils/toast'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import ModalAddPage from './ModalAddPage'
+import { getCookies } from '@/api/cookie.api'
+import { CookieStatus, ICookie } from '@/common/model/cookie'
 
 function Page() {
   const { active } = useTab()
   const [pages, setPages] = useState<IPage[]>([])
   const [isReload, setIsReload] = useState<boolean>(false)
+  const [cookies, setCookies] = useState<ICookie[]>([])
 
   const handleDeletePage = async (id: number) => {
     try {
@@ -33,6 +36,16 @@ function Page() {
 
     fetch()
   }, [isReload])
+
+    useEffect(() => {
+      const fetch = async () => {
+        const { data } = await getCookies()
+        console.log("🚀 ~ fetch ~ data:", data)
+        setCookies(data)
+      }
+  
+      fetch()
+    }, [isReload])
 
   return (
     <div
@@ -68,16 +81,21 @@ function Page() {
               <tr>
                 <th className='col-stt'>STT</th>
                 <th className='col-proxy'>Name</th>
+                <th className='col-proxy'>Cookie(live / total)</th>
                 <th className='col-action'>Hành Động</th>
               </tr>
             </thead>
             <tbody>
               {pages.length > 0 &&
                 pages.map((item, i) => {
+                  const cookiesPage = cookies.filter(c => c.pageId == item.id)
+                  const cookieLive = cookiesPage.filter(cp => cp.status === CookieStatus.ACTIVE)
+
                   return (
                     <tr>
                       <td className='col-stt'>{i + 1}</td>
                       <td className='col-proxy'>{item.name}</td>
+                      <td className='col-proxy'>{cookiesPage?.length??0}/{cookieLive?.length??0 }</td>
                       <td className='col-action'>
                         <button
                           className='btn btn-sm btn-danger'

@@ -55,7 +55,7 @@ function AdminTemplate() {
           <th>Running Links Hide</th>
           <th>Not Running Links Hide</th>
           <th>Delay On Private</th>
-          <th>Get Phone Number</th>
+          <th>Show Phone Number</th>
           <th>Expiration Date</th>
           <th>Action</th>
         </tr>

@@ -6,6 +6,11 @@ import { Switch } from 'antd'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 
+export enum AccountFbUuid {
+  Beewisaka = "Beewisaka@gmail.com",
+  chuongk57 = "chuongk57@gmail.com"
+}
+
 export interface IUserRegister {
   username: string | null
   password: string | null
@@ -15,7 +20,8 @@ export interface IUserRegister {
   linkOffHideLimit: number | null
   expiredAt: Date | null
   delayOnPrivate: number | null,
-  getPhone: boolean
+  getPhone: boolean,
+  accountFbUuid: string | AccountFbUuid
 }
 
 const defaultValue = {
@@ -27,7 +33,8 @@ const defaultValue = {
   linkOffHideLimit: null,
   expiredAt: null,
   delayOnPrivate: 5,
-  getPhone: true
+  getPhone: true,
+  accountFbUuid: ""
 }
 
 function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
@@ -311,7 +318,7 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
                       htmlFor='link_start_limit'
                       className='form-label'
                     >
-                      Get phone number
+                      Show phone number
                   </label>
                   <div>
                     <Switch value={userInfo.getPhone}  defaultChecked onChange={(e) => {
@@ -324,7 +331,37 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
 
                 </div> 
               </div>
-
+              <div className='row mb-3'>
+                <div className='col-md-6'>
+                  <label
+                    htmlFor='editLevel'
+                    className='form-label'
+                  >
+                    Account get Phone
+                  </label>
+                  <select
+                    className='form-control'
+                    id='editLevel'
+                    name='level'
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                    onChange={(e) => {
+                      setUserInfo({
+                        ...userInfo,
+                        accountFbUuid: e.target.value as any,
+                      })
+                    }}
+                    value={userInfo.accountFbUuid ?? ""}
+                  >
+                    <option value={""}></option>
+                    <option value='Beewisaka@gmail.com'>Beewisaka@gmail.com</option>
+                    <option value='chuongk57@gmail.com'>chuongk57@gmail.com</option>
+                  </select>
+                </div>
+              </div>
             </form>
           </div>
           <div className='modal-footer'>

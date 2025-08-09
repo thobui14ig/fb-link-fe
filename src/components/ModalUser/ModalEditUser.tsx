@@ -305,51 +305,82 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                     </div>
                   </div>
 
-                <div className='row mb-3'>
-                  <div className='col-md-6'>
+                  <div className='row mb-3'>
+                    <div className='col-md-6'>
+                        <label
+                          htmlFor='link_start_limit'
+                          className='form-label'
+                        >
+                          Delay on Private
+                        </label>
+                        <input
+                          className='form-control'
+                          id='link_start_limit'
+                          name='link_start_limit'
+                          required
+                          value={user.delayOnPrivate ?? 5}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            setUser({
+                              ...user,
+                              delayOnPrivate: e.target.value as any,
+                            })
+                          }}
+                          style={{
+                            backgroundColor: '#333',
+                            color: '#fff',
+                            border: '1px solid #444',
+                          }}
+                        />
+                      </div>   
+                    <div className='col-md-6 get-phone'>
+                        <label
+                          htmlFor='link_start_limit'
+                          className='form-label'
+                        >
+                          Show phone number
+                      </label>
+                      <div>
+                        <Switch value={user.getPhone}  defaultChecked onChange={(e) => {
+                            setUser({
+                              ...user,
+                              getPhone: e,
+                            })
+                        }} />                    
+                      </div>
+
+                    </div> 
+                  </div>
+                  <div className='row mb-3'>
+                    <div className='col-md-6'>
                       <label
-                        htmlFor='link_start_limit'
+                        htmlFor='editLevel'
                         className='form-label'
                       >
-                        Delay on Private
+                        Account get Phone
                       </label>
-                      <input
+                      <select
                         className='form-control'
-                        id='link_start_limit'
-                        name='link_start_limit'
-                        required
-                        value={user.delayOnPrivate ?? 5}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          setUser({
-                            ...user,
-                            delayOnPrivate: e.target.value as any,
-                          })
-                        }}
+                        id='editLevel'
+                        name='level'
                         style={{
                           backgroundColor: '#333',
                           color: '#fff',
                           border: '1px solid #444',
                         }}
-                      />
-                    </div>   
-                <div className='col-md-6 get-phone'>
-                    <label
-                      htmlFor='link_start_limit'
-                      className='form-label'
-                    >
-                      Get phone number
-                  </label>
-                  <div>
-                    <Switch value={user.getPhone}  defaultChecked onChange={(e) => {
-                        setUser({
-                          ...user,
-                          getPhone: e,
-                        })
-                    }} />                    
+                        onChange={(e) => {
+                          setUser({
+                            ...user,
+                            accountFbUuid: e.target.value as any,
+                          })
+                        }}
+                        value={user.accountFbUuid ?? ""}
+                      >
+                        <option value={""}></option>
+                        <option value='Beewisaka@gmail.com'>Beewisaka@gmail.com</option>
+                        <option value='chuongk57@gmail.com'>chuongk57@gmail.com</option>
+                      </select>
+                    </div>
                   </div>
-
-                </div> 
-                </div>
                 </form>
               </div>
 

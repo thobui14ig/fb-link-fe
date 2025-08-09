@@ -41,5 +41,10 @@ export const menus: IHeaderItems[] = [
         urlName: EUrl.COOKIE,
         name: 'Cookie',
         className: 'fas fa-cookie',
-    }
+    },
+    {
+        urlName: EUrl.PAGE,
+        name: 'Quản lý page',
+        className: 'fas fa-user',
+    },
 ]

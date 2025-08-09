@@ -7,7 +7,12 @@ import { useEffect, useState } from 'react'
 
 function Header() {
   const [mn, setMn] = useState<IHeaderItems[]>([])
-  const { isAdmin } = useApp()
+  const { isAdmin, userLogin } = useApp()
+  const isShowLinkOnMenu = userLogin?.linkOnLimit && Number(userLogin?.linkOnLimit) > 0
+  const isShowLinkOffMenu = userLogin?.linkOffLimit && Number(userLogin?.linkOffLimit ) > 0
+  const isShowLinkOnHideMenu = userLogin?.linkOnHideLimit && Number(userLogin?.linkOnHideLimit ) > 0
+  const isShowLinkOffHideMenu = userLogin?.linkOffHideLimit && Number(userLogin?.linkOffHideLimit ) > 0
+
   useEffect(() => {
     if (isAdmin) {
       setMn([
@@ -34,13 +39,22 @@ function Header() {
         },
       ])
     } else {
+      let mns = [...menus]
+      if (!isShowLinkOnMenu) {
+        mns = mns.filter(item => item.urlName !== EUrl.LINK_ON)
+      }
+      if (!isShowLinkOffMenu) {
+        mns = mns.filter(item => item.urlName !== EUrl.LINK_OFF)
+      }
+      if (!isShowLinkOnHideMenu) {
+        mns = mns.filter(item => item.urlName !== EUrl.LINK_ON_HIDE)
+      }
+      if (!isShowLinkOffHideMenu) {
+        mns = mns.filter(item => item.urlName !== EUrl.LINK_OFF_HIDE)
+      }
+
       setMn([
-        ...menus,
-        {
-          urlName: EUrl.PAGE,
-          name: 'Quản lý page',
-          className: 'fas fa-user',
-        },
+        ...mns,
         {
           urlName: EUrl.LOGOUT,
           name: 'Đăng xuất',
@@ -48,7 +62,7 @@ function Header() {
         },
       ])
     }
-  }, [isAdmin])
+  }, [isAdmin, userLogin])
 
   return (
     <ul

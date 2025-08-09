@@ -41,4 +41,5 @@ export interface ILink {
     content: string
     thread: number
     tablePageId: number
+    totalComment: number
 }
