@@ -136,7 +136,7 @@ function Comment() {
                 <th>Tên bài</th>
                 <th>UID</th>
                 <th>Name</th>
-                {!isAdmin && !!userLogin?.getPhone && <th>Phone Number</th>}
+                {(isAdmin || (!isAdmin && !!userLogin?.getPhone)) && <th>Phone Number</th>}
                 <th>Message</th>
               </tr>
             </thead>
@@ -180,7 +180,7 @@ function Comment() {
                           {item.name}
                         </a>
                       </td>
-                      {!isAdmin && !!userLogin?.getPhone && <td>{item.phoneNumber}</td>}
+                      {(isAdmin || (!isAdmin && !!userLogin?.getPhone)) && <td>{item.phoneNumber}</td>}
                       <td>{item.message}</td>
                     </tr>
                   )

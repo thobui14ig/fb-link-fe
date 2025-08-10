@@ -12,7 +12,7 @@ import { toast } from 'react-toastify'
 
 function CommentHide() {
   const [form] = Form.useForm<any>()
-  const { isAdmin } = useApp()
+  const { isAdmin, userLogin } = useApp()
   const { active } = useTab()
   const [comments, setComments] = useState<IComment[]>([])
   const initialValues = {
@@ -108,7 +108,7 @@ const handleHideCmt = async (checked: boolean, comment: IComment) => {
                 <th>Tên bài</th>
                 <th>UID</th>
                 <th>Name</th>
-                <th>Phone Number</th>
+                {(isAdmin || (!isAdmin && !!userLogin?.getPhone)) && <th>Phone Number</th>}
                 <th>Message</th>
                 <th>Ẩn</th>
               </tr>
@@ -141,7 +141,7 @@ const handleHideCmt = async (checked: boolean, comment: IComment) => {
                           {item.name}
                         </a>
                       </td>
-                      <td>{item.phoneNumber}</td>
+                      {(isAdmin || (!isAdmin && !!userLogin?.getPhone)) && <td>{item.phoneNumber}</td>}
                       <td>{item.message}</td>
                       <td>
                         <Switch

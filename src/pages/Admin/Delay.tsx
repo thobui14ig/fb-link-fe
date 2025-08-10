@@ -11,9 +11,10 @@ export interface ICreateDelayParams
     | 'refreshToken'
     | 'refreshProxy'
     | 'delayOnPublic'
-    | 'delayOnPrivate'
+    | 'delayOffPrivate'
     | 'delayOff'
     | 'delayCommentCount'
+    | 'timeRemoveProxySlow'
   > {}
 
 function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
@@ -24,7 +25,8 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
     delayCommentCount: 0,
     delayOff: 0,
     delayOnPublic: 0,
-    delayOnPrivate: 0,
+    delayOffPrivate: 0,
+    timeRemoveProxySlow: 20
   })
 
   useEffect(() => {
@@ -35,7 +37,8 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
       delayCommentCount: _delay?.delayCommentCount ?? 0,
       delayOff: _delay?.delayOff ?? 0,
       delayOnPublic: _delay?.delayOnPublic ?? 0,
-      delayOnPrivate: _delay?.delayOnPrivate ?? 0,
+      delayOffPrivate: _delay?.delayOffPrivate ?? 0,
+      timeRemoveProxySlow: _delay?.timeRemoveProxySlow ?? 20,
     })
   }, [_delay])
 
@@ -173,7 +176,7 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             htmlFor='delayLinkOn'
             className='form-label'
           >
-            Delay On Private(Giây)
+            Delay Off Private(Giây)
           </label>
           <input
             type='number'
@@ -182,10 +185,10 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setDelay({
                 ...delay,
-                delayOnPrivate: Number(e.target.value),
+                delayOffPrivate: Number(e.target.value),
               })
             }}
-            value={delay.delayOnPrivate}
+            value={delay.delayOffPrivate}
             style={{
               backgroundColor: '#333',
               color: '#fff',
@@ -238,6 +241,32 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
               })
             }}
             value={delay.delayCommentCount}
+            style={{
+              backgroundColor: '#333',
+              color: '#fff',
+              border: '1px solid #444',
+            }}
+            min='0'
+          />
+        </div>
+        <div className='mb-3'>
+          <label
+            htmlFor='delayLinkOn'
+            className='form-label'
+          >
+            Time remove Proxy slow(Giây)
+          </label>
+          <input
+            type='number'
+            className='form-control'
+            id='delayLinkOn'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setDelay({
+                ...delay,
+                timeRemoveProxySlow: Number(e.target.value),
+              })
+            }}
+            value={delay.timeRemoveProxySlow}
             style={{
               backgroundColor: '#333',
               color: '#fff',

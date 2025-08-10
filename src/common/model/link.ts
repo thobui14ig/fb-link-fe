@@ -42,4 +42,5 @@ export interface ILink {
     thread: number
     tablePageId: number
     totalComment: number
+    timeCrawUpdate?: Date
 }

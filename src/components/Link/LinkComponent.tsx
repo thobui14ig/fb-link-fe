@@ -155,6 +155,7 @@ function LinkComponent({ type }: ITypeLink) {
                 <th scope='col'>Tên Link</th>
                 <th scope='col'>Content</th>
                 <th scope='col'>Last Comment Time</th>
+                {isAdmin && <th scope='col'>Chênh Time</th>}
                 {isAdmin && <th scope='col'>Chênh Cmt</th>}
                 <th scope='col'>Comment Count</th>
                 <th scope='col'>Like Count</th>
@@ -204,7 +205,11 @@ function LinkComponent({ type }: ITypeLink) {
                         </span>
                       </td>
                       {isAdmin && 
-                        <td>{`[${item.countBefore}-${item.totalComment}]`}</td>
+                        <>
+                          <td>{item?.timeCrawUpdate as any ?? ""}</td>
+                          <td>{`[${item.countBefore}-${item.totalComment}]`}</td>  
+                        </>
+
                       }
                       <td>{`[${item.countBefore}-${item.countAfter}]`}</td>
                       <td>{`[${item.likeBefore}-${item.likeAfter}]`}</td>
