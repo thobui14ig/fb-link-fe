@@ -2,6 +2,7 @@
 import {
   deleteLink,
   getLinks,
+  hideOption,
   IGetAllLink,
   processLink
 } from '@/api/link.api'
@@ -9,7 +10,6 @@ import { ELink, ILink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
 import { getTypeLink } from '@/common/utils'
 import { customErrorToast } from '@/common/utils/toast'
-import { SettingOutlined } from '@ant-design/icons'
 import { Select, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -18,6 +18,7 @@ import ModalAddKeyword from './ModalAddKeyword'
 import ModalAddLink from './ModalAddLink'
 import ModalEditLink from './ModalEditLink'
 import ModalSetting from './ModalSetting'
+import { SettingOutlined } from '@ant-design/icons'
 
 export interface ITypeLink {
   type: ELink
@@ -91,10 +92,30 @@ function LinkComponent({ type }: ITypeLink) {
       customErrorToast(error)
     }
   }
+  
+  const actionHideCmt = async (key: EKeyHideCmt, linkId: number) => {
+    const currentLink = links.find(item => item.id === linkId)
+    if (currentLink){
+      currentLink.hideBy = key
+      setLinks([...links])
+    }
 
-  const handleAddkeyword = (linkId: number) => {
-    setLinkSetKeyword(linkId)
-    setIsShowModalAddKeywords(true)
+    if (key === EKeyHideCmt.KEYWORD) {
+      setLinkSetKeyword(linkId)
+      setIsShowModalAddKeywords(true)
+    }
+    try {
+      await hideOption(linkId, key)
+      setIsReload(!isReload)
+      toast.success('Ok!')
+    } catch (error) {
+      customErrorToast(error)
+    }
+  }
+
+  const showModalKeyword = (linkId: number) => {
+      setLinkSetKeyword(linkId)
+      setIsShowModalAddKeywords(true)
   }
 
   return (
@@ -156,9 +177,9 @@ function LinkComponent({ type }: ITypeLink) {
                 <th scope='col'>Content</th>
                 <th scope='col'>Last Comment Time</th>
                 {isAdmin && <th scope='col'>Chênh Time</th>}
-                {isAdmin && <th scope='col'>Chênh Cmt</th>}
-                <th scope='col'>Comment Count</th>
-                <th scope='col'>Like Count</th>
+                {isAdmin && <th scope='col' style={{ minWidth: "100px" }}>Data</th>}
+                <th scope='col' style={{ minWidth: "100px" }}>Comment Count</th>
+                <th scope='col' style={{ minWidth: "100px" }}>Like Count</th>
 
                 {isAdmin && (
                   <>
@@ -206,13 +227,13 @@ function LinkComponent({ type }: ITypeLink) {
                       </td>
                       {isAdmin && 
                         <>
-                          <td>{item?.timeCrawUpdate as any ?? ""}</td>
-                          <td>{`[${item.countBefore}-${item.totalComment}]`}</td>  
+                          <td>{item?.timeCrawUpdate as any ?? ""}<span className="square">{item.countAfter - (item.totalCommentNewest - item.totalComment)}</span></td>
+                          <td>{`${item.totalCommentNewest}`} <span className="square">{(item.totalCommentToday)}</span></td>  
                         </>
 
                       }
-                      <td>{`[${item.countBefore}-${item.countAfter}]`}</td>
-                      <td>{`[${item.likeBefore}-${item.likeAfter}]`}</td>
+                      <td>{item.countBefore} <span className="square">{(item.countAfter)}</span></td>
+                      <td>{item.likeBefore} <span className="square">{(item.likeAfter)}</span></td>
 
                       {isAdmin && (
                         <>
@@ -230,12 +251,12 @@ function LinkComponent({ type }: ITypeLink) {
                                 <Select
                                   defaultValue={item.hideBy}
                                   style={{ width: 120 }}
-                                  // onChange={(e) =>
-                                  //   actionHideCmt(
-                                  //     e as unknown as EKeyHideCmt,
-                                  //     item.id as number
-                                  //   )
-                                  // }
+                                  onChange={(e) =>
+                                    actionHideCmt(
+                                      e as unknown as EKeyHideCmt,
+                                      item.id as number
+                                    )
+                                  }
                                   options={[
                                     {
                                       value: EKeyHideCmt.ALL,
@@ -254,7 +275,7 @@ function LinkComponent({ type }: ITypeLink) {
                                 {item.hideBy === EKeyHideCmt.KEYWORD && (
                                   <Typography.Link
                                     onClick={() =>
-                                      handleAddkeyword(item.id as number)
+                                      showModalKeyword(item.id as number)
                                     }
                                   >
                                     <SettingOutlined

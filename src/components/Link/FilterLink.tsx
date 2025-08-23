@@ -23,6 +23,10 @@ export interface FormValues {
   likeFrom?: number
   likeTo?: number
   userId: number
+  diffTimeFrom?: number
+  diffTimeTo?: number
+  totalCmtTodayFrom?: number
+  totalCmtTodayTo?: number
 }
 
 export interface IPropFilter extends IModalReloadProps {
@@ -53,6 +57,10 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
       lastCommentTo,
       likeFrom,
       likeTo,
+      diffTimeFrom,
+      diffTimeTo,
+      totalCmtTodayFrom,
+      totalCmtTodayTo,
     } = values
 
     if (
@@ -60,6 +68,20 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
       (!lastCommentFrom && lastCommentTo)
     ) {
       toast.error('Nhập thiếu thông tin cmt  comment count')
+      return
+    }
+    if (
+      (diffTimeFrom && !diffTimeTo) ||
+      (!diffTimeFrom && diffTimeTo)
+    ) {
+      toast.error('Nhập thiếu thông tin chênh time')
+      return
+    }
+    if (
+      (totalCmtTodayFrom && !totalCmtTodayTo) ||
+      (!totalCmtTodayFrom && totalCmtTodayTo)
+    ) {
+      toast.error('Nhập thiếu thông tin total cmt')
       return
     }
     if (
@@ -148,7 +170,7 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
         )}
 
         <Form.Item
-          label='Thời gian commnent '
+          label='Last comment time '
           style={{ marginBottom: 0 }}
         >
           <Form.Item
@@ -159,6 +181,47 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
           </Form.Item>
           <Form.Item
             name='lastCommentTo'
+            style={{
+              display: 'inline-block',
+              width: '50px',
+            }}
+          >
+            <Input placeholder='đến' />
+          </Form.Item>
+        </Form.Item>
+
+        <Form.Item
+          label='Chênh time'
+          style={{ marginBottom: 0 }}
+        >
+          <Form.Item
+            name='diffTimeFrom'
+            style={{ display: 'inline-block', width: '50px' }}
+          >
+            <Input placeholder='Từ' />
+          </Form.Item>
+          <Form.Item
+            name='diffTimeTo'
+            style={{
+              display: 'inline-block',
+              width: '50px',
+            }}
+          >
+            <Input placeholder='đến' />
+          </Form.Item>
+        </Form.Item>
+        <Form.Item
+          label='Total cmt today'
+          style={{ marginBottom: 0 }}
+        >
+          <Form.Item
+            name='totalCmtTodayFrom'
+            style={{ display: 'inline-block', width: '50px' }}
+          >
+            <Input placeholder='Từ' />
+          </Form.Item>
+          <Form.Item
+            name='totalCmtTodayTo'
             style={{
               display: 'inline-block',
               width: '50px',

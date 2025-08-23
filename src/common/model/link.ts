@@ -41,6 +41,8 @@ export interface ILink {
     content: string
     thread: number
     tablePageId: number
-    totalComment: number
+    totalCommentNewest: number
     timeCrawUpdate?: Date
+    totalComment: number,
+    totalCommentToday: number
 }

@@ -69,7 +69,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     fetch()
-  }, [])
+  }, [JSON.stringify(userLogin)])
 
   return (
     <SocketContext.Provider value={values}>{children}</SocketContext.Provider>

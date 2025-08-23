@@ -43,7 +43,10 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
   }, [_delay])
 
   const update = async () => {
-    const isValid = Object.values(delay).some((value) => Number(value) < 0)
+    if (delay.delayOffPrivate != null) {
+      delay.delayOffPrivate = Number(delay.delayOffPrivate)
+    }
+    const isValid = Object.values(delay).some((value) => value == undefined)
 
     if (isValid) {
       toast.error('Gía trị không hợp lệ!')
@@ -174,27 +177,27 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
         <div className='mb-3'>
           <label
             htmlFor='delayLinkOn'
-            className='form-label'
           >
             Delay Off Private(Giây)
           </label>
           <input
-            type='number'
-            className='form-control'
-            id='delayLinkOn'
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setDelay({
-                ...delay,
-                delayOffPrivate: Number(e.target.value),
-              })
-            }}
-            value={delay.delayOffPrivate}
-            style={{
-              backgroundColor: '#333',
-              color: '#fff',
-              border: '1px solid #444',
-            }}
-            min='0'
+              className='form-control'
+              id='link_start_limit'
+              name='link_start_limit'
+              required
+              value={delay.delayOffPrivate}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setDelay({
+                  ...delay,
+                  delayOffPrivate: e.target.value as any,
+                })
+              }}
+              style={{
+                backgroundColor: '#333',
+                color: '#fff',
+                border: '1px solid #444',
+              }}
+
           />
         </div>
         <div className='mb-3'>
@@ -202,7 +205,7 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             htmlFor='delayLinkOn'
             className='form-label'
           >
-            Delay Off(Phút)
+            Delay Off Public(Giây)
           </label>
           <input
             type='number'
@@ -220,7 +223,6 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
               color: '#fff',
               border: '1px solid #444',
             }}
-            min='0'
           />
         </div>
         <div className='mb-3'>

@@ -23,3 +23,9 @@
   display: flex;
   flex-direction: column;
 }
+
+.square {
+  color: yellow;
+  padding: 5px;
+}
+

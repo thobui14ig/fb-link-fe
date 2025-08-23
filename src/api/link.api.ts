@@ -52,3 +52,5 @@ export const getKeywordByLinkId = (id: number) =>
   http.get<Omit<ILink, 'user'>>(`/links/get-keywords/${id}`)
 export const settingLink = (body: ISettingLink) =>
   http.post(`/links/setting-link`, body)
+export const hideOption = (linkId: number, key: string) =>
+  http.post(`/links/hide-cmt/${linkId}?type=${key}`)

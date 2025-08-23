@@ -23,8 +23,11 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
 
   useEffect(() => {
     ;(async () => {
-        const { data: resPages } = await getPages()
-        setPages(resPages)
+      const { data: resPages } = await getPages()
+      if (resPages.length > 0) {
+        setPageId(resPages[0].id)
+      }
+      setPages(resPages)
     })()
   }, [])
 
