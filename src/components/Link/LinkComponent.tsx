@@ -177,10 +177,9 @@ function LinkComponent({ type }: ITypeLink) {
                 <th scope='col'>Content</th>
                 <th scope='col'>Last Comment Time</th>
                 {isAdmin && <th scope='col'>Chênh Time</th>}
-                {isAdmin && <th scope='col' style={{ minWidth: "100px" }}>Data</th>}
-                <th scope='col' style={{ minWidth: "100px" }}>Comment Count</th>
-                <th scope='col' style={{ minWidth: "100px" }}>Like Count</th>
-
+                <th scope='col' style={{ minWidth: "100px" }}>Data</th>
+                {isAdmin && <th scope='col' style={{ minWidth: "100px" }}>Comment Count</th>}
+                {isAdmin &&  <th scope='col' style={{ minWidth: "100px" }}>Like Count</th>}
                 {isAdmin && (
                   <>
                     <th scope='col'>Type Link</th>
@@ -226,17 +225,14 @@ function LinkComponent({ type }: ITypeLink) {
                         </span>
                       </td>
                       {isAdmin && 
-                        <>
-                          <td>{item?.timeCrawUpdate as any ?? ""}<span className="square">{item.countAfter - (item.totalCommentNewest - item.totalComment)}</span></td>
-                          <td>{`${item.totalCommentNewest}`} <span className="square">{(item.totalCommentToday)}</span></td>  
-                        </>
-
+                        <td>{item?.timeCrawUpdate as any ?? ""}<span className="square">{item.countAfter - (item.totalCommentNewest - item.totalComment)}</span></td>
                       }
-                      <td>{item.countBefore} <span className="square">{(item.countAfter)}</span></td>
-                      <td>{item.likeBefore} <span className="square">{(item.likeAfter)}</span></td>
+                      <td>{`${item.totalCommentNewest}`} <span className="square">{(item.totalCommentToday)}</span></td>  
 
                       {isAdmin && (
                         <>
+                          <td>{item.countBefore} <span className="square">{(item.countAfter)}</span></td>
+                          <td>{item.likeBefore} <span className="square">{(item.likeAfter)}</span></td>
                           <td>{item.type}</td>
                           <td>{item.delayTime}</td>
                           <td>{item.username}</td>

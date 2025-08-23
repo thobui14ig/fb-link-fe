@@ -49,8 +49,8 @@ function Login() {
       <div className='login-container'>
         <div className='login-header'>
           <div className='brand'>
-            <h3>VUASALE.COM</h3>
-            <small>Quản lý khách hàng Facebook dễ dàng và hiệu quả!</small>
+            <h3>Login</h3>
+            {/* <small>Quản lý khách hàng Facebook dễ dàng và hiệu quả!</small> */}
           </div>
         </div>
 
@@ -61,7 +61,7 @@ function Login() {
                 className='form-control'
                 id='username'
                 name='username'
-                placeholder='UserName'
+                placeholder='Username'
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setDataLogin({
                     ...dataLogin,

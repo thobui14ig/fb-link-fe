@@ -2,6 +2,7 @@ import { IGetAllLink, settingLink } from '@/api/link.api'
 import { IModalReloadProps } from '@/common/interface'
 import { ELink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
+import { getTypeLink } from '@/common/utils'
 import { customErrorToast } from '@/common/utils/toast'
 import { Form, InputNumber, Modal, Switch } from 'antd'
 import { toast } from 'react-toastify'
@@ -49,10 +50,11 @@ function ModalSetting({
       await settingLink({
         ...values,
         linkIds: links.map((item) => item.id) as number[],
-        hideCmt:
+        hideCmt:  
           type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE
             ? true
-                  : false,
+            : false,
+        type: getTypeLink(type)
       })
       setIsReload(!isReload)
       toast.success('Update thành công!')

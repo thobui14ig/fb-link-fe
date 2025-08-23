@@ -13,7 +13,7 @@ import { getCookies } from '@/api/cookie.api'
 import { CookieStatus } from '@/common/model/cookie'
 
 export interface FormValues {
-  type: 'private' | 'public' | 'die'
+  type: 'private' | 'public' | 'die' | 'undefined'
   lastCommentFrom?: number
   lastCommentTo?: number
   differenceCountCmtFrom?: number
@@ -165,6 +165,7 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
               <Select.Option value='private'>Private</Select.Option>
               <Select.Option value='public'>Public</Select.Option>
               <Select.Option value='die'>Die</Select.Option>
+              <Select.Option value='undefined'>Undefined</Select.Option>
             </Select>
           </Form.Item>
         )}
@@ -189,27 +190,29 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
             <Input placeholder='đến' />
           </Form.Item>
         </Form.Item>
+        {isAdmin &&
+          <Form.Item
+            label='Chênh time'
+            style={{ marginBottom: 0 }}
+          >
+            <Form.Item
+              name='diffTimeFrom'
+              style={{ display: 'inline-block', width: '50px' }}
+            >
+              <Input placeholder='Từ' />
+            </Form.Item>
+            <Form.Item
+              name='diffTimeTo'
+              style={{
+                display: 'inline-block',
+                width: '50px',
+              }}
+            >
+              <Input placeholder='đến' />
+            </Form.Item>
+          </Form.Item>          
+        }
 
-        <Form.Item
-          label='Chênh time'
-          style={{ marginBottom: 0 }}
-        >
-          <Form.Item
-            name='diffTimeFrom'
-            style={{ display: 'inline-block', width: '50px' }}
-          >
-            <Input placeholder='Từ' />
-          </Form.Item>
-          <Form.Item
-            name='diffTimeTo'
-            style={{
-              display: 'inline-block',
-              width: '50px',
-            }}
-          >
-            <Input placeholder='đến' />
-          </Form.Item>
-        </Form.Item>
         <Form.Item
           label='Total cmt today'
           style={{ marginBottom: 0 }}
@@ -230,49 +233,48 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
             <Input placeholder='đến' />
           </Form.Item>
         </Form.Item>
-        <Form.Item
-          label='Chênh Cmt'
-          style={{ marginBottom: 0 }}
-        >
-          <Form.Item
-            name='differenceCountCmtFrom'
-            style={{ display: 'inline-block', width: '50px' }}
-          >
-            <Input placeholder='Từ' />
-          </Form.Item>
-          <Form.Item
-            name='differenceCountCmtTo'
-            style={{
-              display: 'inline-block',
-              width: '50px',
-            }}
-          >
-            <Input placeholder='đến' />
-          </Form.Item>
-        </Form.Item>
-        <Form.Item
-          label='Like'
-          style={{ marginBottom: 0 }}
-        >
-          <Form.Item
-            name='likeFrom'
-            style={{ display: 'inline-block', width: '50px' }}
-          >
-            <Input placeholder='Từ' />
-          </Form.Item>
-          <Form.Item
-            name='likeTo'
-            style={{
-              display: 'inline-block',
-              width: '50px',
-            }}
-          >
-            <Input placeholder='đến' />
-          </Form.Item>
-        </Form.Item>
-
         {isAdmin && (
           <>
+            <Form.Item
+              label='Chênh Cmt'
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='differenceCountCmtFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='differenceCountCmtTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              label='Like'
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='likeFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='likeTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
             <Form.Item
               label='Delay'
               style={{ marginBottom: 0 }}

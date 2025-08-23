@@ -3,7 +3,7 @@ import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
 import { IComment } from '@/common/model/comment'
 import { useApp } from '@/common/store/AppContext'
-import { Button, DatePicker, Form } from 'antd'
+import { Button, DatePicker, Form, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import * as XLSX from 'xlsx'
@@ -17,6 +17,8 @@ function Comment() {
   const [form] = Form.useForm<IGetCommentParams>()
   const { active } = useTab()
   const [comments, setComments] = useState<IComment[]>([])
+  const [commentsFromApi, setCommentsFromApi] = useState<IComment[]>([])
+  const [isShowPhone, setIsShowPhone] = useState<boolean>(false)
   const [showPopover, setShowPopover] = useState<null | string>(null)
   const [contentPopover, setShowContentPopover] = useState<null | string>(null)
   const initialValues: IGetCommentParams = {
@@ -27,6 +29,12 @@ function Comment() {
   useEffect(() => {
     const fetch = async () => {
       const { data } = await getComments(initialValues)
+      setCommentsFromApi(data)
+      if (isShowPhone) {
+        const cmts = data.filter(item => Number(item.phoneNumber?.length) > 0)
+        setComments(cmts)
+        return
+      }
       setComments(data)
     }
 
@@ -35,6 +43,12 @@ function Comment() {
 
   const onFinish = async (values: IGetCommentParams) => {
     const { data } = await getComments(values)
+    setCommentsFromApi(data)
+    if (isShowPhone) {
+      const cmts = data.filter(item => Number(item.phoneNumber?.length) > 0)
+      setComments(cmts)
+      return
+    }
     setComments(data)
   }
 
@@ -74,6 +88,16 @@ function Comment() {
     }
   }
 
+  const showPhone = (checked: boolean) => {
+    setIsShowPhone(checked)
+    if (checked) {
+      const cmts = commentsFromApi.filter(item => Number(item.phoneNumber?.length) > 0)
+      setComments(cmts)
+      return
+    }
+    setComments([...commentsFromApi])    
+  }
+
   return (
     <div
       className={`tab-pane fade ${active(Tab.COMMENT)}`}
@@ -92,6 +116,7 @@ function Comment() {
             initialValues={{
               startDate: initialValues.startDate,
               endDate: initialValues.endDate,
+              phoneNumber: isShowPhone
             }}
           >
             <Form.Item
@@ -122,6 +147,14 @@ function Comment() {
             >
               Download Excel
             </Button>
+            <Form.Item
+              style={{ marginLeft: 10 }}
+              label='Phone Number'
+              valuePropName='checked'
+              name='phoneNumber'
+            >
+              <Switch onChange={showPhone}/>
+            </Form.Item>
           </Form>
         </div>
 

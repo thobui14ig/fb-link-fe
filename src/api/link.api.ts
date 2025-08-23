@@ -19,6 +19,7 @@ export interface ISettingLink {
   delay: number
   linkIds: number[]
   hideCmt?: boolean
+  type: LinkStatus
 }
 
 export interface IGetAllLink extends ILink {
