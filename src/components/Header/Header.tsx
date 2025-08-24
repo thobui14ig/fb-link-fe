@@ -33,6 +33,11 @@ function Header() {
           className: 'fas fa-cogs',
         },
         {
+          urlName: EUrl.VPS,
+          name: 'Vps',
+          className: 'fas fa-cogs',
+        },
+        {
           urlName: EUrl.LOGOUT,
           name: 'Đăng xuất',
           className: 'fas fa-user',

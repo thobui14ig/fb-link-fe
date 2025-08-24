@@ -17,6 +17,7 @@ import Token from './pages/Token/Token.tsx';
 import Users from './pages/Users/Users.tsx';
 import LinkOffHide from './pages/LinkOffHide/LinkOnHide.tsx';
 import Page from './pages/Page/Page.tsx';
+import Vps from './pages/Vps/Vps.tsx';
 
 
 const router = createBrowserRouter([
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
       {
         path: '/page',
         element: <Page />,
+      },
+      {
+        path: '/vps',
+        element: <Vps />,
       },
     ],
   },
