@@ -3,9 +3,10 @@ export enum VpsStatus {
     Die = 'die',
 }
 
-export interface IPage {
+export interface IVps {
     id: number,
     ip: string,
     port: number,
     status: VpsStatus
+    speed: number
 }
