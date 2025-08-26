@@ -20,7 +20,7 @@ function App() {
   }, [])
 
   return (
-    <div className="contents mt-5">
+    <div className="contents mt-1">
       <Header />
       <div className="tab-content" id="pills-tabContent">
         <Outlet />

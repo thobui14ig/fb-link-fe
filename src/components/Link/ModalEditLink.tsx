@@ -13,9 +13,11 @@ import { getPages } from '@/api/page.api'
 
 interface IModalEditLink extends IModalReloadProps {
   linkEditId: number | null
- type: ELink
+  type: ELink,
+  links: ILink[],
+  setLinks: any
 }
-function ModalEditLink({ linkEditId, isReload, setIsReload, type }: IModalEditLink) {
+function ModalEditLink({ linkEditId, isReload, setIsReload, type, links, setLinks }: IModalEditLink) {
   const { getLink } = useLink()
   const { isAdmin } = useApp()
   const [pages, setPages] = useState<IPage[]>([])
@@ -36,9 +38,16 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type }: IModalEditLi
     try {
       if (link) {
         link.delayTime = Number(link.delayTime)
-        await updateLink(link)
-        setIsReload(!isReload)
+        let currentLink = links.find(item => item.id === link.id)
+        if (currentLink) {
+          currentLink.linkName = link.linkName as string;
+          currentLink.type = link.type as Type
+          currentLink.delayTime = link.delayTime
+          setLinks([...links])
+        }
         toast('Update thành công!')
+        await updateLink(link)
+        // setIsReload(!isReload)
         closeModal('editLinkModal')
       }
     } catch (error) {

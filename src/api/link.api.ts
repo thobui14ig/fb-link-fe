@@ -55,3 +55,5 @@ export const settingLink = (body: ISettingLink) =>
   http.post(`/links/setting-link`, body)
 export const hideOption = (linkId: number, key: string) =>
   http.post(`/links/hide-cmt/${linkId}?type=${key}`)
+export const priority = (body: { priority: boolean, linkId: number }) =>
+  http.post(`/links/priority`, body)

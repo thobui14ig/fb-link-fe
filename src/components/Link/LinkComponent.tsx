@@ -4,13 +4,14 @@ import {
   getLinks,
   hideOption,
   IGetAllLink,
+  priority as priorityApi,
   processLink
 } from '@/api/link.api'
 import { ELink, ILink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
 import { getTypeLink } from '@/common/utils'
 import { customErrorToast } from '@/common/utils/toast'
-import { Select, Typography } from 'antd'
+import { Checkbox, Select, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import FilterLink from './FilterLink'
@@ -118,6 +119,21 @@ function LinkComponent({ type }: ITypeLink) {
       setIsShowModalAddKeywords(true)
   }
 
+  const priority = async (linkId: number, priority: boolean) => {
+    const newPriority =  priority ? false : true
+    try {
+      const currentLink = links.find(item => item.id === linkId)
+      if (currentLink) {
+        currentLink.priority = newPriority
+      }
+      setLinks([...links])
+      toast.success('Ok!')
+      await priorityApi({ linkId, priority: newPriority })
+    } catch (error) {
+      customErrorToast(error)
+    }
+  }
+
   return (
     <div
       className='card p-4'
@@ -184,6 +200,7 @@ function LinkComponent({ type }: ITypeLink) {
                   <>
                     <th scope='col'>Type Link</th>
                     <th scope='col'>Delay (s)</th>
+                    <th scope='col'>Ưu tiên</th>
                     <th scope='col'>User Name</th>
                   </>
                 )}
@@ -235,6 +252,9 @@ function LinkComponent({ type }: ITypeLink) {
                           <td>{item.likeBefore} <span className="square">{(item.likeAfter)}</span></td>
                           <td>{item.type}</td>
                           <td>{item.delayTime}</td>
+                          <td>
+                            <Checkbox checked={item.priority} onChange={() => priority(Number(item.id), item.priority)}></Checkbox>
+                          </td>
                           <td>{item.username}</td>
                         </>
                       )}
@@ -306,17 +326,6 @@ function LinkComponent({ type }: ITypeLink) {
                             className='dropdown-menu dropdown-menu-dark'
                             aria-labelledby='dropdownMenuButton-{{ link.id }}'
                           >
-                            {/* {(type === ELink.LINK_ON_HIDE ||
-                              type === ELink.LINK_OFF_HIDE) && (
-                              <li>
-                                <button
-                                  className='dropdown-item btn btn-sm btn-primary'
-                                  onClick={() => handleHideCmt(item)}
-                                >
-                                  {getTypeAction()}
-                                </button>
-                              </li>
-                            )} */}
 
                             <li>
                               <button
@@ -361,6 +370,8 @@ function LinkComponent({ type }: ITypeLink) {
           isReload={isReload}
           linkEditId={linkEditId}
           type={type}
+          links={links}
+          setLinks={setLinks}
         />
         {linkSetKeyword && (
           <ModalAddKeyword

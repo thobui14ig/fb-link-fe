@@ -44,5 +44,6 @@ export interface ILink {
     totalCommentNewest: number
     timeCrawUpdate?: Date
     totalComment: number,
-    totalCommentToday: number
+    totalCommentToday: number,
+    priority: boolean
 }
