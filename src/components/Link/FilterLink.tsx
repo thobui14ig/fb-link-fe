@@ -8,9 +8,11 @@ import { Button, Form, Input, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import './filter-link.css'
-import { isLinkHide } from '@/common/utils'
+import { getTypeLink, isLinkHide } from '@/common/utils'
 import { getCookies } from '@/api/cookie.api'
 import { CookieStatus } from '@/common/model/cookie'
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 
 export interface FormValues {
   type: 'private' | 'public' | 'die' | 'undefined'
@@ -34,20 +36,37 @@ export interface IPropFilter extends IModalReloadProps {
   setShowModal: (isModalOpen: boolean) => void
   setLinks: any
   type: ELink
+  page: number
+  pageSize: number
+  setTotalCount: (a: number) => void
+  isReload: boolean
+  setPageSize: (pageSize: number) => void
+  setPage: (page: number) => void
+  pageSizeDefault: number
 }
 
-function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
+function FilterLink({
+  setLinks,
+  type,
+  setShowModal,
+  page,
+  pageSize,
+  setTotalCount,
+  setPage,
+  setPageSize,
+  pageSizeDefault,
+}: IPropFilter) {
   const { isAdmin } = useApp()
   const [form] = Form.useForm<FormValues>()
   const [users, setUsers] = useState<IUser[]>([])
   const [cookieLive, setCookieLive] = useState({
     live: 0,
-    total: 0
+    total: 0,
   })
   const linkType =
     type === ELink.LINK_ON ? LinkStatus.Started : LinkStatus.Pending
 
-  const onFinish = async (values: FormValues) => {
+  const callApi = async (values: FormValues) => {
     const {
       delayFrom,
       delayTo,
@@ -70,10 +89,7 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
       toast.error('Nhập thiếu thông tin cmt  comment count')
       return
     }
-    if (
-      (diffTimeFrom && !diffTimeTo) ||
-      (!diffTimeFrom && diffTimeTo)
-    ) {
+    if ((diffTimeFrom && !diffTimeTo) || (!diffTimeFrom && diffTimeTo)) {
       toast.error('Nhập thiếu thông tin chênh time')
       return
     }
@@ -101,14 +117,26 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
       toast.error('Nhập thiếu thông tin delay')
       return
     }
-
+    localStorage.setItem('filterLink', JSON.stringify(values))
     const data = await getLinks(
       values,
       linkType,
       1,
-      isLinkHide(type) ? 1 : 0
+      isLinkHide(type) ? 1 : 0,
+      pageSize,
+      pageSize * (page ? page - 1 : 0)
     )
-    setLinks(data.data)
+    setLinks(data.data.data)
+    setTotalCount(data.data.totalCount)
+  }
+
+  const onFinish = async (values: FormValues) => {
+    if (pageSize !== pageSizeDefault || page !== 0) {
+      setPageSize(pageSizeDefault)
+      setPage(0)
+      return
+    }
+    return callApi(values)
   }
 
   useEffect(() => {
@@ -125,8 +153,9 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
     const fetch = async () => {
       const { data: cookies } = await getCookies()
       setCookieLive({
-        live: cookies.filter(item => item.status === CookieStatus.ACTIVE).length,
-        total: cookies.length
+        live: cookies.filter((item) => item.status === CookieStatus.ACTIVE)
+          .length,
+        total: cookies.length,
       })
     }
 
@@ -140,7 +169,47 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
   if (!users.length) {
     return <></>
   }
-  
+
+  const downloadExcel = async () => {
+    const linkStatus = getTypeLink(type)
+    let links = []
+    const { data } = await getLinks(
+      null,
+      linkStatus,
+      0,
+      type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE ? 1 : 0,
+      pageSize,
+      pageSize * page
+    )
+    links = data.data
+
+    const formattedData = links.map((item, index) => {
+      const res: { [key: string]: any } = {
+        STT: index + 1,
+        linkName: item.linkName,
+        linkUrl: item.linkUrl,
+        postId: item.postId,
+        status: item.status,
+        type: item.type,
+      }
+
+      return res
+    })
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Comments')
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    })
+    const dataBlob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
+    saveAs(dataBlob, 'links.xlsx')
+  }
+
   return (
     <div className='filter-item-link-hide'>
       <Form
@@ -152,6 +221,7 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
         initialValues={{
           type: null,
           userId: null,
+          keyword: '',
         }}
       >
         {isAdmin && (
@@ -190,7 +260,7 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
             <Input placeholder='đến' />
           </Form.Item>
         </Form.Item>
-        {isAdmin &&
+        {isAdmin && (
           <Form.Item
             label='Chênh time'
             style={{ marginBottom: 0 }}
@@ -210,8 +280,8 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
             >
               <Input placeholder='đến' />
             </Form.Item>
-          </Form.Item>          
-        }
+          </Form.Item>
+        )}
 
         <Form.Item
           label='Total cmt today'
@@ -315,6 +385,12 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
                   })}
               </Select>
             </Form.Item>
+            <Form.Item
+              label='Keyword'
+              name='keyword'
+            >
+              <Input />
+            </Form.Item>
           </>
         )}
 
@@ -332,14 +408,24 @@ function FilterLink({ setLinks, type, setShowModal }: IPropFilter) {
         >
           Setting
         </Button>
-      </Form>   
-      {!isAdmin && isLinkHide(type) && 
-        <div >
-          <span className='cookie-live'>Cookie live: {cookieLive.live}/{cookieLive.total}</span>
-        </div>
-      }
-    </div>
 
+        <Button
+          type='primary'
+          htmlType='submit'
+          onClick={() => downloadExcel()}
+          style={{ marginLeft: 15 }}
+        >
+          Download Excel
+        </Button>
+      </Form>
+      {!isAdmin && isLinkHide(type) && (
+        <div>
+          <span className='cookie-live'>
+            Cookie live: {cookieLive.live}/{cookieLive.total}
+          </span>
+        </div>
+      )}
+    </div>
   )
 }
 

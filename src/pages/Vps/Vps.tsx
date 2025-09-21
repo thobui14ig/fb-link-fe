@@ -1,4 +1,3 @@
-
 import { deleteVps, getVps } from '@/api/vps.api'
 import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
@@ -35,17 +34,16 @@ function Vps() {
   const fetchVps = async () => {
     try {
       const { data } = await getVps()
-      setVps(data)        
+      setVps(data)
     } catch (error) {}
   }
 
   const refreshVps = async () => {
     try {
       await fetchVps()
-      toast.success("Refresh ok") 
+      toast.success('Refresh ok')
     } catch (error) {}
   }
-
 
   return (
     <div
@@ -75,7 +73,10 @@ function Vps() {
           </button>
         </div>
         <div className='refress-vps'>
-          <Button type='primary' onClick={() => refreshVps()}>
+          <Button
+            type='primary'
+            onClick={() => refreshVps()}
+          >
             <RedoOutlined />
           </Button>
           <Button
@@ -102,14 +103,17 @@ function Vps() {
             <tbody>
               {vps.length > 0 &&
                 vps.map((item, i) => {
-
                   return (
                     <tr>
                       <td className='col-stt'>{i + 1}</td>
                       <td className='col-proxy'>{item.ip}</td>
                       <td className='col-proxy'>{item.port}</td>
-                       <td className='col-proxy'>{item.speed}s</td>
-                      <td className='col-proxy'><div className={`vps-status-${item.status}`}>{item.status === VpsStatus.Live ? 'Live' : 'Die'}</div></td>
+                      <td className='col-proxy'>{item.speed}s</td>
+                      <td className='col-proxy'>
+                        <div className={`vps-status-${item.status}`}>
+                          {item.status === VpsStatus.Live ? 'Live' : 'Die'}
+                        </div>
+                      </td>
                       <td className='col-action'>
                         <span
                           className='btn-remove-vps'
@@ -129,12 +133,12 @@ function Vps() {
           isReload={isReload}
           setIsReload={setIsReload}
         />
-        {isShowInstruct &&
+        {isShowInstruct && (
           <ModalInstruct
             isModalOpen={isShowInstruct}
             setIsModalOpen={setIsShowInstruct}
           />
-        }
+        )}
       </div>
     </div>
   )

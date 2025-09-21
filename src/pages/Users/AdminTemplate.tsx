@@ -42,7 +42,7 @@ function AdminTemplate() {
       <thead>
         <tr>
           <th
-            colSpan={9}
+            colSpan={10}
             className='text-center'
           >
             All Users
@@ -55,6 +55,7 @@ function AdminTemplate() {
           <th>Running Links Hide</th>
           <th>Not Running Links Hide</th>
           <th>Delay On Private</th>
+          <th>Delay On Public</th>
           <th>Show Phone Number</th>
           <th>Expiration Date</th>
           <th>Action</th>
@@ -71,8 +72,12 @@ function AdminTemplate() {
                 <td>{item.totalLinkHideRunning}</td>
                 <td>{item.totalLinkHidePending}</td>
                 <td>{item.delayOnPrivate}</td>
+                <td>{item.delayOnPublic}</td>
                 <td>
-                  <Switch value={item.getPhone}  defaultChecked/>    
+                  <Switch
+                    value={item.getPhone}
+                    defaultChecked
+                  />
                 </td>
                 <td>
                   <span
@@ -125,7 +130,7 @@ function AdminTemplate() {
 
         <tr>
           <td
-            colSpan={9}
+            colSpan={10}
             className='text-center'
           >
             <button

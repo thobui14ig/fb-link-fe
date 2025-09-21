@@ -7,8 +7,8 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 export enum AccountFbUuid {
-  Beewisaka = "Beewisaka@gmail.com",
-  chuongk57 = "chuongk57@gmail.com"
+  Beewisaka = 'Beewisaka@gmail.com',
+  chuongk57 = 'chuongk57@gmail.com',
 }
 
 export interface IUserRegister {
@@ -19,8 +19,9 @@ export interface IUserRegister {
   linkOnHideLimit: number | null
   linkOffHideLimit: number | null
   expiredAt: Date | null
-  delayOnPrivate: number | null,
-  getPhone: boolean,
+  delayOnPrivate: number | null
+  delayOnPublic: number | null
+  getPhone: boolean
   accountFbUuid: string | AccountFbUuid
 }
 
@@ -33,8 +34,9 @@ const defaultValue = {
   linkOffHideLimit: null,
   expiredAt: null,
   delayOnPrivate: 5,
+  delayOnPublic: 5,
   getPhone: true,
-  accountFbUuid: ""
+  accountFbUuid: '',
 }
 
 function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
@@ -51,7 +53,10 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
     try {
       if (userInfo && userInfo.delayOnPrivate) {
         userInfo.delayOnPrivate = Number(userInfo.delayOnPrivate)
-      } 
+      }
+      if (userInfo && userInfo.delayOnPublic) {
+        userInfo.delayOnPublic = Number(userInfo.delayOnPublic)
+      }
       await createUser(userInfo)
       setUserInfo({ ...defaultValue })
       setIsReload(!isReload)
@@ -290,46 +295,73 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
               </div>
               <div className='row mb-3'>
                 <div className='col-md-6'>
-                    <label
-                      htmlFor='link_start_limit'
-                      className='form-label'
-                    >
-                      Delay on Private
-                    </label>
-                    <input
-                      className='form-control'
-                      required
-                      value={userInfo.delayOnPrivate ?? 5}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setUserInfo({
-                          ...userInfo,
-                          delayOnPrivate: e.target.value as any,
-                        })
-                      }}
-                      style={{
-                        backgroundColor: '#333',
-                        color: '#fff',
-                        border: '1px solid #444',
-                      }}
-                    />
-                </div>   
+                  <label
+                    htmlFor='link_start_limit'
+                    className='form-label'
+                  >
+                    Delay on Private
+                  </label>
+                  <input
+                    className='form-control'
+                    required
+                    value={userInfo.delayOnPrivate ?? 5}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setUserInfo({
+                        ...userInfo,
+                        delayOnPrivate: e.target.value as any,
+                      })
+                    }}
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <label
+                    htmlFor='link_start_limit'
+                    className='form-label'
+                  >
+                    Delay on Public
+                  </label>
+                  <input
+                    className='form-control'
+                    required
+                    value={userInfo.delayOnPublic ?? 5}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setUserInfo({
+                        ...userInfo,
+                        delayOnPublic: e.target.value as any,
+                      })
+                    }}
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                  />
+                </div>
                 <div className='col-md-6 get-phone'>
-                    <label
-                      htmlFor='link_start_limit'
-                      className='form-label'
-                    >
-                      Show phone number
+                  <label
+                    htmlFor='link_start_limit'
+                    className='form-label'
+                  >
+                    Show phone number
                   </label>
                   <div>
-                    <Switch value={userInfo.getPhone}  defaultChecked onChange={(e) => {
+                    <Switch
+                      value={userInfo.getPhone}
+                      defaultChecked
+                      onChange={(e) => {
                         setUserInfo({
                           ...userInfo,
                           getPhone: e,
                         })
-                    }} />                    
+                      }}
+                    />
                   </div>
-
-                </div> 
+                </div>
               </div>
               <div className='row mb-3'>
                 <div className='col-md-6'>
@@ -354,11 +386,15 @@ function ModalAddUser({ isReload, setIsReload }: IModalReloadProps) {
                         accountFbUuid: e.target.value as any,
                       })
                     }}
-                    value={userInfo.accountFbUuid ?? ""}
+                    value={userInfo.accountFbUuid ?? ''}
                   >
-                    <option value={""}></option>
-                    <option value='Beewisaka@gmail.com'>Beewisaka@gmail.com</option>
-                    <option value='chuongk57@gmail.com'>chuongk57@gmail.com</option>
+                    <option value={''}></option>
+                    <option value='Beewisaka@gmail.com'>
+                      Beewisaka@gmail.com
+                    </option>
+                    <option value='chuongk57@gmail.com'>
+                      chuongk57@gmail.com
+                    </option>
                   </select>
                 </div>
               </div>

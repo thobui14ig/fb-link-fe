@@ -2,7 +2,12 @@ import { createLink, getLink as getLinkApi } from '@/api/link.api'
 import { ELink, LinkStatus } from '@/common/model/link'
 
 function useLink() {
-  const addLink = async (link: string, type: ELink, thread: number, pageId: number | null = null) => {
+  const addLink = async (
+    link: string,
+    type: ELink,
+    thread: number,
+    pageId: number | null = null
+  ) => {
     const links = link
       .split('\n')
       .map((url) => url.trim())
@@ -27,7 +32,7 @@ function useLink() {
           ? true
           : false,
       thread,
-      tablePageId: pageId
+      tablePageId: pageId,
     }
     return createLink(argCreate)
   }

@@ -24,17 +24,31 @@ export interface ISettingLink {
 
 export interface IGetAllLink extends ILink {
   username: string
+  totalCount: number
 }
+
+export interface LinkDeleted {
+  data: {
+    id: number
+    linkName: string
+    linkUrl: string
+    username: string
+  }[]
+  totalCount: number
+}
+
 export const createLink = (links: ICreateLinkParams) =>
   http.post<ILink>(`/links`, links)
 export const getLinks = (
   body: FormValues | null,
   status: LinkStatus,
   isFilter: number = 0,
-  hideCmt: number = 0
+  hideCmt: number = 0,
+  limit: number,
+  offset: number
 ) =>
-  http.post<IGetAllLink[]>(
-    `/links/query?status=${status}&isFilter=${isFilter}&hideCmt=${hideCmt}`,
+  http.post<{ data: IGetAllLink[]; totalCount: number }>(
+    `/links/query?status=${status}&isFilter=${isFilter}&hideCmt=${hideCmt}&limit=${limit}&offset=${offset}`,
     body ?? {}
   )
 export const getLink = (id: number) =>
@@ -55,5 +69,23 @@ export const settingLink = (body: ISettingLink) =>
   http.post(`/links/setting-link`, body)
 export const hideOption = (linkId: number, key: string) =>
   http.post(`/links/hide-cmt/${linkId}?type=${key}`)
-export const priority = (body: { priority: boolean, linkId: number }) =>
+export const priority = (body: { priority: boolean; linkId: number }) =>
   http.post(`/links/priority`, body)
+export const getLinkDeleted = (
+  body:
+    | {
+        userId: number | null
+        keyword: string | null
+        limit: number
+        offset: number
+      }
+    | {}
+) =>
+  http.post<{ data: IGetAllLink[]; totalCount: number }>(
+    `/links/get-link-deleted`,
+    body
+  )
+export const updateLinkDelete = (body: {
+  status: LinkStatus
+  linkIds: number[]
+}) => http.post(`/links/update-link-delete`, body)

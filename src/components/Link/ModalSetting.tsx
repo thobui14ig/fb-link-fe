@@ -1,8 +1,8 @@
-import { IGetAllLink, settingLink } from '@/api/link.api'
+import { getLinks, IGetAllLink, settingLink } from '@/api/link.api'
 import { IModalReloadProps } from '@/common/interface'
 import { ELink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
-import { getTypeLink } from '@/common/utils'
+import { getTypeLink, isLinkHide } from '@/common/utils'
 import { customErrorToast } from '@/common/utils/toast'
 import { Form, InputNumber, Modal, Switch } from 'antd'
 import { toast } from 'react-toastify'
@@ -10,7 +10,7 @@ export interface IPropModalSetting extends IModalReloadProps {
   isModalOpen: boolean
   setShowModal: (isModalOpen: boolean) => void
   links: IGetAllLink[]
-  linkStatus: LinkStatus,
+  linkStatus: LinkStatus
   type: ELink
 }
 
@@ -25,9 +25,8 @@ function ModalSetting({
   setShowModal,
   isReload,
   setIsReload,
-  links,
   linkStatus,
-  type
+  type,
 }: IPropModalSetting) {
   const { isAdmin } = useApp()
   const [form] = Form.useForm<IForm>()
@@ -36,6 +35,9 @@ function ModalSetting({
     onOff: linkStatus === LinkStatus.Started ? true : false,
     delay: 0,
   }
+  const linkType =
+    type === ELink.LINK_ON ? LinkStatus.Started : LinkStatus.Pending
+
   const handleOk = () => {
     setShowModal(false)
     form.submit()
@@ -47,14 +49,23 @@ function ModalSetting({
 
   const onFinish = async (values: IForm) => {
     try {
+      const filterItemValue = localStorage.getItem('filterLink')
+      const data = await getLinks(
+        JSON.parse(filterItemValue ?? ''),
+        linkType,
+        1,
+        isLinkHide(type) ? 1 : 0,
+        10000000000,
+        0
+      )
       await settingLink({
         ...values,
-        linkIds: links.map((item) => item.id) as number[],
-        hideCmt:  
+        linkIds: data.data.data.map((item) => item.id) as number[],
+        hideCmt:
           type === ELink.LINK_ON_HIDE || type === ELink.LINK_OFF_HIDE
             ? true
             : false,
-        type: getTypeLink(type)
+        type: getTypeLink(type),
       })
       setIsReload(!isReload)
       toast.success('Update thành công!')

@@ -19,7 +19,10 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
     try {
       if (user && user.delayOnPrivate) {
         user.delayOnPrivate = Number(user.delayOnPrivate)
-      } 
+      }
+      if (user && user.delayOnPublic) {
+        user.delayOnPublic = Number(user.delayOnPublic)
+      }
       user && (await updateUser(user))
       setIsReload(!isReload)
       toast('Update thành công!')
@@ -307,48 +310,77 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
 
                   <div className='row mb-3'>
                     <div className='col-md-6'>
-                        <label
-                          htmlFor='link_start_limit'
-                          className='form-label'
-                        >
-                          Delay on Private
-                        </label>
-                        <input
-                          className='form-control'
-                          id='link_start_limit'
-                          name='link_start_limit'
-                          required
-                          value={user.delayOnPrivate ?? 5}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            setUser({
-                              ...user,
-                              delayOnPrivate: e.target.value as any,
-                            })
-                          }}
-                          style={{
-                            backgroundColor: '#333',
-                            color: '#fff',
-                            border: '1px solid #444',
-                          }}
-                        />
-                      </div>   
+                      <label
+                        htmlFor='link_start_limit'
+                        className='form-label'
+                      >
+                        Delay on Private
+                      </label>
+                      <input
+                        className='form-control'
+                        id='link_start_limit'
+                        name='link_start_limit'
+                        required
+                        value={user.delayOnPrivate ?? 5}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setUser({
+                            ...user,
+                            delayOnPrivate: e.target.value as any,
+                          })
+                        }}
+                        style={{
+                          backgroundColor: '#333',
+                          color: '#fff',
+                          border: '1px solid #444',
+                        }}
+                      />
+                    </div>
+                    <div className='col-md-6'>
+                      <label
+                        htmlFor='link_start_limit'
+                        className='form-label'
+                      >
+                        Delay on Public
+                      </label>
+                      <input
+                        className='form-control'
+                        id='link_start_limit'
+                        name='link_start_limit'
+                        required
+                        value={user.delayOnPublic ?? 5}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setUser({
+                            ...user,
+                            delayOnPublic: e.target.value as any,
+                          })
+                        }}
+                        style={{
+                          backgroundColor: '#333',
+                          color: '#fff',
+                          border: '1px solid #444',
+                        }}
+                      />
+                    </div>
                     <div className='col-md-6 get-phone'>
-                        <label
-                          htmlFor='link_start_limit'
-                          className='form-label'
-                        >
-                          Show phone number
+                      <label
+                        htmlFor='link_start_limit'
+                        className='form-label'
+                      >
+                        Show phone number
                       </label>
                       <div>
-                        <Switch value={user.getPhone}  defaultChecked onChange={(e) => {
+                        <Switch
+                          value={user.getPhone}
+                          defaultChecked
+                          onChange={(e) => {
                             setUser({
                               ...user,
                               getPhone: e,
                             })
-                        }} />                    
+                          }}
+                        />
                       </div>
-
-                    </div> 
+                    </div>
                   </div>
                   <div className='row mb-3'>
                     <div className='col-md-6'>
@@ -373,11 +405,15 @@ function ModalEditUser({ id, isReload, setIsReload }: IModalEditUser) {
                             accountFbUuid: e.target.value as any,
                           })
                         }}
-                        value={user.accountFbUuid ?? ""}
+                        value={user.accountFbUuid ?? ''}
                       >
-                        <option value={""}></option>
-                        <option value='Beewisaka@gmail.com'>Beewisaka@gmail.com</option>
-                        <option value='chuongk57@gmail.com'>chuongk57@gmail.com</option>
+                        <option value={''}></option>
+                        <option value='Beewisaka@gmail.com'>
+                          Beewisaka@gmail.com
+                        </option>
+                        <option value='chuongk57@gmail.com'>
+                          chuongk57@gmail.com
+                        </option>
                       </select>
                     </div>
                   </div>

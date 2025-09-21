@@ -9,14 +9,14 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
-  const {isAdmin} = useApp()
+  const { isAdmin } = useApp()
   const [cookies, setCookies] = useState<string>('')
   const [pages, setPages] = useState<IPage[]>([])
   const [pageId, setPageId] = useState<number | null>(null)
 
   useEffect(() => {
     ;(async () => {
-        const { data: resPages } = await getPages()
+      const { data: resPages } = await getPages()
       setPages(resPages)
       setPageId(resPages.length > 0 ? resPages[0].id : null)
     })()
@@ -102,7 +102,7 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
                   }}
                 ></textarea>
               </div>
-              {!isAdmin &&
+              {!isAdmin && (
                 <div className='mb-3'>
                   <label
                     htmlFor='editLevel'
@@ -124,16 +124,20 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
                     }}
                     value={pageId ?? 0}
                   >
-                    {pages.length > 0 && 
+                    {pages.length > 0 &&
                       pages.map((item, i) => {
-                        return (<option key={i} value={item.id}>{item.name}</option>)
-                      })
-                    }
-    
+                        return (
+                          <option
+                            key={i}
+                            value={item.id}
+                          >
+                            {item.name}
+                          </option>
+                        )
+                      })}
                   </select>
-                </div>                 
-              }
-
+                </div>
+              )}
             </form>
           </div>
           <div className='modal-footer'>

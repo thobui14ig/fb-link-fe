@@ -13,16 +13,16 @@ import { getPages } from '@/api/page.api'
 
 interface IModalEditLink extends IModalReloadProps {
   linkEditId: number | null
-  type: ELink,
-  links: ILink[],
+  type: ELink
+  links: ILink[]
   setLinks: any
 }
-function ModalEditLink({ linkEditId, isReload, setIsReload, type, links, setLinks }: IModalEditLink) {
+function ModalEditLink({ linkEditId, type, links, setLinks }: IModalEditLink) {
   const { getLink } = useLink()
   const { isAdmin } = useApp()
   const [pages, setPages] = useState<IPage[]>([])
   const [link, setLink] = useState<Omit<Partial<ILink>, 'user'> | null>(null)
-  
+
   useEffect(() => {
     ;(async () => {
       if (linkEditId) {
@@ -38,9 +38,9 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type, links, setLink
     try {
       if (link) {
         link.delayTime = Number(link.delayTime)
-        let currentLink = links.find(item => item.id === link.id)
+        const currentLink = links.find((item) => item.id === link.id)
         if (currentLink) {
-          currentLink.linkName = link.linkName as string;
+          currentLink.linkName = link.linkName as string
           currentLink.type = link.type as Type
           currentLink.delayTime = link.delayTime
           setLinks([...links])
@@ -135,9 +135,8 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type, links, setLink
                   }}
                 />
               </div>
-                
-          
-              {link?.hideCmt && link.tablePageId &&
+
+              {link?.hideCmt && link.tablePageId && (
                 <div className='mb-3'>
                   <label
                     htmlFor='editLevel'
@@ -157,22 +156,27 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type, links, setLink
                     onChange={(e) => {
                       setLink({
                         ...link,
-                        tablePageId: Number(e.target.value)
+                        tablePageId: Number(e.target.value),
                       })
                     }}
                     value={link.tablePageId}
                   >
-                    {pages.length > 0 && 
+                    {pages.length > 0 &&
                       pages.map((item, i) => {
-                        return (<option key={i} value={item.id}>{item.name}</option>)
-                      })
-                    }
-    
+                        return (
+                          <option
+                            key={i}
+                            value={item.id}
+                          >
+                            {item.name}
+                          </option>
+                        )
+                      })}
                   </select>
                 </div>
-              }
+              )}
 
-              {isAdmin && isLinkHide(type) && 
+              {isAdmin && isLinkHide(type) && (
                 <div className='mb-3'>
                   <label
                     htmlFor='editPostId'
@@ -184,22 +188,21 @@ function ModalEditLink({ linkEditId, isReload, setIsReload, type, links, setLink
                     type='text'
                     className='form-control'
                     id='editPostId'
-                    value={link?.thread??1}
+                    value={link?.thread ?? 1}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setLink({
                         ...link,
-                        thread: Number(e.target.value)
+                        thread: Number(e.target.value),
                       })
-                    }}               
+                    }}
                     style={{
                       backgroundColor: '#333',
                       color: '#fff',
                       border: '1px solid #444',
                     }}
                   />
-                </div>    
-                
-              }
+                </div>
+              )}
 
               {isAdmin && (
                 <>

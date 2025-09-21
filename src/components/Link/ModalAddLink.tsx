@@ -14,7 +14,7 @@ interface IPropsmodalAddLink extends IModalReloadProps {
   type: ELink
 }
 function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
-  const {isAdmin} = useApp()
+  const { isAdmin } = useApp()
   const [link, setLink] = useState<string>('')
   const [pageId, setPageId] = useState<number | null>(null)
   const [thread, setThread] = useState<number>(1)
@@ -32,6 +32,10 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
   }, [])
 
   const handleAddLink = async () => {
+    if (link.includes('share')) {
+      toast.error('Không được chứa link share')
+      return
+    }
     if (link.length === 0) {
       toast.error('Nội dung không được trống!')
       return
@@ -104,7 +108,7 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
                   }}
                 ></textarea>
               </div>
-              {isAdmin && isLinkHide(type) && 
+              {isAdmin && isLinkHide(type) && (
                 <div className='mb-3'>
                   <label
                     htmlFor='link_add_limit'
@@ -128,10 +132,10 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
                       border: '1px solid #444',
                     }}
                   />
-                </div>                
-              }
+                </div>
+              )}
 
-              {isLinkHide(type) &&
+              {isLinkHide(type) && (
                 <div className='mb-3'>
                   <label
                     htmlFor='editLevel'
@@ -151,18 +155,22 @@ function ModalAddLink({ isReload, setIsReload, type }: IPropsmodalAddLink) {
                     onChange={(e) => {
                       setPageId(Number(e.target.value))
                     }}
-                    value={pageId??0}
+                    value={pageId ?? 0}
                   >
-                    {pages.length > 0 && 
+                    {pages.length > 0 &&
                       pages.map((item, i) => {
-                        return (<option key={i} value={item.id}>{item.name}</option>)
-                      })
-                    }
-    
+                        return (
+                          <option
+                            key={i}
+                            value={item.id}
+                          >
+                            {item.name}
+                          </option>
+                        )
+                      })}
                   </select>
-                </div>              
-              }
-
+                </div>
+              )}
             </form>
           </div>
           <div className='modal-footer'>

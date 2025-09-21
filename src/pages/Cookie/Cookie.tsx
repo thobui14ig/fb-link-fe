@@ -82,7 +82,7 @@ function Cookie() {
                 <th className='col-cookie'>Cookie</th>
                 <th className='col-status'>Page</th>
                 <th className='col-status'>Status</th>
-                { isAdmin && <th className='col-status'>Created By</th>}
+                {isAdmin && <th className='col-status'>Created By</th>}
                 <th className='col-action'>Hành Động</th>
               </tr>
             </thead>
@@ -95,7 +95,9 @@ function Cookie() {
                       <td className='col-cookie'>{item.cookie}</td>
                       <td className='col-status'>{item?.page?.name}</td>
                       <td className='col-status'>{item.status}</td>
-                      { isAdmin && <td className='col-status'>{item.user?.username}</td>}
+                      {isAdmin && (
+                        <td className='col-status'>{item.user?.username}</td>
+                      )}
                       <td className='nowrap'>
                         <div className='dropdown'>
                           <button

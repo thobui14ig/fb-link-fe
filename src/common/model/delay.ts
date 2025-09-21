@@ -9,4 +9,6 @@ export interface IDelay {
   delayOff: number
   delayCommentCount: number
   timeRemoveProxySlow: number
+  vip: string
+  popular: string
 }

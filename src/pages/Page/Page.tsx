@@ -1,4 +1,3 @@
-
 import { deletePage, getPages } from '@/api/page.api'
 import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
@@ -30,22 +29,22 @@ function Page() {
     const fetch = async () => {
       try {
         const { data } = await getPages()
-        setPages(data)        
+        setPages(data)
       } catch (error) {}
     }
 
     fetch()
   }, [isReload])
 
-    useEffect(() => {
-      const fetch = async () => {
-        const { data } = await getCookies()
-        console.log("🚀 ~ fetch ~ data:", data)
-        setCookies(data)
-      }
-  
-      fetch()
-    }, [isReload])
+  useEffect(() => {
+    const fetch = async () => {
+      const { data } = await getCookies()
+      console.log('🚀 ~ fetch ~ data:', data)
+      setCookies(data)
+    }
+
+    fetch()
+  }, [isReload])
 
   return (
     <div
@@ -88,14 +87,18 @@ function Page() {
             <tbody>
               {pages.length > 0 &&
                 pages.map((item, i) => {
-                  const cookiesPage = cookies.filter(c => c.pageId == item.id)
-                  const cookieLive = cookiesPage.filter(cp => cp.status === CookieStatus.ACTIVE)
+                  const cookiesPage = cookies.filter((c) => c.pageId == item.id)
+                  const cookieLive = cookiesPage.filter(
+                    (cp) => cp.status === CookieStatus.ACTIVE
+                  )
 
                   return (
-                    <tr>
+                    <tr key={i}>
                       <td className='col-stt'>{i + 1}</td>
                       <td className='col-proxy'>{item.name}</td>
-                      <td className='col-proxy'>{cookiesPage?.length??0}/{cookieLive?.length??0 }</td>
+                      <td className='col-proxy'>
+                        {cookiesPage?.length ?? 0}/{cookieLive?.length ?? 0}
+                      </td>
                       <td className='col-action'>
                         <button
                           className='btn btn-sm btn-danger'

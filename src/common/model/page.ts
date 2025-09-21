@@ -1,4 +1,4 @@
 export interface IPage {
-    id: number,
-    name: string
+  id: number
+  name: string
 }

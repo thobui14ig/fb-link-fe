@@ -15,6 +15,8 @@ export interface ICreateDelayParams
     | 'delayOff'
     | 'delayCommentCount'
     | 'timeRemoveProxySlow'
+    | 'vip'
+    | 'popular'
   > {}
 
 function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
@@ -26,7 +28,9 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
     delayOff: 0,
     delayOnPublic: 0,
     delayOffPrivate: 0,
-    timeRemoveProxySlow: 20
+    timeRemoveProxySlow: 20,
+    vip: '',
+    popular: '',
   })
 
   useEffect(() => {
@@ -39,6 +43,8 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
       delayOnPublic: _delay?.delayOnPublic ?? 0,
       delayOffPrivate: _delay?.delayOffPrivate ?? 0,
       timeRemoveProxySlow: _delay?.timeRemoveProxySlow ?? 20,
+      vip: _delay?.vip ?? '',
+      popular: _delay?.popular ?? '',
     })
   }, [_delay])
 
@@ -62,15 +68,15 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
   }
 
   return (
-    <div className='col-md-6 mb-3'>
+    <div className='col-md-6 '>
       <h6
-        className='text-center mb-3'
+        className='text-center '
         style={{ color: '#ffc107' }}
       >
         Cài đặt Delay
       </h6>
       <form id='delayForm'>
-        <div className='mb-3'>
+        <div className=''>
           <label
             htmlFor='delayLinkOn'
             className='form-label'
@@ -96,7 +102,7 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             min='0'
           />
         </div>
-        <div className='mb-3'>
+        <div className=''>
           <label
             htmlFor='delayLinkOff'
             className='form-label'
@@ -122,7 +128,7 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             min='0'
           />
         </div>
-        <div className='mb-3'>
+        <div className=''>
           <label
             htmlFor='delayCheck'
             className='form-label'
@@ -148,7 +154,7 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             min='0'
           />
         </div>
-        <div className='mb-3'>
+        <div className=''>
           <label
             htmlFor='delayLinkOn'
             className='form-label'
@@ -174,33 +180,28 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             min='0'
           />
         </div>
-        <div className='mb-3'>
-          <label
-            htmlFor='delayLinkOn'
-          >
-            Delay Off Private(Giây)
-          </label>
+        <div className=''>
+          <label htmlFor='delayLinkOn'>Delay Off Private(Giây)</label>
           <input
-              className='form-control'
-              id='link_start_limit'
-              name='link_start_limit'
-              required
-              value={delay.delayOffPrivate}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setDelay({
-                  ...delay,
-                  delayOffPrivate: e.target.value as any,
-                })
-              }}
-              style={{
-                backgroundColor: '#333',
-                color: '#fff',
-                border: '1px solid #444',
-              }}
-
+            className='form-control'
+            id='link_start_limit'
+            name='link_start_limit'
+            required
+            value={delay.delayOffPrivate}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setDelay({
+                ...delay,
+                delayOffPrivate: e.target.value as any,
+              })
+            }}
+            style={{
+              backgroundColor: '#333',
+              color: '#fff',
+              border: '1px solid #444',
+            }}
           />
         </div>
-        <div className='mb-3'>
+        <div className=''>
           <label
             htmlFor='delayLinkOn'
             className='form-label'
@@ -225,7 +226,7 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             }}
           />
         </div>
-        <div className='mb-3'>
+        <div className=''>
           <label
             htmlFor='delayLinkOn'
             className='form-label'
@@ -251,7 +252,7 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             min='0'
           />
         </div>
-        <div className='mb-3'>
+        <div className=''>
           <label
             htmlFor='delayLinkOn'
             className='form-label'
@@ -275,6 +276,54 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
               border: '1px solid #444',
             }}
             min='0'
+          />
+        </div>
+        <div className=''>
+          <label
+            htmlFor='delayLinkOn'
+            className='form-label'
+          >
+            Key Vip
+          </label>
+          <input
+            className='form-control'
+            id='vip'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setDelay({
+                ...delay,
+                vip: String(e.target.value),
+              })
+            }}
+            value={delay.vip}
+            style={{
+              backgroundColor: '#333',
+              color: '#fff',
+              border: '1px solid #444',
+            }}
+          />
+        </div>
+        <div className=''>
+          <label
+            htmlFor='delayLinkOn'
+            className='form-label'
+          >
+            Key Thường
+          </label>
+          <input
+            className='form-control'
+            id='popular'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setDelay({
+                ...delay,
+                popular: String(e.target.value),
+              })
+            }}
+            value={delay.popular}
+            style={{
+              backgroundColor: '#333',
+              color: '#fff',
+              border: '1px solid #444',
+            }}
           />
         </div>
         <div className='text-center'>

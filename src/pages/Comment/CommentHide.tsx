@@ -23,30 +23,30 @@ function CommentHide() {
   useEffect(() => {
     const fetch = async () => {
       const { data } = await getComments(initialValues, 1)
-      setComments(data)
+      setComments(data.data)
     }
 
     fetch()
   }, [])
 
-const handleHideCmt = async (checked: boolean, comment: IComment) => {
-  try {
-    const curenttCmt = comments.find((item) => item.id === comment.id)
-    if (curenttCmt?.hideCmt) {
-      toast.error('Không thể tắt ẩn!')
-      return
-    }
+  const handleHideCmt = async (checked: boolean, comment: IComment) => {
+    try {
+      const curenttCmt = comments.find((item) => item.id === comment.id)
+      if (curenttCmt?.hideCmt) {
+        toast.error('Không thể tắt ẩn!')
+        return
+      }
 
-    if (curenttCmt) {
-      curenttCmt.hideCmt = checked
-      setComments([...comments]) // Trigger render
-      await hideCmt(comment)
-      toast.success('Ok!')
+      if (curenttCmt) {
+        curenttCmt.hideCmt = checked
+        setComments([...comments]) // Trigger render
+        await hideCmt(comment)
+        toast.success('Ok!')
+      }
+    } catch (error) {
+      customErrorToast(error)
     }
-  } catch (error) {
-    customErrorToast(error)
   }
-}
 
   return (
     <div
@@ -56,6 +56,12 @@ const handleHideCmt = async (checked: boolean, comment: IComment) => {
       aria-labelledby='pills-linksOn-tab'
     >
       <div className='card p-3'>
+        <h5
+          className='text-center mb-4'
+          style={{ color: '#ffc107' }}
+        >
+          Comments Hide
+        </h5>
         <div className='mb-3 d-flex align-items-center'>
           <Form
             form={form}
@@ -108,7 +114,9 @@ const handleHideCmt = async (checked: boolean, comment: IComment) => {
                 <th>Tên bài</th>
                 <th>UID</th>
                 <th>Name</th>
-                {(isAdmin || (!isAdmin && !!userLogin?.getPhone)) && <th>Phone Number</th>}
+                {(isAdmin || (!isAdmin && !!userLogin?.getPhone)) && (
+                  <th>Phone Number</th>
+                )}
                 <th>Message</th>
                 <th>Ẩn</th>
               </tr>
@@ -141,13 +149,15 @@ const handleHideCmt = async (checked: boolean, comment: IComment) => {
                           {item.name}
                         </a>
                       </td>
-                      {(isAdmin || (!isAdmin && !!userLogin?.getPhone)) && <td>{item.phoneNumber}</td>}
+                      {(isAdmin || (!isAdmin && !!userLogin?.getPhone)) && (
+                        <td>{item.phoneNumber}</td>
+                      )}
                       <td>{item.message}</td>
                       <td>
                         <Switch
                           checked={item.hideCmt}
-                          checkedChildren="ON"
-                          unCheckedChildren="OFF"
+                          checkedChildren='ON'
+                          unCheckedChildren='OFF'
                           onChange={(checked) => handleHideCmt(checked, item)}
                         />
                       </td>
