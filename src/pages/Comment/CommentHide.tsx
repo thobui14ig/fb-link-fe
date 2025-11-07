@@ -18,6 +18,9 @@ function CommentHide() {
   const initialValues = {
     startDate: dayjs(),
     endDate: dayjs(),
+    limit: 10000000,
+    offset: 0,
+    keywords: ""
   }
 
   useEffect(() => {
