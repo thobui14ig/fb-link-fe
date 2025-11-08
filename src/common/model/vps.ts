@@ -6,7 +6,7 @@ export enum VpsStatus {
 export interface IVps {
   id: number
   ip: string
-  port: number
+  port: string
   status: VpsStatus
   speed: number
 }

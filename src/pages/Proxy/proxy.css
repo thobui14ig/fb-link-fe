@@ -1,0 +1,6 @@
+:where(.css-dev-only-do-not-override-1m2bkf9).ant-form-item .ant-form-item-label >label{
+    color: white;
+}
+.filter-proxy {
+    display: flex
+}   

@@ -1,4 +1,4 @@
-import { deleteVps, getVps } from '@/api/vps.api'
+import { deleteVps, getVps, restartVps } from '@/api/vps.api'
 import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
 import { IVps, VpsStatus } from '@/common/model/vps'
@@ -22,6 +22,17 @@ function Vps() {
       await deleteVps(id)
       setIsReload(!isReload)
       toast('Xóa thành công!')
+    } catch (error) {
+      customErrorToast(error)
+    }
+  }
+
+  const handleRestartVps = async (port: string) => {
+    try {
+      // await restartVps(port)
+      // setIsReload(!isReload)
+      // toast('Restart thành công!')
+      alert("No")
     } catch (error) {
       customErrorToast(error)
     }
@@ -93,10 +104,10 @@ function Vps() {
             <thead>
               <tr>
                 <th className='col-stt'>STT</th>
-                <th className='col-proxy'>Ip</th>
-                <th className='col-proxy'>Port</th>
-                <th className='col-proxy'>Speed</th>
-                <th className='col-proxy'>Status</th>
+                <th className='col-proxy' style={{ width: '100px' }}>Ip</th>
+                <th className='col-proxy' style={{ width: '100px' }}>Port</th>
+                <th className='col-proxy' style={{ width: '100px' }} >Speed</th>
+                <th className='col-proxy' style={{ width: '100px' }}>Status</th>
                 <th className='col-action'>Hành Động</th>
               </tr>
             </thead>
@@ -114,13 +125,24 @@ function Vps() {
                           {item.status === VpsStatus.Live ? 'Live' : 'Die'}
                         </div>
                       </td>
-                      <td className='col-action'>
-                        <span
-                          className='btn-remove-vps'
-                          onClick={() => handleDeleteVps(item.id)}
-                        >
-                          Xóa
-                        </span>
+                      <td className='col-action' >
+                        <div>
+                          <Button
+                            type='primary'
+                            onClick={() => handleDeleteVps(item.id)}
+                          >
+                            Xóa
+                          </Button>
+                          <Button
+                            type='primary'
+                            htmlType='submit'
+                            style={{ marginLeft: 10 }}
+                            onClick={() => handleRestartVps(item.port)}
+                          >
+                            Restart
+                          </Button>                        
+                        </div>
+
                       </td>
                     </tr>
                   )
