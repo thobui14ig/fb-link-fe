@@ -1,0 +1,15 @@
+.post-id-popover{
+    cursor: pointer;
+    position: relative;
+}
+.popover {
+    position: absolute;
+    left: 130px;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    min-width: 400px;
+    max-width: 500px;
+    color: black;
+  }
+  

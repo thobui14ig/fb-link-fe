@@ -19,6 +19,8 @@ import LinkOffHide from './pages/LinkOffHide/LinkOnHide.tsx'
 import Page from './pages/Page/Page.tsx'
 import Vps from './pages/Vps/Vps.tsx'
 import LinkDeleted from './pages/LinkDeleted/LinkDeleted.tsx'
+import Reaction from './pages/Reaction/Reaction.tsx'
+import Setting from './pages/Setting/Setting.tsx'
 
 const router = createBrowserRouter([
   {
@@ -83,6 +85,14 @@ const router = createBrowserRouter([
       {
         path: '/vps',
         element: <Vps />,
+      },
+      {
+        path: '/reaction',
+        element: <Reaction />,
+      },
+      {
+        path: '/setting',
+        element: <Setting />,
       },
     ],
   },

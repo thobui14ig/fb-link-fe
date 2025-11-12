@@ -13,6 +13,8 @@ export enum Tab {
   LINK_OFF_HIDE = 'linkOffHide',
   PAGE = 'page',
   VPS = 'vps',
+  REACTION = 'reaction',
+  SETTING = 'setting',
 }
 
 export enum EAuth {
@@ -37,4 +39,6 @@ export enum EUrl {
   LINK_OFF_HIDE = 'linkOffHide',
   PAGE = 'page',
   VPS = 'vps',
+  REACTION = 'reaction',
+  SETTING = 'setting',
 }

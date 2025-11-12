@@ -29,10 +29,20 @@ function Vps() {
 
   const handleRestartVps = async (port: string) => {
     try {
-      // await restartVps(port)
-      // setIsReload(!isReload)
-      // toast('Restart thành công!')
-      alert("No")
+      await restartVps([port])
+      setIsReload(!isReload)
+      toast('Restart thành công!')
+    } catch (error) {
+      customErrorToast(error)
+    }
+  }
+
+  const restartAll = async () => {
+    try {
+      const ports = vps.map(item => item.port)
+      await restartVps(ports)
+      setIsReload(!isReload)
+      toast('Restart thành công!')
     } catch (error) {
       customErrorToast(error)
     }
@@ -97,6 +107,14 @@ function Vps() {
             style={{ marginLeft: 5 }}
           >
             Hướng dẫn
+          </Button>
+          <Button
+            type='primary'
+            htmlType='submit'
+            onClick={() => restartAll()}
+            style={{ marginLeft: 5 }}
+          >
+            Restart All
           </Button>
         </div>
         <div className='table-responsive'>

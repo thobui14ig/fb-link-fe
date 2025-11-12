@@ -1,0 +1,14 @@
+:where(.css-dev-only-do-not-override-1m2bkf9).ant-form-item .ant-form-item-label >label {
+    color: black;
+}
+:where(.css-dev-only-do-not-override-1m2bkf9).ant-select.ant-select-in-form-item {
+    width: 80%;
+}
+
+.modal-add-setting{
+    display: flex;
+    flex-direction: column;
+}
+.modal-add-setting-property{
+    display: flex
+}
