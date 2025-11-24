@@ -1,4 +1,8 @@
-import { deleteAutoSetting, getAutoSetting } from '@/api/auto.api'
+import {
+  deleteAutoSetting,
+  getAutoSetting,
+  updateAutoSetting,
+} from '@/api/auto.api'
 import { Tab } from '@/common/constant'
 import useTab from '@/common/hook/useTab'
 import { IAuto } from '@/common/model/auto'
@@ -6,22 +10,29 @@ import { customErrorToast } from '@/common/utils/toast'
 import { Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import ModalAddSetting from './ModalAddSetting'
+import ModalAddSetting, { IAutoSettingParam } from './ModalAddSetting'
 import './setting.css'
+import Parameter from './Parameter'
+import { Form } from 'antd'
+import { validateFormAuto } from './utils'
 
 function Setting() {
+  const [form] = Form.useForm<IAutoSettingParam>()
   const { active } = useTab()
   const [autoSetting, setAutoSetting] = useState<IAuto[]>([])
   const [isReload, setIsReload] = useState<boolean>(false)
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleDeletePage = async (id: number) => {
-    try {
-      await deleteAutoSetting(id)
-      setIsReload(!isReload)
-      toast('Xóa thành công!')
-    } catch (error) {
-      customErrorToast(error)
+    const result = confirm('Bạn có chắc muốn xóa không?')
+    if (result) {
+      try {
+        await deleteAutoSetting(id)
+        setIsReload(!isReload)
+        toast('Xóa thành công!')
+      } catch (error) {
+        customErrorToast(error)
+      }
     }
   }
 
@@ -36,6 +47,11 @@ function Setting() {
     fetch()
   }, [isReload])
 
+  const handleSave = async (id: number) => {
+    if (!validateFormAuto(form.getFieldsValue())) return
+    await updateAutoSetting(id, form.getFieldsValue())
+    toast('Save thành công!')
+  }
 
   return (
     <div
@@ -70,33 +86,47 @@ function Setting() {
           <table className='table table-striped table-dark'>
             <thead>
               <tr>
-                <th className='col-proxy' style={{ width: '100px' }}>Thông số</th>
+                <th
+                  className='col-proxy'
+                  style={{ width: '100px' }}
+                >
+                  Thông số
+                </th>
                 <th className='col-action'>Hành Động</th>
               </tr>
             </thead>
             <tbody>
               {autoSetting.length > 0 &&
                 autoSetting.map((item, i) => {
-
+                  const initialValues = { ...item.params }
                   return (
                     <tr key={i}>
-                      <td className='col-proxy'>{JSON.stringify(item.params)}</td>
+                      <td className='col-proxy'>
+                        <Form
+                          name='basic'
+                          className='modal-add-setting'
+                          form={form}
+                          initialValues={initialValues}
+                        >
+                          <Parameter params={item.params} />
+                        </Form>
+                      </td>
                       <td className='col-action'>
-                          <Button
-                            type='primary'
-                            htmlType='submit'
-                            onClick={() => handleDeletePage(item.id)}
-                          >
-                            Xóa
-                          </Button>   
-                          <Button
-                            type='primary'
-                            htmlType='submit'
-                            style={{ marginLeft: 10 }}
-                            onClick={() => handleDeletePage(item.id)}
-                          >
-                            Edit
-                          </Button>   
+                        <Button
+                          type='primary'
+                          htmlType='submit'
+                          onClick={() => handleDeletePage(item.id)}
+                        >
+                          Xóa
+                        </Button>
+                        <Button
+                          type='primary'
+                          htmlType='submit'
+                          style={{ marginLeft: 10 }}
+                          onClick={() => handleSave(item.id)}
+                        >
+                          Save
+                        </Button>
                       </td>
                     </tr>
                   )

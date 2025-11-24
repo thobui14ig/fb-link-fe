@@ -52,6 +52,9 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
     if (delay.delayOffPrivate != null) {
       delay.delayOffPrivate = Number(delay.delayOffPrivate)
     }
+    if (delay.refreshProxy != null) {
+      delay.refreshProxy = Number(delay.refreshProxy)
+    }
     const isValid = Object.values(delay).some((value) => value == undefined)
 
     if (isValid) {
@@ -133,16 +136,15 @@ function Delay({ _delay }: { _delay: Partial<IDelay> | null }) {
             htmlFor='delayCheck'
             className='form-label'
           >
-            Refresh Proxy(Phút)
+            Refresh Proxy(Giây)
           </label>
           <input
-            type='number'
             className='form-control'
             id='delayCheck'
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setDelay({
                 ...delay,
-                refreshProxy: Number(e.target.value),
+                refreshProxy: e.target.value as any
               })
             }}
             value={delay.refreshProxy}

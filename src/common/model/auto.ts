@@ -1,6 +1,6 @@
-import { IAutoSettingParam } from "@/pages/Setting/ModalAddSetting";
+import { IAutoSettingParam } from '@/pages/Setting/ModalAddSetting'
 
 export interface IAuto {
-    id: number,
-    params: IAutoSettingParam
+  id: number
+  params: IAutoSettingParam
 }

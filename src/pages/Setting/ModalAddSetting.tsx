@@ -1,15 +1,17 @@
 import { createAutoSetting } from '@/api/auto.api'
 import { IModalReloadProps } from '@/common/interface'
+import { LinkStatus, Type } from '@/common/model/link'
 import { Button, Form, Input, InputNumber, Modal, Select, Switch } from 'antd'
 import { toast } from 'react-toastify'
 
-interface IModalAddSetting extends IModalReloadProps{
-    isModalOpen: boolean
-    setIsModalOpen: (isModalOpen: boolean) => void
+interface IModalAddSetting extends IModalReloadProps {
+  isModalOpen: boolean
+  setIsModalOpen: (isModalOpen: boolean) => void
 }
 
 export interface IAutoSettingParam {
-  type: 'private' | 'public' | 'die' | 'undefined'
+  type: Type
+  status: LinkStatus
   lastCommentFrom?: number
   lastCommentTo?: number
   differenceCountCmtFrom?: number
@@ -27,7 +29,12 @@ export interface IAutoSettingParam {
   delay: number
 }
 
-function ModalAddSetting({ isReload, setIsReload, isModalOpen, setIsModalOpen}: IModalAddSetting) {
+function ModalAddSetting({
+  isReload,
+  setIsReload,
+  isModalOpen,
+  setIsModalOpen,
+}: IModalAddSetting) {
   const [form] = Form.useForm<IAutoSettingParam>()
   const initialValues = {
     isDelete: false,
@@ -38,13 +45,12 @@ function ModalAddSetting({ isReload, setIsReload, isModalOpen, setIsModalOpen}: 
     keyword: '',
   }
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
 
   const onFinish = async () => {
     const values = form.getFieldsValue()
-    console.log(values)
     const {
       delayFrom,
       delayTo,
@@ -58,19 +64,24 @@ function ModalAddSetting({ isReload, setIsReload, isModalOpen, setIsModalOpen}: 
       diffTimeTo,
       totalCmtTodayFrom,
       totalCmtTodayTo,
-      type
+      type,
+      status,
     } = values
-    if(!type) {
-        toast.error('Loại không được bỏ trống')
-        return       
+    if (!type) {
+      toast.error('Loại không được bỏ trống')
+      return
+    }
+    if (!status) {
+      toast.error('Loại không được bỏ trống')
+      return
     }
 
     if (
       (lastCommentFrom && !lastCommentTo) ||
       (!lastCommentFrom && lastCommentTo)
     ) {
-        toast.error('Nhập thiếu thông tin cmt  comment count')
-        return
+      toast.error('Nhập thiếu thông tin cmt  comment count')
+      return
     }
     if ((diffTimeFrom && !diffTimeTo) || (!diffTimeFrom && diffTimeTo)) {
       toast.error('Nhập thiếu thông tin chênh time')
@@ -107,195 +118,202 @@ function ModalAddSetting({ isReload, setIsReload, isModalOpen, setIsModalOpen}: 
   }
 
   return (
-      <Modal
-        title="Basic Modal"
-        closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isModalOpen}
-        // onOk={handleOk}
-        onCancel={handleCancel}
-        footer={null}
-        width={500} 
+    <Modal
+      title='Basic Modal'
+      closable={{ 'aria-label': 'Custom Close Button' }}
+      open={isModalOpen}
+      onCancel={handleCancel}
+      footer={null}
+      width={500}
+    >
+      <Form
+        name='basic'
+        labelCol={{ span: 13 }}
+        style={{ maxWidth: 500 }}
+        initialValues={initialValues}
+        className='modal-add-setting'
+        onFinish={onFinish}
+        form={form}
       >
-        <Form
-            name="basic"
-            labelCol={{ span: 13}}
-            // wrapperCol={{ span: 14 }}
-            style={{ maxWidth: 500 }}
-            initialValues={initialValues}
-            className='modal-add-setting'
-            onFinish={onFinish}
-            form={form}
-        >
-            <div className='modal-add-setting-property'>
-                <div>
-                    <Form.Item
-                        label='Loại'
-                        name='type'
-                    >
-                        <Select>
-                            <Select.Option value={null}>Chọn</Select.Option>
-                            <Select.Option value='private'>Private</Select.Option>
-                            <Select.Option value='public'>Public</Select.Option>
-                            <Select.Option value='die'>Die</Select.Option>
-                            <Select.Option value='undefined'>Undefined</Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label='Last comment time '
-                        style={{ marginBottom: 0 }}
-                    >
-                    <Form.Item
-                        name='lastCommentFrom'
-                        style={{ display: 'inline-block', width: '50px' }}
-                    >
-                        <Input placeholder='Từ' />
-                    </Form.Item>
-                    <Form.Item
-                        name='lastCommentTo'
-                        style={{
-                        display: 'inline-block',
-                        width: '50px',
-                        }}
-                    >
-                        <Input placeholder='đến' />
-                    </Form.Item>
-                    </Form.Item>
-                    <Form.Item
-                    label='Chênh time'
-                    style={{ marginBottom: 0 }}
-                    >
-                    <Form.Item
-                        name='diffTimeFrom'
-                        style={{ display: 'inline-block', width: '50px' }}
-                    >
-                        <Input placeholder='Từ' />
-                    </Form.Item>
-                    <Form.Item
-                        name='diffTimeTo'
-                        style={{
-                        display: 'inline-block',
-                        width: '50px',
-                        }}
-                    >
-                        <Input placeholder='đến' />
-                    </Form.Item>
-                    </Form.Item>
-                    <Form.Item
-                    label='Total cmt today'
-                    style={{ marginBottom: 0 }}
-                    >
-                    <Form.Item
-                        name='totalCmtTodayFrom'
-                        style={{ display: 'inline-block', width: '50px' }}
-                    >
-                        <Input placeholder='Từ' />
-                    </Form.Item>
-                    <Form.Item
-                        name='totalCmtTodayTo'
-                        style={{
-                        display: 'inline-block',
-                        width: '50px',
-                        }}
-                    >
-                        <Input placeholder='đến' />
-                    </Form.Item>
-                    </Form.Item>
-                    <Form.Item
-                        label='Chênh Cmt'
-                        style={{ marginBottom: 0 }}
-                    >
-                        <Form.Item
-                        name='differenceCountCmtFrom'
-                        style={{ display: 'inline-block', width: '50px' }}
-                        >
-                        <Input placeholder='Từ' />
-                        </Form.Item>
-                        <Form.Item
-                        name='differenceCountCmtTo'
-                        style={{
-                            display: 'inline-block',
-                            width: '50px',
-                        }}
-                        >
-                        <Input placeholder='đến' />
-                        </Form.Item>
-                    </Form.Item>
-                    <Form.Item
-                        label='Like'
-                        style={{ marginBottom: 0 }}
-                    >
-                        <Form.Item
-                        name='likeFrom'
-                        style={{ display: 'inline-block', width: '50px' }}
-                        >
-                        <Input placeholder='Từ' />
-                        </Form.Item>
-                        <Form.Item
-                        name='likeTo'
-                        style={{
-                            display: 'inline-block',
-                            width: '50px',
-                        }}
-                        >
-                            <Input placeholder='đến' />
-                        </Form.Item>
-                    </Form.Item>
-                    <Form.Item
-                        label='Delay'
-                        style={{ marginBottom: 0 }}
-                    >
-                        <Form.Item
-                        name='delayFrom'
-                        style={{ display: 'inline-block', width: '50px' }}
-                        >
-                            <Input placeholder='Từ' />
-                        </Form.Item>
-                        <Form.Item
-                        name='delayTo'
-                        style={{
-                            display: 'inline-block',
-                            width: '50px',
-                        }}
-                        >
-                            <Input placeholder='đến' />
-                        </Form.Item>
-                    </Form.Item>
-                </div>
-                <div>
-                    <Form.Item
-                        label='Delete'
-                        valuePropName='checked'
-                        name='isDelete'
-                    >
-                        <Switch />
-                    </Form.Item>
-                    <Form.Item
-                    label='On/Off'
-                    valuePropName='checked'
-                    name='onOff'
-                    >
-                        <Switch />
-                    </Form.Item>
-                    <Form.Item
-                        label='Delay'
-                        name='delay'
-                    >
-                        <InputNumber />
-                    </Form.Item>
-                </div>                
-            </div>
-
-
-            <Form.Item label={null}>
-                <Button
-                    type='primary'
-                    htmlType='submit'
-                >
-                    Submit
-                </Button>
+        <div className='modal-add-setting-property'>
+          <div>
+            <Form.Item
+              label='Loại'
+              name='type'
+            >
+              <Select>
+                <Select.Option value={null}>Chọn</Select.Option>
+                <Select.Option value='private'>Private</Select.Option>
+                <Select.Option value='public'>Public</Select.Option>
+                <Select.Option value='die'>Die</Select.Option>
+                <Select.Option value='undefined'>Undefined</Select.Option>
+              </Select>
             </Form.Item>
-        </Form>
-      </Modal>
+            <Form.Item
+              label='Status'
+              name='status'
+            >
+              <Select>
+                <Select.Option value={null}>Chọn</Select.Option>
+                <Select.Option value='pending'>Pending</Select.Option>
+                <Select.Option value='started'>Started</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label='Last comment time '
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='lastCommentFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='lastCommentTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              label='Chênh time'
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='diffTimeFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='diffTimeTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              label='Total cmt today'
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='totalCmtTodayFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='totalCmtTodayTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              label='Chênh Cmt'
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='differenceCountCmtFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='differenceCountCmtTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              label='Like'
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='likeFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='likeTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
+            <Form.Item
+              label='Delay'
+              style={{ marginBottom: 0 }}
+            >
+              <Form.Item
+                name='delayFrom'
+                style={{ display: 'inline-block', width: '50px' }}
+              >
+                <Input placeholder='Từ' />
+              </Form.Item>
+              <Form.Item
+                name='delayTo'
+                style={{
+                  display: 'inline-block',
+                  width: '50px',
+                }}
+              >
+                <Input placeholder='đến' />
+              </Form.Item>
+            </Form.Item>
+          </div>
+          <div>
+            <Form.Item
+              label='Delete'
+              valuePropName='checked'
+              name='isDelete'
+            >
+              <Switch />
+            </Form.Item>
+            <Form.Item
+              label='On/Off'
+              valuePropName='checked'
+              name='onOff'
+            >
+              <Switch />
+            </Form.Item>
+            <Form.Item
+              label='Delay'
+              name='delay'
+            >
+              <InputNumber />
+            </Form.Item>
+          </div>
+        </div>
+
+        <Form.Item label={null}>
+          <Button
+            type='primary'
+            htmlType='submit'
+          >
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
   )
 }
 

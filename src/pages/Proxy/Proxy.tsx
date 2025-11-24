@@ -11,29 +11,29 @@ import { Button, Form, Select } from 'antd'
 import './proxy.css'
 
 export interface FormValues {
-  isFbBlock: boolean | null,
-  status: ProxyStatus | null,
+  isFbBlock: boolean | null
+  status: ProxyStatus | null
 }
 
 const statusBlockFb = [
   {
-    name: "Chưa",
-    value: false
+    name: 'Chưa',
+    value: false,
   },
   {
-    name: "Đã block",
-    value: true
+    name: 'Đã block',
+    value: true,
   },
 ]
 
 const statusProxies = [
   {
-    name: "InActive",
-    value: ProxyStatus.INACTIVE
+    name: 'InActive',
+    value: ProxyStatus.INACTIVE,
   },
   {
-    name: "Active",
-    value: ProxyStatus.ACTIVE
+    name: 'Active',
+    value: ProxyStatus.ACTIVE,
   },
 ]
 
@@ -63,16 +63,16 @@ function Proxy() {
   }, [isReload])
 
   const onFinish = async (values: FormValues) => {
-      const { data } = await getProxies(values)
-      setProxies(data)
+    const { data } = await getProxies(values)
+    setProxies(data)
   }
 
   const removeDataFilter = async () => {
-    const result = confirm("Bạn có chắc muốn xóa không?");
+    const result = confirm('Bạn có chắc muốn xóa không?')
 
     if (result) {
       try {
-        await deleteProxies(proxies.map(item => item.id))
+        await deleteProxies(proxies.map((item) => item.id))
         setIsReload(!isReload)
         toast('Xóa thành công!')
       } catch (error) {
@@ -109,75 +109,74 @@ function Proxy() {
           </button>
         </div>
         <div className='filter-proxy'>
-        <Form
-          form={form}
-          name='horizontal_login'
-          layout='inline'
-          className='white-label white-form'
-          onFinish={onFinish}
-          initialValues={{
-            isFbBlock: null,
-            status: null,
-          }}
-        >
-          <Form.Item
-            label='Block'
-            style={{ width: '200px' }}
-            name='isFbBlock'
+          <Form
+            form={form}
+            name='horizontal_login'
+            layout='inline'
+            className='white-label white-form'
+            onFinish={onFinish}
+            initialValues={{
+              isFbBlock: null,
+              status: null,
+            }}
           >
-            <Select>
-              <Select.Option value={null}>Tất cả</Select.Option>
-              {statusBlockFb.length > 0 &&
-                statusBlockFb.map((item, i) => {
-                  return (
-                    <Select.Option
-                      key={i}
-                      value={item.value}
-                    >
-                      {item.name}
-                    </Select.Option>
-                  )
-                })}
-            </Select>
-          </Form.Item>      
-          <Form.Item
-            label='Status'
-            style={{ width: '200px' }}
-            name='status'
-          >
-            <Select>
-              <Select.Option value={null}>Tất cả</Select.Option>
-              {statusProxies.length > 0 &&
-                statusProxies.map((item, i) => {
-                  return (
-                    <Select.Option
-                      key={i}
-                      value={item.value}
-                    >
-                      {item.name}
-                    </Select.Option>
-                  )
-                })}
-            </Select>
-          </Form.Item>
-          <Form.Item label={null}>
-            <Button
-              type='primary'
-              htmlType='submit'
+            <Form.Item
+              label='Block'
+              style={{ width: '200px' }}
+              name='isFbBlock'
             >
-              Submit
-            </Button>
-          </Form.Item>
-          <Form.Item label={null}>
-            <Button
-              type={"primary"}
-              onClick={() => removeDataFilter()}
+              <Select>
+                <Select.Option value={null}>Tất cả</Select.Option>
+                {statusBlockFb.length > 0 &&
+                  statusBlockFb.map((item, i) => {
+                    return (
+                      <Select.Option
+                        key={i}
+                        value={item.value}
+                      >
+                        {item.name}
+                      </Select.Option>
+                    )
+                  })}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label='Status'
+              style={{ width: '200px' }}
+              name='status'
             >
-              Xoá
-            </Button>
-          </Form.Item>
-        </Form>
-     
+              <Select>
+                <Select.Option value={null}>Tất cả</Select.Option>
+                {statusProxies.length > 0 &&
+                  statusProxies.map((item, i) => {
+                    return (
+                      <Select.Option
+                        key={i}
+                        value={item.value}
+                      >
+                        {item.name}
+                      </Select.Option>
+                    )
+                  })}
+              </Select>
+            </Form.Item>
+            <Form.Item label={null}>
+              <Button
+                type='primary'
+                htmlType='submit'
+              >
+                Submit
+              </Button>
+            </Form.Item>
+            <Form.Item label={null}>
+              <Button
+                type={'primary'}
+                onClick={() => removeDataFilter()}
+              >
+                Xoá
+              </Button>
+            </Form.Item>
+          </Form>
         </div>
         <div className='table-responsive'>
           <table className='table table-striped table-dark'>
