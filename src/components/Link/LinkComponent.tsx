@@ -7,6 +7,7 @@ import {
   IGetAllLink,
   priority as priorityApi,
   processLink,
+  regetInfo,
 } from '@/api/link.api'
 import { ELink, ILink, LinkStatus } from '@/common/model/link'
 import { useApp } from '@/common/store/AppContext'
@@ -183,6 +184,10 @@ function LinkComponent({ type }: ITypeLink) {
     []
   )
 
+  const handleRegetInfo = (id: number) => {
+    return regetInfo([id])
+  }
+
   let stt = links.length
 
   return (
@@ -234,6 +239,7 @@ function LinkComponent({ type }: ITypeLink) {
           setPageSize={setPageSize}
           setPage={setPage}
           pageSizeDefault={pageSizeDefault}
+          links={links}
         />
 
         <div className='table-responsive'>
@@ -279,6 +285,7 @@ function LinkComponent({ type }: ITypeLink) {
                     <th scope='col'>Delay (s)</th>
                     <th scope='col'>Ưu tiên</th>
                     <th scope='col'>CMD</th>
+                    <th scope='col'>Reget info</th>
                     <th scope='col'>User Name</th>
                   </>
                 )}
@@ -378,6 +385,15 @@ function LinkComponent({ type }: ITypeLink) {
                               onClick={() => handleWatchCmd(Number(item.id))}
                             >
                               Xem
+                            </Button>
+                          </td>
+                          <td>
+                            <Button
+                              type='primary'
+                              htmlType='submit'
+                              onClick={() => handleRegetInfo(Number(item.id))}
+                            >
+                              Go
                             </Button>
                           </td>
                           <td>{item.username}</td>

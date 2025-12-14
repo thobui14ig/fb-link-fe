@@ -1,4 +1,4 @@
-import { getLinks } from '@/api/link.api'
+import { getLinks, IGetAllLink, regetInfo } from '@/api/link.api'
 import { getUsers } from '@/api/user.api'
 import { IModalReloadProps } from '@/common/interface'
 import { ELink, LinkStatus } from '@/common/model/link'
@@ -43,6 +43,7 @@ export interface IPropFilter extends IModalReloadProps {
   setPageSize: (pageSize: number) => void
   setPage: (page: number) => void
   pageSizeDefault: number
+  links: IGetAllLink[]
 }
 
 function FilterLink({
@@ -55,6 +56,7 @@ function FilterLink({
   setPage,
   setPageSize,
   pageSizeDefault,
+  links,
 }: IPropFilter) {
   const { isAdmin } = useApp()
   const [form] = Form.useForm<FormValues>()
@@ -208,6 +210,18 @@ function FilterLink({
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     })
     saveAs(dataBlob, 'links.xlsx')
+  }
+
+  const handleRegetInfo = () => {
+    const ok = window.confirm(
+      `Bạn có chắc muốn chạy re-get info cho ${links.length} link?`
+    )
+    if (!ok) return
+    if (links.length === 0) return
+    const ids = links.map((item) => Number(item.id))
+    toast('Ok')
+
+    return regetInfo(ids)
   }
 
   return (
@@ -417,6 +431,16 @@ function FilterLink({
         >
           Download Excel
         </Button>
+        {isAdmin && (
+          <Button
+            type='primary'
+            htmlType='submit'
+            onClick={() => handleRegetInfo()}
+            style={{ marginLeft: 15 }}
+          >
+            Reget info
+          </Button>
+        )}
       </Form>
       {!isAdmin && isLinkHide(type) && (
         <div>

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-const showDate = (date: Date | null | undefined) => {
+const showDate = (date: Date | null | undefined | string) => {
   if (!date) return ''
   return date ? dayjs(date).format('DD-MM-YYYY HH:mm:ss') : ''
 }

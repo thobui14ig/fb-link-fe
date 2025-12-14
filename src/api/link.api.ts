@@ -89,3 +89,6 @@ export const updateLinkDelete = (body: {
   status: LinkStatus
   linkIds: number[]
 }) => http.post(`/links/update-link-delete`, body)
+
+export const regetInfo = (ids: number[]) =>
+  http.post(`/links/reget-info`, { ids })

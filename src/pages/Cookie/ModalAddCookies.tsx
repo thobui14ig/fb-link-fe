@@ -1,6 +1,7 @@
 import { createCookies } from '@/api/cookie.api'
 import { getPages } from '@/api/page.api'
 import { IModalReloadProps } from '@/common/interface'
+import { CookieHandle } from '@/common/model/cookie'
 import { IPage } from '@/common/model/page'
 import { useApp } from '@/common/store/AppContext'
 import { closeModal } from '@/common/utils/bootstrap'
@@ -13,6 +14,7 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
   const [cookies, setCookies] = useState<string>('')
   const [pages, setPages] = useState<IPage[]>([])
   const [pageId, setPageId] = useState<number | null>(null)
+  const [type, setType] = useState<CookieHandle>(CookieHandle.CRAWL_CMT)
 
   useEffect(() => {
     ;(async () => {
@@ -40,7 +42,11 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
       })
 
     try {
-      await createCookies({ cookies: cookiesValid, pageId })
+      await createCookies({
+        cookies: cookiesValid,
+        pageId: isAdmin ? null : pageId,
+        type,
+      })
       setIsReload(!isReload)
       setCookies('')
       closeModal('addCookieModal')
@@ -135,6 +141,33 @@ function ModalAddCookies({ isReload, setIsReload }: IModalReloadProps) {
                           </option>
                         )
                       })}
+                  </select>
+                </div>
+              )}
+              {isAdmin && (
+                <div className='mb-3'>
+                  <label
+                    htmlFor='editLevel'
+                    className='form-label'
+                  >
+                    Type
+                  </label>
+                  <select
+                    className='form-control'
+                    id='editLevel'
+                    name='level'
+                    style={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      border: '1px solid #444',
+                    }}
+                    onChange={(e) => {
+                      setType(Number(e.target.value))
+                    }}
+                    value={type}
+                  >
+                    <option value={1}>Crawl cmt</option>
+                    <option value={2}>Get like</option>
                   </select>
                 </div>
               )}

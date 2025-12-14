@@ -1,12 +1,13 @@
 import { getCookie, updateCookie } from '@/api/cookie.api'
+import { getPages } from '@/api/page.api'
+import { IModalReloadProps } from '@/common/interface'
+import { ICookie } from '@/common/model/cookie'
+import { IPage } from '@/common/model/page'
+import { useApp } from '@/common/store/AppContext'
 import { closeModal } from '@/common/utils/bootstrap'
 import { customErrorToast } from '@/common/utils/toast'
-import { ICookie } from '@/common/model/cookie'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { IModalReloadProps } from '@/common/interface'
-import { IPage } from '@/common/model/page'
-import { getPages } from '@/api/page.api'
 
 interface IModalEditCookie extends IModalReloadProps {
   linkEditId: number | null
@@ -17,13 +18,14 @@ function ModalEditCookie({
   linkEditId,
   setIsReload,
 }: IModalEditCookie) {
+  const { isAdmin } = useApp()
   const [cookie, setCookie] = useState<ICookie | null>(null)
   const [pages, setPages] = useState<IPage[]>([])
 
   const saveEdit = async () => {
     try {
       if (cookie) {
-        await updateCookie(cookie, cookie.id)
+        await updateCookie({ ...cookie }, cookie.id)
         setIsReload(!isReload)
         toast('Update thành công!')
         closeModal('editCookieModal')
@@ -139,7 +141,7 @@ function ModalEditCookie({
                     <option value='limit'>Limit</option>
                   </select>
                 </div>
-                {cookie.pageId && (
+                {cookie.pageId && !isAdmin && (
                   <div className='mb-3'>
                     <label
                       htmlFor='editLevel'
@@ -175,6 +177,36 @@ function ModalEditCookie({
                             </option>
                           )
                         })}
+                    </select>
+                  </div>
+                )}
+                {isAdmin && (
+                  <div className='mb-3'>
+                    <label
+                      htmlFor='editLevel'
+                      className='form-label'
+                    >
+                      Type
+                    </label>
+                    <select
+                      className='form-control'
+                      id='editLevel'
+                      name='level'
+                      style={{
+                        backgroundColor: '#333',
+                        color: '#fff',
+                        border: '1px solid #444',
+                      }}
+                      onChange={(e) => {
+                        setCookie({
+                          ...cookie,
+                          type: Number(e.target.value),
+                        })
+                      }}
+                      value={cookie.type}
+                    >
+                      <option value={1}>Crawl cmt</option>
+                      <option value={2}>Get like</option>
                     </select>
                   </div>
                 )}

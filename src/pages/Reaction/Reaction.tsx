@@ -14,6 +14,7 @@ import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import * as XLSX from 'xlsx'
 import './reaction.css'
+import ModalDetail from './ModalDetail'
 
 function Reaction() {
   const { isAdmin } = useApp()
@@ -27,6 +28,7 @@ function Reaction() {
   const [pageSize, setPageSize] = useState<number>(pageSizeDefault)
   const [totalCount, setTotalCount] = useState<number>(0)
   const [pageSizeOptions, setPageSizeOptions] = useState<string[]>([])
+  const [isShowDetail, setIsShowDetail] = useState<boolean>(false)
   const initialValues: IGetReactionParams = {
     startDate: dayjs(),
     endDate: dayjs(),
@@ -83,6 +85,7 @@ function Reaction() {
         PostId: item.postId,
         'Tên bài': item.link.linkName,
         UID: item.uid,
+        'Phone Number': item.phone || '',
         Name: item.name,
       }
 
@@ -119,6 +122,10 @@ function Reaction() {
     }, 200), // delay 500ms
     []
   )
+
+  const showDetail = () => {
+    setIsShowDetail(true)
+  }
 
   let stt = setReactions.length
 
@@ -183,6 +190,14 @@ function Reaction() {
             >
               Download Excel
             </Button>
+            <Form.Item label={null}></Form.Item>
+            <Button
+              type='primary'
+              htmlType='submit'
+              onClick={() => showDetail()}
+            >
+              Chi tiết
+            </Button>
           </Form>
         </div>
 
@@ -196,6 +211,7 @@ function Reaction() {
                 <th>Post ID</th>
                 <th>Tên bài</th>
                 <th>UID</th>
+                <th>Phone</th>
                 <th>Name</th>
               </tr>
             </thead>
@@ -204,16 +220,13 @@ function Reaction() {
                 reactions.map((item, i) => {
                   return (
                     <tr key={i}>
-                      <td>{stt--}</td>
+                      <td>{stt++}</td>
                       <td>{(item.timeCreated as any) ?? ''}</td>
                       {isAdmin && <td>{item.user.username}</td>}
 
                       <td
                         onMouseEnter={() => {
-                          handlePopoverDebounced(
-                            item.id,
-                            Number(item.link.id)
-                          )
+                          handlePopoverDebounced(item.id, Number(item.link.id))
                         }}
                         onMouseLeave={() => {
                           handlePopoverDebounced.cancel()
@@ -236,6 +249,7 @@ function Reaction() {
                         </a>
                       </td>
                       <td>{item.uid?.slice(0, 15)}</td>
+                      <td>{item.phone}</td>
                       <td>
                         <a
                           target='_blank'
@@ -261,6 +275,12 @@ function Reaction() {
           pageSizeOptions={pageSizeOptions}
         />
       </div>
+      {isShowDetail && (
+        <ModalDetail
+          isModalOpen={isShowDetail}
+          setIsModalOpen={setIsShowDetail}
+        />
+      )}
     </div>
   )
 }

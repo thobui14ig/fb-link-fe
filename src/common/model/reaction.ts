@@ -4,6 +4,7 @@ import { IUser } from './user'
 export interface IReaction {
   id: number
   uid?: string
+  phone: string
   name?: string
   postId?: string,
   timeCreated?: Date

@@ -13,3 +13,7 @@
     color: black;
   }
   
+.task-detail {
+    display: flex;
+    justify-content: space-between;
+}
